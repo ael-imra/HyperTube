@@ -1,0 +1,93 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {
+            "prefer-const": "warn",
+            "no-const-assign": "warn",
+            "no-var": "error",
+            "no-new-object": "error",
+            "object-shorthand": "warn",
+            "no-prototype-builtins": "warn",
+            "prefer-object-spread": "warn",
+            "no-array-constructor": "warn",
+            "array-callback-return": "warn",
+            "prefer-destructuring": "warn",
+            "quotes": [
+                "warn",
+                "single"
+            ],
+            "template-curly-spacing": [
+                "error",
+                "never"
+            ],
+            "prefer-template": "error",
+            "no-eval": "error",
+            "func-style": [
+                "error",
+                "expression"
+            ],
+            "no-useless-escape": "error",
+            "no-loop-func": "error",
+            "prefer-rest-params": "error",
+            "default-param-last": "error",
+            "no-new-func": "error",
+            "space-before-function-paren": "error",
+            "space-before-blocks": "error",
+            "no-param-reassign": "error",
+            "prefer-spread": "error",
+            "prefer-arrow-callback": "error",
+            "arrow-spacing": [
+                "error",
+                {
+                    "before": true,
+                    "after": true
+                }
+            ],
+            "arrow-parens": "error",
+            "no-confusing-arrow": "error",
+            "implicit-arrow-linebreak": [
+                "error",
+                "beside"
+            ],
+            "no-duplicate-imports": "error",
+            "dot-notation": "error",
+            "one-var": "error",
+            "no-plusplus": "error",
+            "max-len": [
+                "error",
+                {
+                    "code": 70,
+                    "tabWidth": 2
+                }
+            ],
+            "operator-linebreak": [
+                "error",
+                "after"
+            ],
+            "no-unused-vars": "error",
+            "eqeqeq": [
+                "error",
+                "always"
+            ],
+            "no-unneeded-ternary": "error",
+            "no-mixed-operators": "error",
+            "nonblock-statement-body-position": "error",
+            "no-else-return": "error",
+            "space-infix-ops": "error",
+            "newline-per-chained-call": "error",
+            "padded-blocks": [
+                "error",
+                "always"
+            ],
+            "no-multiple-empty-lines": "error",
+            // "object-curly-spacing": "error",
+            "no-multi-assign": "error"
+    }
+}
