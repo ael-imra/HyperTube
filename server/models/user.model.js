@@ -1,42 +1,33 @@
-const jsonwebtoken = require('jsonwebtoken')
-const { checkUserInput } = require('../services/user.service')
-const { query } = require('../models/mysql.model')
+const { query } = require(__dirname+"/../controllers/mysql.control")
 
-const register = function (body){
-  const error = checkUserInput(body,["Email","Username","Lastname","Firstname","Password"])
-  if (error)
-    return ({
-      type:"Error",
-      status:400,
-      content:error
-    })
-  query('INSERT INTO Users SET ?',body)
-  return ({
-    type:"Success",
-    status:200,
-    content:"Registration Successful"
-  })
+const getUser = async function (dependencies, keys) {
+    const [user] = await query(`SELECT ${keys.toString()} FROM Users WHERE ?`, dependencies)
+    return user
 }
 
-const login = async function (body){
-  const error = checkUserInput(body,["Username","Password"])
-  if (error)
-    return ({
-      type:"Error",
-      status:400,
-      content:error
-    })
-  const [{UserID,IsActive,JWT}] = await query('SELECT UserID,IsActive,JWT FROM Users WHERE Username=? AND Password=?',[body.Username,body.Password])
-  if (JWT)
-    return ({
-      type:"Success",
-      status: 200,
-      content: JWT
-    })
-  else if (IsActive)
-    return ({
-      type:"Success",
-      status: 200,
-      content: jsonwebtoken.sign({UserID},)
-    })
+const insertUser = async function (values) {
+    const resultInsert = await query("INSERT INTO Users SET ?", [values])
+    return resultInsert.affectedRows ? resultInsert : false
+}
+
+const updateUser = async function (dependencies, values) {
+    const resultUpdate = await query("UPDATE Users SET ? WHERE ?", [values, dependencies])
+    return resultUpdate.affectedRows ? resultUpdate : false
+}
+
+const deleteUser = async function (dependencies) {
+    const resultDelete = await query("DELETE FROM Users WHERE ?", [dependencies])
+    return resultDelete.affectedRows ? resultDelete : false
+}
+const checkUserExist = async function (username,email){
+	const [user] = await query('SELECT userID FROM Users WHERE userName=? OR email=?',[username,email])
+	return user ? true : false
+}
+
+module.exports = {
+    getUser,
+    insertUser,
+    updateUser,
+    deleteUser,
+	checkUserExist
 }

@@ -11,7 +11,6 @@
     "rules": {
             "prefer-const": "warn",
             "no-const-assign": "warn",
-            "no-var": "error",
             "no-new-object": "error",
             "object-shorthand": "warn",
             "no-prototype-builtins": "warn",
@@ -58,13 +57,12 @@
             ],
             "no-duplicate-imports": "error",
             "dot-notation": "error",
-            "one-var": "error",
             "no-plusplus": "error",
             "max-len": [
                 "error",
                 {
-                    "code": 70,
-                    "tabWidth": 2
+                    "code": 90,
+                    "tabWidth": 4
                 }
             ],
             "operator-linebreak": [
@@ -78,16 +76,10 @@
             ],
             "no-unneeded-ternary": "error",
             "no-mixed-operators": "error",
-            "nonblock-statement-body-position": "error",
             "no-else-return": "error",
             "space-infix-ops": "error",
             "newline-per-chained-call": "error",
-            "padded-blocks": [
-                "error",
-                "always"
-            ],
             "no-multiple-empty-lines": "error",
-            // "object-curly-spacing": "error",
             "no-multi-assign": "error"
     }
 }
