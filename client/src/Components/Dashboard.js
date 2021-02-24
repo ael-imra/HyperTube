@@ -4,120 +4,168 @@ import { DataContext } from '../Context/AppContext';
 import Slider from './Slider';
 import MovieIcon from '@material-ui/icons/Movie';
 import Axios from 'axios';
-
 import '../Css/Dashboard.css';
-
 import ListMovies from './ListMovies';
+import Search from './Search';
+import FindReplaceIcon from '@material-ui/icons/FindReplace';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-const ListGenre = (props) => {
-  let ArrayGender = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Romance', 'Thriller', 'Western'];
+const SortAndFilter = () => {
+  const ctx = React.useContext(DataContext);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [filter, setFilter] = React.useState(ctx.cache.filter);
+  const ArrayYears = () => {
+    const listYears = [];
+    for (let i = 1; i <= 61; i++) listYears.push(i + 1959);
+    return listYears;
+  };
+  const listFilter = {
+    genre: [
+      'All',
+      'Action',
+      'Adventure',
+      'Animation',
+      'Biography',
+      'Comedy',
+      'Crime',
+      'Documentary',
+      'Drama',
+      'Family',
+      'Fantasy',
+      'Film-Noir',
+      'Game-Show',
+      'History',
+      'Horror',
+      'Music',
+      'Musical',
+      'Mystery',
+      'News',
+      'Reality-TV',
+      'Romance',
+      'Sci-Fi',
+      'Sport',
+      'Talk-Show',
+      'Thriller',
+      'War',
+      'Western',
+    ],
+    rating: [0, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+    order: ['year', 'rating', 'title'],
+    years: ArrayYears(),
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const selectFilter = (type, value) => {
+    if (type === 'years') setFilter((oldValue) => ({ ...oldValue, years: value }));
+    if (type === 'genre') setFilter((oldValue) => ({ ...oldValue, genre: value }));
+    if (type === 'rating') setFilter((oldValue) => ({ ...oldValue, rating: value }));
+    if (type === 'order') setFilter((oldValue) => ({ ...oldValue, order: value }));
+    ctx.cache.filter = filter;
+    handleClose();
+  };
+  const search = async () => {
+    if (ctx.ref.setListMovies) ctx.ref.setListMovies({ list: [], page: 0, next: true, middleware: true });
+    ctx.cache.listMovies = await ctx.GetMovies(1, [], filter);
+    if (ctx.ref.setListMovies) ctx.ref.setListMovies(ctx.cache.listMovies);
+  };
   return (
-    <div className='genres'>
-      {ArrayGender.map((gender, key) => (
-        <Button
-          key={key}
-          variant='contained'
-          onClick={(e) => {
-            if (props.myListGender.findIndex((gender) => e.target.innerText === gender) === -1) props.setMyListGender([...props.myListGender, e.target.innerText]);
-            else props.setMyListGender(props.myListGender.filter((item) => e.target.innerText !== item));
+    <div className='SortAndFilter'>
+      <div>
+        <Search
+          Onchange={(value) => {
+            setFilter((oldValue) => ({ ...oldValue, title: value }));
+            ctx.cache.filter = filter;
           }}
+        />
+        <Button
+          variant='contained'
+          size='large'
+          onClick={search}
+          startIcon={<FindReplaceIcon style={{ fontSize: '35px' }} />}
           style={{
-            backgroundColor: `${props.myListGender.findIndex((lgender) => lgender === gender) !== -1 ? '#ec4646' : '#222831'}`,
+            backgroundColor: '#ec4646',
             color: 'white',
             textTransform: 'none',
-            width: '130px',
-            fontSize: '16px',
-            marginTop: '0px',
-            borderRadius: '30px',
-            fontWeight: '900',
-            padding: '4px',
+            width: '180px',
+            fontSize: '18px',
           }}>
-          {gender}
+          Search
         </Button>
-      ))}
+      </div>
+      <div>
+        {/* <div className='q'>
+          <p>Years</p>
+          <div onClick={handleClick} data-filter='years'>
+            <p>{filter.years !== '' ? filter.years : 'All'}</p>
+            <ExpandMoreIcon />
+          </div>
+        </div> */}
+        <div className='q'>
+          <p>Genre</p>
+          <div onClick={handleClick} data-filter='genre'>
+            <p>{filter.genre !== '' ? filter.genre : 'All'}</p>
+            <ExpandMoreIcon />
+          </div>
+        </div>
+        <div className='q'>
+          <p>Rating</p>
+          <div onClick={handleClick} data-filter='rating'>
+            <p>{filter.rating !== 0 ? `+ ${filter.rating}` : 'All'}</p>
+            <ExpandMoreIcon />
+          </div>
+        </div>
+        <div className='q'>
+          <p>Order By</p>
+          <div onClick={handleClick} data-filter='order'>
+            <p>{filter.order !== '' ? filter.order : 'All'}</p>
+            <ExpandMoreIcon />
+          </div>
+        </div>
+      </div>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: '460px',
+            width: '160px',
+          },
+        }}>
+        {anchorEl
+          ? listFilter[anchorEl.getAttribute('data-filter')].map((item, key) => (
+              <MenuItem onClick={() => selectFilter(anchorEl.getAttribute('data-filter'), item)} key={key}>
+                {anchorEl.getAttribute('data-filter') === 'rating' ? `+ ${item}` : item}
+              </MenuItem>
+            ))
+          : ''}
+      </Menu>
     </div>
   );
 };
-// const ListMovie = (props) => {
-//   return (
-//     <div className='ListMovie'>
-//       {props.ctx.movies.listMovies.list.map((movie, key) => (
-//         <div className='PostMovie' key={key}>
-//           <div className='movieImage'>
-//             <img src={movie.image} alt='movie' />
-//             <div className='moreInfoMovie'>
-//               <p style={{ color: 'white', padding: '6px', border: '1px solid white', position: 'absolute', top: '10px', right: '10px', borderRadius: '8px', fontSize: '15px' }}>{movie.language.toUpperCase()}</p>
-//               <p style={{ color: 'white', fontSize: '15px', marginLeft: '15px', marginRight: '15px', marginBottom: '5px' }}>{`gender : ${movie.genres.toString()}`}</p>
-//               <Divider style={{ backgroundColor: '#e8eae6', width: '90%', marginTop: '15px', display: 'flex', marginLeft: 'auto', marginRight: 'auto', height: '0.3px' }} />
-//               <p style={{ color: 'white', fontSize: '16px', overflow: 'hidden', maxHeight: '200px', marginLeft: '15px', marginRight: '15px' }}>{movie.description}</p>
-//               <div style={{ width: '100%', height: '55px', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>
-//                 <Button
-//                   variant='contained'
-//                   startIcon={<PlayArrowIcon style={{ fontSize: '25px' }} />}
-//                   style={{
-//                     backgroundColor: '#ec4646',
-//                     color: 'white',
-//                     textTransform: 'none',
-//                     fontSize: '12px',
-//                   }}>
-//                   Watch
-//                 </Button>
-//                 <Button
-//                   variant='contained'
-//                   startIcon={<PlaylistAddIcon style={{ fontSize: '25px' }} />}
-//                   style={{
-//                     backgroundColor: 'rgba(34, 40, 49, 0.86)',
-//                     color: 'white',
-//                     textTransform: 'none',
-//                     fontSize: '12px',
-//                   }}>
-//                   Add to list
-//                 </Button>
-//               </div>
-//             </div>
-//           </div>
-//           <p>{movie.titre}</p>
-//           <div>
-//             <p>{movie.year}</p>
-//             <p>{movie.runtime} Min</p>
-//             <Divider orientation='vertical' style={{ height: '14px', backgroundColor: '#6b6b6b' }} />
-//             <div className='PostRating'>
-//               <StarIcon style={{ color: '#ffb400', fontSize: '20px', marginRight: '5px' }} /> <p style={{ color: '#ffb400', fontSize: '14px', margin: '0px' }}>{movie.rating}</p>
-//             </div>
-//             <VisibilityIcon style={{ color: '#ec4646', fontSize: '17px', marginRight: '5px' }} />
-//           </div>
-//         </div>
-//       ))}
-//       <LinearProgress color='secondary' style={{ position: 'absolute', bottom: '0px', width: '100%' }} />
-//     </div>
-//   );
-// };
 export default function Dashboard() {
   const ctx = React.useContext(DataContext);
-  const [myListGender, setMyListGender] = React.useState(['Drama']);
   const [listPopularMovies, setListPopularMovies] = React.useState([]);
-  React.useEffect(async () => {
-    const popularMovies = await Axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
-    const detailPopularMovies = await new Promise((resolve) => {
-      const result = [];
-      popularMovies.data.results.map(async (movie) => {
-        const image = await Axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
-        result.push({ id: movie.id, title: movie.title, original_language: movie.original_language, image: `https://image.tmdb.org/t/p/original/${image.data.backdrops[0].file_path}`, overview: movie.overview, date: parseInt(movie.release_date), rating: movie.vote_average });
-        if (result.length === popularMovies.data.results.length) resolve(result);
-      });
-    });
-    setListPopularMovies(detailPopularMovies);
-  }, []);
+  console.log('Dashboard');
+
   return (
     <>
       <Slider list={listPopularMovies} />
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginLeft: '55px' }}>
-        <MovieIcon style={{ fontSize: '50px', color: 'white' }} />
-        <p style={{ color: 'white', fontSize: '28px', marginLeft: '10px' }}>Movies</p>
-        <ListGenre myListGender={myListGender} setMyListGender={setMyListGender} ctx={ctx} />
+      <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '15px', marginLeft: '55px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <MovieIcon style={{ fontSize: '50px', color: 'white' }} />
+          <p style={{ color: 'white', fontSize: '28px', margin: '0', marginLeft: '10px' }}>Movies</p>
+        </div>
+        <SortAndFilter />
       </div>
-      {/* <ListMovie ctx={ctx} /> */}
-      <ListMovies ctx={ctx} />
+      <ListMovies />
     </>
   );
 }

@@ -12,6 +12,7 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Search from './Search';
 
 const LogoWebSite = (props) => {
   let history = useHistory();
@@ -50,32 +51,6 @@ const NavWeb = (props) => {
         }}>
         <p style={{ color: `${props.isActive === 3 ? '#ec4646' : 'white'}` }}>Profile</p>
       </div>
-      <div className='search'>
-        <SearchIcon style={{ color: 'white', fontSize: '20px', marginRight: '7px' }} />
-        <InputBase
-          placeholder='Search…'
-          style={{ fontSize: '14px', color: 'white' }}
-          onFocus={(e) => {
-            e.target.closest('.search').style.width = '140px';
-          }}
-          onBlur={(e) => {
-            e.target.closest('.search').style.width = '110px';
-          }}
-          onChange={async (e) => {
-            if (e.target.value === '') {
-              document.querySelector('.App').scrollTop = 0;
-              props.ctx.movies.setListMovies({ list: await props.ctx.GetMovies(1, props.ctx.movies.listMovies.list, ''), page: 2 });
-            }
-            props.search.setSearch(e.target.value);
-          }}
-          onKeyDown={async (e) => {
-            if (e.keyCode === 13) {
-              document.querySelector('.App').scrollTop = 0;
-              props.ctx.movies.setListMovies({ list: await props.ctx.GetMovies(1, props.ctx.movies.listMovies.list, props.search.search), page: 2 });
-            }
-          }}
-        />
-      </div>
       <Button
         variant='outlined'
         size={'small'}
@@ -112,10 +87,6 @@ const NavMobil = (props) => {
   const [showMenuNav, setShowMenuNav] = React.useState(null);
   return (
     <div className='Nav' style={{ width: `${props.ctx.width >= 700 ? '75%' : '85%'}` }}>
-      <div className='search' style={{ marginRight: 'auto', marginLeft: 'auto', width: `${props.ctx.width >= 550 ? '62%' : '37%'}` }}>
-        <SearchIcon style={{ color: 'white', fontSize: '20px', marginRight: '7px' }} />
-        <InputBase placeholder='Search…' style={{ fontSize: '14px', color: 'white' }} />
-      </div>
       <Button
         variant='outlined'
         size={'small'}

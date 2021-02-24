@@ -28,10 +28,12 @@ function App() {
       className='App'
       style={{ overflowY: 'auto' }}
       onScroll={async (e) => {
-        if (e.target.scrollTop + e.target.clientHeight + 450 > e.target.scrollHeight) {
-          if (ctx.ref.setListMovies) {
-            ctx.cache.listMovies = { list: await ctx.GetMovies(ctx.cache.listMovies.page, ctx.cache.listMovies.list, search), page: ctx.cache.listMovies.page + 1, next: true };
-            ctx.ref.setListMovies(ctx.cache.listMovies);
+        if (e.target.scrollTop + e.target.clientHeight + 450 > e.target.scrollHeight && e.target.scrollTop > 800) {
+          if (ctx.ref.setListMovies && ctx.cache.listMovies.list.lenght !== 0) {
+            if (ctx.cache.listMovies.next) {
+              ctx.cache.listMovies = await ctx.GetMovies(ctx.cache.listMovies.page, ctx.cache.listMovies.list, ctx.cache.filter);
+              ctx.ref.setListMovies(ctx.cache.listMovies);
+            }
           }
         }
         if (e.target.scrollTop >= 750) document.querySelector('.Header').style.backgroundColor = 'rgba(34, 40, 49, 0.78)';
