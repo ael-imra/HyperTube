@@ -3,9 +3,9 @@ const LocalStrategy = require("passport-local").Strategy
 const GitHubStrategy = require("passport-github2").Strategy
 const FortyTwoStrategy = require("passport-42").Strategy
 const GoogleStrategy = require("passport-google-oauth20").Strategy
-const { getUser, insertUser } = require(__dirname+"/../models/user.model")
-const { keys, host } = require("./index.config")
-const {generateToken} = require(__dirname+"/../helper/index.helper")
+const { getUser, insertUser } = require(__dirname+"/../models/userModel")
+const { keys, host } = require("./indexConfig")
+const {generateToken} = require(__dirname+"/../helper/indexHelper")
 
 passport.use(
     new LocalStrategy(

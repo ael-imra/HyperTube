@@ -3,28 +3,26 @@ import Logo from '../Images/Logo.svg';
 import Button from '@material-ui/core/Button';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import SearchIcon from '@material-ui/icons/Search';
 import { DataContext } from '../Context/AppContext';
 import { useHistory } from 'react-router-dom';
 import '../Css/Header.css';
-import { UseWindowSize } from '../Assets/UseWindowSize';
-import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Search from './Search';
+import { UseWindowSize } from '../Assets/UseWindowSize';
 
-const LogoWebSite = (props) => {
+const LogoWebSite = () => {
   let history = useHistory();
-
+  const width = UseWindowSize();
   return (
     <div className='Logo' onClick={() => history.push('/')}>
       <img src={Logo} alt='...' />
-      {props.ctx.width <= 700 ? '' : <p>Hypertube</p>}
+      {width <= 700 ? '' : <p>Hypertube</p>}
     </div>
   );
 };
 const NavWeb = (props) => {
+  const ctx = React.useContext(DataContext);
   return (
     <div className='Nav'>
       <div
@@ -33,7 +31,7 @@ const NavWeb = (props) => {
           props.setIsActive(1);
           props.ctx.history.push('/');
         }}>
-        <p style={{ color: `${props.isActive === 1 ? '#ec4646' : 'white'}` }}>Home</p>
+        <p style={{ color: `${props.isActive === 1 ? '#ec4646' : 'white'}` }}>{ctx.Languages[ctx.Lang].Home}</p>
       </div>
       <div
         className={`${props.isActive === 2 ? 'LinkActive' : 'Link'}`}
@@ -41,7 +39,7 @@ const NavWeb = (props) => {
           props.setIsActive(2);
           props.ctx.history.push('/MyList');
         }}>
-        <p style={{ color: `${props.isActive === 2 ? '#ec4646' : 'white'}` }}>My List</p>
+        <p style={{ color: `${props.isActive === 2 ? '#ec4646' : 'white'}` }}>{ctx.Languages[ctx.Lang].Mylist}</p>
       </div>
       <div
         className={`${props.isActive === 3 ? 'LinkActive' : 'Link'}`}
@@ -49,7 +47,7 @@ const NavWeb = (props) => {
           props.setIsActive(3);
           props.ctx.history.push('/Profile');
         }}>
-        <p style={{ color: `${props.isActive === 3 ? '#ec4646' : 'white'}` }}>Profile</p>
+        <p style={{ color: `${props.isActive === 3 ? '#ec4646' : 'white'}` }}>{ctx.Languages[ctx.Lang].Profile}</p>
       </div>
       <Button
         variant='outlined'
@@ -62,6 +60,7 @@ const NavWeb = (props) => {
           textTransform: 'none',
           display: 'flex',
           marginRight: '10px',
+          marginLeft: '10px',
         }}
         onClick={() => props.ctx.setLang((oldValue) => (oldValue === 'Eng' ? 'Fr' : 'Eng'))}>
         {props.ctx.Lang === 'Eng' ? 'Eng' : 'Fre'}
@@ -78,15 +77,16 @@ const NavWeb = (props) => {
           marginRight: '10px',
         }}
         onClick={() => props.ctx.setLang((oldValue) => (oldValue === 'Eng' ? 'Fr' : 'Eng'))}>
-        Logout
+        {ctx.Languages[ctx.Lang].Logout}
       </Button>
     </div>
   );
 };
 const NavMobil = (props) => {
+  const ctx = React.useContext(DataContext);
   const [showMenuNav, setShowMenuNav] = React.useState(null);
   return (
-    <div className='Nav' style={{ width: `${props.ctx.width >= 700 ? '75%' : '85%'}` }}>
+    <div className='Nav'>
       <Button
         variant='outlined'
         size={'small'}
@@ -110,7 +110,7 @@ const NavMobil = (props) => {
             props.ctx.history.push('/');
             props.setIsActive(1);
           }}>
-          Home
+          {ctx.Languages[ctx.Lang].Home}
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -118,7 +118,7 @@ const NavMobil = (props) => {
             props.setIsActive(3);
             props.ctx.history.push('/Profile');
           }}>
-          Profile
+          {ctx.Languages[ctx.Lang].Profile}
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -126,9 +126,9 @@ const NavMobil = (props) => {
             props.ctx.history.push('/MyList');
             props.setIsActive(2);
           }}>
-          My List
+          {ctx.Languages[ctx.Lang].Mylist}
         </MenuItem>
-        <MenuItem onClick={() => setShowMenuNav(null)}>Logout</MenuItem>
+        <MenuItem onClick={() => setShowMenuNav(null)}>{ctx.Languages[ctx.Lang].Logout}</MenuItem>
       </Menu>
     </div>
   );
@@ -160,7 +160,7 @@ export default function Header(props) {
     );
   else
     return (
-      <div className='Header' style={{ position: 'sticky', top: '-3px', zIndex: '999999', height: '70px' }}>
+      <div className='Header' style={{ position: 'sticky', top: '-3px', zIndex: '999999', height: '60px', backgroundColor: 'rgba(34, 40, 49, 0.46)' }}>
         <LogoWebSite ctx={ctx} />
         {width < 840 ? <NavMobil isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} /> : <NavWeb isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} />}
       </div>

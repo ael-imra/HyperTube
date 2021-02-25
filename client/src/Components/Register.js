@@ -4,11 +4,12 @@ import Button from '@material-ui/core/Button';
 import SocialMedia from './SocialMedia';
 import { useHistory } from 'react-router-dom';
 import { DataContext } from '../Context/AppContext';
+import { authRegister } from '../Assets/auth';
 export default function Register(props) {
   const [DataInput, saveDataInput] = React.useState({ email: '', password: '', firstName: '', lastName: '', userName: '' });
   let history = useHistory();
   const ctx = React.useContext(DataContext);
-  const register = () => {
+  const register = async () => {
     let listError = [];
     if (!ctx.Validator('userName', DataInput.userName)) listError.push(ctx.Languages[ctx.Lang].UserNameNotValid);
     if (!ctx.Validator('email', DataInput.email)) listError.push(ctx.Languages[ctx.Lang].EmailNotValid);
@@ -16,7 +17,11 @@ export default function Register(props) {
     if (!ctx.Validator('firstName', DataInput.firstName)) listError.push(ctx.Languages[ctx.Lang].FirstNameNotValid);
     if (!ctx.Validator('lastName', DataInput.lastName)) listError.push(ctx.Languages[ctx.Lang].LastNameNameNotValid);
     if (listError.length !== 0) props.handleShowMessage('error', listError.toString().replace(/,/g, ' -'));
-    else console.log('ok');
+    else {
+      const result = await authRegister(DataInput);
+      props.handleShowMessage(result.type, result.body);
+      if (result.type === 'success') history.push('/Login');
+    }
   };
   return (
     <div className='Sing'>
@@ -92,7 +97,7 @@ export default function Register(props) {
         size='large'
         onClick={register}
         style={{
-          backgroundColor: '#03a9f1',
+          backgroundColor: '#ec4646',
           color: 'white',
           textTransform: 'none',
           width: '200px',
