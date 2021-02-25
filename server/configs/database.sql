@@ -22,3 +22,29 @@ CREATE TABLE IF NOT EXISTS `Comments` (
 	`date` DATETIME DEFAULT NOW(),
     FOREIGN KEY (userID) REFERENCES `Users`(userID)
 );
+CREATE TABLE IF NOT EXISTS `Favorites` (
+    `favoriteID` INT AUTO_INCREMENT PRIMARY KEY,
+    `userID` INT NOT NULL,
+    `imdbID` VARCHAR(10) NOT NULL,
+    `movieTitle` VARCHAR(100) NOT NULL,
+    `movieImage` VARCHAR(100) NOT NULL,
+	`date` DATETIME DEFAULT NOW(),
+    FOREIGN KEY (userID) REFERENCES `Users`(userID)
+);
+CREATE TABLE IF NOT EXISTS `Viewed` (
+    `viewedID` INT AUTO_INCREMENT PRIMARY KEY,
+    `userID` INT NOT NULL,
+    `imdbID` VARCHAR(10) NOT NULL,
+    `movieTitle` VARCHAR(100) NOT NULL,
+    `movieImage` VARCHAR(100) NOT NULL,
+	`date` DATETIME DEFAULT NOW(),
+    FOREIGN KEY (userID) REFERENCES `Users`(userID)
+);
+CREATE TABLE IF NOT EXISTS `Movies` (
+    `movieID` INT AUTO_INCREMENT PRIMARY KEY,
+    `imdbID` VARCHAR(10) NOT NULL,
+    `torrentHash` VARCHAR(100) NOT NULL,
+    `path` VARCHAR(255) NOT NULL,
+    `isDownloaded` INT DEFAULT 0,
+	`dateLastView` DATETIME DEFAULT NOW()
+);
