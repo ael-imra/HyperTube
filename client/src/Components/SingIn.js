@@ -3,6 +3,7 @@ import Input from './Input';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { DataContext } from '../Context/AppContext';
+import { authLogin } from '../Assets/auth';
 
 import SocialMedia from './SocialMedia';
 const SingIn = (props) => {
@@ -10,9 +11,11 @@ const SingIn = (props) => {
   let history = useHistory();
   const ctx = React.useContext(DataContext);
 
-  const login = () => {
-    if (ctx.Validator('userName', DataInput.userName) && ctx.Validator('password', DataInput.password)) console.log('ok');
-    else props.handleShowMessage('error', ctx.Languages[ctx.Lang].MessageErrorLogin);
+  const login = async () => {
+    if (ctx.Validator('userName', DataInput.userName) && ctx.Validator('password', DataInput.password)) {
+      const result = await authLogin(DataInput);
+      console.log(result)
+    } else props.handleShowMessage('error', ctx.Languages[ctx.Lang].MessageErrorLogin);
   };
   return (
     <div className='Sing'>
@@ -77,7 +80,7 @@ const SingIn = (props) => {
         variant='contained'
         size='large'
         style={{
-          backgroundColor: '#03a9f1',
+          backgroundColor: '#ec4646',
           color: 'white',
           textTransform: 'none',
           width: '200px',

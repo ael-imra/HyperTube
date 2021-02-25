@@ -10,12 +10,11 @@ export default function Search(props) {
     <div className='search'>
       <SearchIcon style={{ color: 'white', fontSize: '25px', marginRight: '10px' }} />
       <InputBase
-        placeholder='Search…'
+        placeholder={`${ctx.Languages[ctx.Lang].Search} ...`}
         style={{ fontSize: '17px', color: 'white', width: '100%' }}
         onChange={(e) => {
           document.querySelector('.App').scrollTop = 0;
           props.Onchange(e.target.value);
-
         }}
       />
     </div>
