@@ -9,6 +9,8 @@ const authRoute = require('./routes/authRoute')
 const oauthRoute = require('./routes/oauthRoute')
 const profileRoute = require('./routes/profileRoute')
 const commentRoute = require('./routes/commentRoute')
+const favoriteRoute = require('./routes/favoriteRoute')
+const movieRoute = require('./routes/movieRoute')
 const authentication = require('./middleware/authentication')
 const errorHandler = require('./middleware/errorHandler')
 const { keys } = require('./configs/indexConfig')
@@ -50,14 +52,19 @@ app.use('/oauth', oauthRoute)
 app.use('/auth', authRoute)
 app.use('/profile', authentication, profileRoute)
 app.use('/comment', authentication, commentRoute)
+app.use('/favorite', authentication, favoriteRoute)
+app.use('/movie', authentication, movieRoute)
 app.get('/', (req, res) => {
-	if (req.isAuthenticated()) return res.send('Welcome LLLLLL')
+	if (req.isAuthenticated()) {
+		res.type('.html')
+		return res.sendFile(__dirname + '/public/index.html')
+	}
 	return res.redirect('/login')
 })
 app.get('/login', (req, res) => {
 	if (!req.isAuthenticated()) {
-		res.contentType('text/html')
-		return res.sendFile(__dirname + '/public/index.html')
+		res.type('.html')
+		return res.sendFile(__dirname + '/public/login.html')
 	}
 	return res.redirect('/')
 })
