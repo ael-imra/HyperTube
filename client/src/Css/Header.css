@@ -3,7 +3,7 @@
   height: 95px;
   display: flex;
   align-items: center;
-  background-color: rgba(34, 40, 49, 0.46);
+  /* background-color: rgba(34, 40, 49, 0.46); */
 }
 .Logo {
   display: flex;
@@ -11,14 +11,15 @@
   cursor: pointer;
 }
 .Logo > img {
-  width: 75px;
+  width: 55px;
   margin-left: 25px;
 }
 .Logo > p {
   color: white;
-  font-size: 33px;
+  font-size: 30px;
   font-family: 'B612', sans-serif;
   user-select: none;
+  animation: tracking-in-expand 0.7s;
 }
 .Nav {
   height: 65px;
@@ -46,7 +47,7 @@
 }
 .LinkActive::after {
   position: absolute;
-  top: 45px;
+  bottom: -4px;
   background-color: #ec4646;
   content: '';
   width: 90%;
@@ -55,7 +56,7 @@
 }
 .Link::after {
   position: absolute;
-  top: 45px;
+  bottom: -4px;
   background-color: #ec4646;
   content: '';
   width: 0%;
@@ -65,18 +66,18 @@
 .Link:hover:after {
   width: 90%;
 }
-@media only screen and (max-width: 533px) {
-  .Header {
-    padding-top: 0px;
-    height: 60px;
-    margin-bottom: 9px;
+@keyframes tracking-in-expand {
+  0% {
+    letter-spacing: -45px;
+    transform-origin: left;
+    opacity: 0;
   }
-  .Logo > img {
-    width: 55px;
-    margin-left: 2px;
+  40% {
+    opacity: 0.6;
   }
-  .Logo > p {
-    font-size: 21px;
+  100% {
+    opacity: 1;
+    letter-spacing: 0px;
   }
 }
 @media only screen and (max-width: 550px) {

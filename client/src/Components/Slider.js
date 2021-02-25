@@ -7,8 +7,12 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import Rating from '@material-ui/lab/Rating';
 import '../Css/Slider.css';
 import Axios from 'axios';
+import { UseWindowSize } from '../Assets/UseWindowSize';
+import { DataContext } from '../Context/AppContext';
 
-export default function Slider(props) {
+export default function Slider() {
+  const width = UseWindowSize();
+  const ctx = React.useContext(DataContext);
   const [sliderActive, setSliderActive] = React.useState(0);
   const [listPopularMovies, setListPopularMovies] = React.useState([]);
   React.useEffect(async () => {
@@ -23,7 +27,7 @@ export default function Slider(props) {
     });
     setListPopularMovies(detailPopularMovies);
   }, []);
-  return (
+  return width > 600 ? (
     <div className='Slide'>
       {sliderActive !== 0 ? (
         <NavigateBeforeIcon
@@ -59,7 +63,7 @@ export default function Slider(props) {
                   fontSize: '18px',
                   marginTop: '15px',
                 }}>
-                Watch
+                {ctx.Languages[ctx.Lang].Watch}
               </Button>
               <Button
                 variant='contained'
@@ -69,10 +73,10 @@ export default function Slider(props) {
                   color: 'white',
                   textTransform: 'none',
                   fontSize: '18px',
-                  width: '180px',
+                  minWidth:'180px',
                   marginTop: '15px',
                 }}>
-                Add to list
+                {ctx.Languages[ctx.Lang].AddToList}
               </Button>
             </div>
           </div>
@@ -89,5 +93,7 @@ export default function Slider(props) {
         ''
       )}
     </div>
+  ) : (
+    ''
   );
 }

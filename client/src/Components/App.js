@@ -13,33 +13,48 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import ResetPassword from './ResetPassword';
 import Dashboard from './Dashboard';
+import Axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function App() {
   const [snackbarToggle, setSnackbarToggle] = React.useState(false);
   const [contentMessage, setContentMessage] = React.useState({ type: '', content: '' });
+  const [isLogin, setIsLogin] = React.useState('');
   const [search, setSearch] = React.useState('');
   const ctx = React.useContext(DataContext);
   const handleCloseMessage = () => {
     setSnackbarToggle(false);
   };
-  console.log('App');
-  return (
+  React.useEffect(async () => {
+    const result = await Axios.get('/auth', { withCredentials: true });
+    setIsLogin(result.data.isLogin);
+  }, []);
+  return isLogin === '' ? (
+    <CircularProgress color='secondary' />
+  ) : isLogin === true ? (
     <div
       className='App'
       style={{ overflowY: 'auto' }}
       onScroll={async (e) => {
         if (e.target.scrollTop + e.target.clientHeight + 450 > e.target.scrollHeight && e.target.scrollTop > 800) {
           if (ctx.ref.setListMovies && ctx.cache.listMovies.list.lenght !== 0) {
-            if (ctx.cache.listMovies.next) {
+            if (ctx.cache.listMovies.next && ctx.cache.listMoviesLoader === false) {
+              ctx.cache.listMoviesLoader = true;
               ctx.cache.listMovies = await ctx.GetMovies(ctx.cache.listMovies.page, ctx.cache.listMovies.list, ctx.cache.filter);
               ctx.ref.setListMovies(ctx.cache.listMovies);
+              ctx.cache.listMoviesLoader = false;
             }
           }
         }
         if (e.target.scrollTop >= 750) document.querySelector('.Header').style.backgroundColor = 'rgba(34, 40, 49, 0.78)';
         else document.querySelector('.Header').style.backgroundColor = 'rgba(34, 40, 49, 0.46)';
       }}>
-      {/* <Header type='notLogin' />
+      <Header type='Login' search={{ search, setSearch }} />
+      <Dashboard />
+    </div>
+  ) : (
+    <div className='App' style={{ overflowY: 'auto' }}>
+      <Header type='notLogin' />
       <div className='Body'>
         <>
           <Switch>
@@ -80,14 +95,12 @@ function App() {
             </Route>
           </Switch>
           <Snackbar open={snackbarToggle} autoHideDuration={5000} onClose={handleCloseMessage}>
-            <Alert severity={contentMessage.type} onClose={handleCloseMessage} variant='filled' style={{ backgroundColor: '#ec4646' }}>
+            <Alert severity={contentMessage.type} onClose={handleCloseMessage} variant='filled'>
               {contentMessage.content}
             </Alert>
           </Snackbar>
         </>
-      </div> */}
-      <Header type='Login' search={{ search, setSearch }} />
-      <Dashboard />
+      </div>
     </div>
   );
 }
