@@ -9,7 +9,7 @@ const register = async function (req, res, next) {
 		const error = checkUserInput(req.body, ['email', 'userName', 'lastName', 'firstName', 'password'])
 		if (error)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: error,
 			})
@@ -21,24 +21,24 @@ const register = async function (req, res, next) {
 				const insertSuccessful = await insertUser({ ...req.body, token })
 				if (insertSuccessful)
 					return res.send({
-						type: 'Success',
+						type: 'success',
 						status: 200,
 						body: 'Registration Successful',
 					})
 				return res.send({
-					type: 'Error',
+					type: 'error',
 					status: 400,
 					body: 'Registration Failed',
 				})
 			}
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: 'Something wrong with email',
 			})
 		}
 		return res.send({
-			type: 'Warn',
+			type: 'warning',
 			status: 403,
 			body: 'User already exist',
 		})
@@ -52,7 +52,7 @@ const login = async function (req, res, next) {
 		const error = checkUserInput(req.body, ['userName', 'password'])
 		if (error)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: error,
 			})
@@ -60,33 +60,33 @@ const login = async function (req, res, next) {
 		if (user) {
 			if (user.githubID || user.googleID || user['42ID'])
 				return res.send({
-					type: 'Warn',
+					type: 'warning',
 					status: 403,
 					body: "You can't login with this username",
 				})
 			const checkPassword = await bcrypt.compare(req.body.password, user.password)
 			if (!checkPassword)
 				return res.send({
-					type: 'Error',
+					type: 'error',
 					status: 401,
 					body: 'Incorrect password',
 				})
 			if (user.isActive) {
 				req.login(user.userID, (err) => err)
 				return res.send({
-					type: 'Success',
+					type: 'success',
 					status: 200,
 					body: 'user authenticated',
 				})
 			} else if (user.isActive === 0)
 				return res.send({
-					type: 'Warn',
+					type: 'warning',
 					status: 403,
 					body: 'You must activate the account',
 				})
 		}
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 401,
 			body: 'Incorrect userName or password',
 		})
@@ -100,7 +100,7 @@ const resetPassword = async function (req, res, next) {
 		const error = checkUserInput(req.body, ['email'])
 		if (error)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: error,
 			})
@@ -108,25 +108,25 @@ const resetPassword = async function (req, res, next) {
 		if (user) {
 			if (!user.isActive)
 				return res.send({
-					type: 'Warn',
+					type: 'warning',
 					status: 403,
 					body: 'Please verify your email than reset your password',
 				})
 			const mailResult = await sendMail('active', req.body.email, user.userName, `http://${req.headers.host}/token=${user.token}`)
 			if (!mailResult.error)
 				return res.send({
-					type: 'Success',
+					type: 'success',
 					status: 200,
 					body: 'Check your email to reset password',
 				})
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: 'Something wrong with email',
 			})
 		}
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 400,
 			body: 'Incorrect email',
 		})
@@ -139,7 +139,7 @@ const activeAccount = async function (req, res, next) {
 		const error = checkUserInput(req.body, ['token'])
 		if (error)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
 				body: error,
 			})
@@ -148,13 +148,13 @@ const activeAccount = async function (req, res, next) {
 			const token = generateToken(128)
 			updateUser({ userName: user.userName }, { token, isActive: 1 })
 			return res.send({
-				type: 'Success',
+				type: 'success',
 				status: 200,
 				body: 'Your account has been activated successfully',
 			})
 		}
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 400,
 			body: 'Incorrect token',
 		})

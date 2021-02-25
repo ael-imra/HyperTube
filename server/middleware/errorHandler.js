@@ -1,7 +1,8 @@
 const errorHandler = function (err, req, res, next) {
+	console.log(err)
 	if (err)
 		res.send({
-			type: 'Error',
+			type: 'error',
 			status: 403,
 			body: 'Something wrong please try again',
 		})
