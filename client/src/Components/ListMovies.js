@@ -17,8 +17,8 @@ export default function ListMovies() {
     ctx.cache.listMovies = await ctx.GetMovies(1, [], ctx.cache.filter);
     ctx.ref.setListMovies = setListMovies;
     setListMovies(ctx.cache.listMovies);
-  }, []);
-  console.log('ListMovie');
+    return () => (ctx.ref.setListMovies = null);
+  }, [ctx.Lang]);
   return (
     <div className='ListMovie'>
       {listMovies.middleware ? (

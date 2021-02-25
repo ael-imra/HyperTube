@@ -1,21 +1,19 @@
 import React, { useState, createContext } from 'react';
 import { Languages } from '../Assets/language';
 import { Validator } from '../Assets/validator';
-import { UseWindowSize } from '../Assets/UseWindowSize';
 import { useHistory } from 'react-router-dom';
-
 import { GetMovies } from '../Assets/GetMovies';
-
 export const DataContext = createContext();
 export default function AppContext(props) {
   const [Lang, setLang] = useState('Eng');
-  const width = UseWindowSize();
+
   let history = useHistory();
   const ref = {};
   const cache = {
     listMovies: { list: [], page: 0, next: false, middleware: true },
     listPopularMovies: {},
-    filter: { years: '', rating: 0, title: '', order: '', genre: '' },
+    filter: { years: '', rating: 0, title: '', order: 'desc', genre: '', sort: '' },
+    listMoviesLoader: false,
   };
   return (
     <DataContext.Provider
@@ -24,7 +22,6 @@ export default function AppContext(props) {
         setLang,
         Languages,
         Validator,
-        width,
         history,
         GetMovies,
         ref,
@@ -34,3 +31,7 @@ export default function AppContext(props) {
     </DataContext.Provider>
   );
 }
+
+// body: "User already exist"
+// status: 403
+// type: "warning"
