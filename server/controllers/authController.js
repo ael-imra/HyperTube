@@ -118,7 +118,7 @@ const resetPassword = async function (req, res, next) {
           status: 403,
           body: 'Please verify your email than reset your password',
         });
-      const mailResult = await sendMail('active', req.body.email, user.userName, `http://${req.headers.host}/token=${user.token}`);
+      const mailResult = await sendMail('reset', req.body.email, user.userName, `http://${req.headers.host}/ResetPassword/${user.token}`);
       if (!mailResult.error)
         return res.send({
           type: 'success',
