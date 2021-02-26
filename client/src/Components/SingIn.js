@@ -14,7 +14,11 @@ const SingIn = (props) => {
   const login = async () => {
     if (ctx.Validator('userName', DataInput.userName) && ctx.Validator('password', DataInput.password)) {
       const result = await authLogin(DataInput);
-      console.log(result)
+      props.handleShowMessage(result.type, result.body);
+      if (result.type === 'success') {
+        props.setIsLogin(true);
+        history.push('/');
+      }
     } else props.handleShowMessage('error', ctx.Languages[ctx.Lang].MessageErrorLogin);
   };
   return (

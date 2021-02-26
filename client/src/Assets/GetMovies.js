@@ -1,7 +1,7 @@
 import Axios from 'axios';
 export const GetMovies = async (page, oldValue, search) => {
   let { years, rating, order, genre, title, sort } = search;
-  if (order === '') order = 'download_count';
+  if (sort === '') sort = 'download_count';
   if (genre === 'All') genre = '';
   let test = await new Promise(async (resolve) => {
     let arrayMovies;
