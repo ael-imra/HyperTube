@@ -9,7 +9,6 @@ authRoute.get('/', (req, res) => {
   });
 });
 authRoute.post('/login', (req, res, next) => {
-  console.log('ENTER');
   if (!req.isAuthenticated()) {
     return passport.authenticate('local', async () => {
       return await login(req, res, next);

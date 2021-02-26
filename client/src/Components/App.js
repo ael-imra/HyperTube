@@ -67,6 +67,7 @@ function App() {
                   setContentMessage({ type: type, content: content });
                   setSnackbarToggle(true);
                 }}
+                setIsLogin={setIsLogin}
               />
             </Route>
             <Route exact path='/Register'>
