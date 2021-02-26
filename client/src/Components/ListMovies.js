@@ -6,6 +6,7 @@ import StarIcon from '@material-ui/icons/Star';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';
 import { DataContext } from '../Context/AppContext';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import '../Css/ListMovies.css';
@@ -13,6 +14,8 @@ import '../Css/ListMovies.css';
 export default function ListMovies() {
   const ctx = React.useContext(DataContext);
   const [listMovies, setListMovies] = React.useState(ctx.cache.listMovies);
+
+  let history = useHistory();
   React.useEffect(async () => {
     ctx.cache.listMovies = await ctx.GetMovies(1, [], ctx.cache.filter);
     ctx.ref.setListMovies = setListMovies;
@@ -38,6 +41,9 @@ export default function ListMovies() {
                     <Button
                       variant='contained'
                       startIcon={<PlayArrowIcon style={{ fontSize: '25px' }} />}
+                      onClick={(e) => {
+                        history.push(`/movie/${movie.id}`);
+                      }}
                       style={{
                         backgroundColor: '#ec4646',
                         color: 'white',
