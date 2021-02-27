@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `Movies` (
     `movieID` INT AUTO_INCREMENT PRIMARY KEY,
     `imdbID` VARCHAR(10) NOT NULL,
     `torrentHash` VARCHAR(100) NOT NULL,
-    `path` VARCHAR(255) NOT NULL,
-    `isDownloaded` INT DEFAULT 0,
+    `path` VARCHAR(255),
 	`dateLastView` DATETIME DEFAULT NOW()
 );
