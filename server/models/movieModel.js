@@ -1,7 +1,7 @@
 const { query } = require(__dirname + '/../controllers/mysqlController')
 
 const getMovie = async function (imdbID, torrentHash) {
-	const [movie] = await query('SELECT path,isDownloaded FROM Movies WHERE imdbID=? AND torrentHash=?', [imdbID, torrentHash])
+	const [movie] = await query('SELECT movieID,path FROM Movies WHERE imdbID=? AND torrentHash=?', [imdbID, torrentHash])
 	return movie || {}
 }
 const insertMovie = async function (values) {
