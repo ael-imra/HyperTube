@@ -1,6 +1,6 @@
 const { getMovie } = require('../models/movieModel')
-const { downloadSubtitles } = require('../services/downloadService')
-const { streamFromPath, streamFromTorrent } = require('./streamController')
+const { downloadSubtitles } = require('../services/streamService')
+const { streamFromTorrent } = require('./streamController')
 
 const getOneMovie = async function (req, res, next) {
 	try {
@@ -11,11 +11,11 @@ const getOneMovie = async function (req, res, next) {
 				status: 400,
 				body: 'Incorrect parameters',
 			})
-		const { path, isDownloaded } = await getMovie(imdbID, torrentHash)
-		if (path && isDownloaded) return streamFromPath(path, req, res, next)
+		const movie = await getMovie(imdbID, torrentHash)
+		// if (movie && movie.path) streamFromPath(movie, req, res, next)
 		// downloadSubtitles(imdbID)
 		// res.end()
-		return streamFromTorrent(path, req, res, next)
+		return streamFromTorrent(movie, req, res, next)
 	} catch (err) {
 		next(err)
 	}
