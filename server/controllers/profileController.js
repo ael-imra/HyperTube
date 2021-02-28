@@ -115,7 +115,7 @@ const editImage = async function (req, res, next) {
 		const user = await getUser({ userID: req.user }, ['image'])
 		const resultUpdate = await updateUser({ userID: req.user }, { image: imagePath })
 		if (resultUpdate) {
-			if (user.image) fs.unlink(__dirname + '/..' + user.image, (err) => console.log(err))
+			if (user.image && fs.existsSync(__dirname + '/..' + user.image)) fs.unlink(__dirname + '/..' + user.image, (err) => console.log(err))
 			return res.send({
 				type: 'success',
 				status: 200,
