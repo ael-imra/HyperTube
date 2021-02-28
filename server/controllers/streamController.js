@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { updateMovie, insertMovie } = require('../models/movieModel')
+const { insertMovie, insertWatchedMovie, updateWatchedMovie } = require('../models/movieModel')
 const { downloadStream, convertStream } = require('../services/streamService')
 const path = require('path')
 
@@ -13,9 +13,13 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 				status: 403,
 				body: 'Movie not found',
 			})
-		if (!movieExist) insertMovie({ torrentHash, imdbID })
+		console.log(movieExist)
+		if (!Object.keys(movieExist).length) {
+			insertMovie({ torrentHash, imdbID, path: streamObject.file.path })
+			insertWatchedMovie({ imdbID, userID: req.user })
+		} else updateWatchedMovie(imdbID, req.user)
 		const ext = path.extname(streamObject.file.name).replace('.', '')
-		if (ext !== 'mp4' && ext !== 'opgg' && ext !== 'webm') streamObject.needConvert = true
+		if (ext !== 'mp4' && ext !== 'opgg' && ext !== 'webm' && ext !== 'avi' && ext !== 'mkv') streamObject.needConvert = true
 		const { range } = req.headers
 		if (!streamObject.needConvert) {
 			if (range) {
@@ -27,7 +31,7 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 					'Content-Range': `bytes ${start}-${end}/${streamObject.file.length}`,
 					'Accept-Ranges': 'bytes',
 					'Content-Length': chunkSize,
-					'Content-Type': `video/${ext}`,
+					'Content-Type': `video/mp4`,
 				}
 				const streamFile = streamObject.file.createReadStream({
 					start,
@@ -38,7 +42,7 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 			}
 			const header = {
 				'Content-Length': streamObject.file.length,
-				'Content-Type': `video/${ext}`,
+				'Content-Type': `video/mp4`,
 			}
 			const streamFile = streamObject.file.createReadStream()
 			res.writeHead(206, header)

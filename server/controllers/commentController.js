@@ -2,13 +2,14 @@ const { getComments, deleteComment, insertComment } = require('../models/comment
 
 const getAllComments = async function (req, res, next) {
 	try {
-		if (typeof req.params.imdbID !== 'string' || req.params.imdbID.length > 10)
+		const { imdbID } = req.params
+		if (typeof imdbID !== 'string' || imdbID.length > 10)
 			return res.send({
 				type: 'error',
 				status: 400,
 				body: 'Incorrect imdbID',
 			})
-		const allComments = await getComments(req.params.imdbID)
+		const allComments = await getComments(imdbID)
 		if (allComments.length > 0)
 			return res.send({
 				type: 'success',
@@ -26,13 +27,14 @@ const getAllComments = async function (req, res, next) {
 }
 const addComment = async function (req, res, next) {
 	try {
+		const { imdbID, commentContent } = req.body
 		if (
-			typeof req.body.imdbID !== 'string' ||
-			!req.body.imdbID.trim() ||
-			req.body.imdbID.trim().length > 10 ||
-			typeof req.body.commentContent !== 'string' ||
-			!req.body.commentContent.trim() ||
-			req.body.commentContent.trim().length > 100
+			typeof imdbID !== 'string' ||
+			!imdbID.trim() ||
+			imdbID.trim().length > 10 ||
+			typeof commentContent !== 'string' ||
+			!commentContent.trim() ||
+			commentContent.trim().length > 100
 		)
 			return res.send({
 				type: 'error',
@@ -41,8 +43,8 @@ const addComment = async function (req, res, next) {
 			})
 		const resultInsert = await insertComment({
 			userID: req.user,
-			imdbID: req.body.imdbID.trim(),
-			commentContent: req.body.commentContent.trim(),
+			imdbID: imdbID.trim(),
+			commentContent: commentContent.trim(),
 		})
 		if (resultInsert.insertId)
 			return res.send({
@@ -61,13 +63,14 @@ const addComment = async function (req, res, next) {
 }
 const removeComment = async function (req, res, next) {
 	try {
-		if (typeof req.body.imdbID !== 'string' || !req.body.imdbID.trim() || req.body.imdbID.trim().length > 10)
+		const { imdbID, commentID } = req.body
+		if (typeof imdbID !== 'string' || !imdbID.trim() || imdbID.trim().length > 10 || typeof commentID !== 'number')
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Incorrect imdbID',
+				body: 'Incorrect parameters',
 			})
-		const deleteResult = await deleteComment(req.body.imdbID.trim(), req.user)
+		const deleteResult = await deleteComment(imdbID.trim(), req.user)
 		if (deleteResult)
 			return res.send({
 				type: 'success',
