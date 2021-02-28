@@ -9,23 +9,29 @@ import '../Css/Slider.css';
 import Axios from 'axios';
 import { UseWindowSize } from '../Assets/UseWindowSize';
 import { DataContext } from '../Context/AppContext';
+import { useHistory } from 'react-router-dom';
 
 export default function Slider() {
   const width = UseWindowSize();
   const ctx = React.useContext(DataContext);
   const [sliderActive, setSliderActive] = React.useState(0);
   const [listPopularMovies, setListPopularMovies] = React.useState([]);
+  let history = useHistory();
   React.useEffect(async () => {
+    let unmount = false;
     const popularMovies = await Axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
     const detailPopularMovies = await new Promise((resolve) => {
       const result = [];
       popularMovies.data.results.map(async (movie) => {
         const image = await Axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
+        image.data.backdrops.sort((a, b) => b.width - a.width);
         result.push({ id: movie.id, title: movie.title, original_language: movie.original_language, image: `https://image.tmdb.org/t/p/original/${image.data.backdrops[0].file_path}`, overview: movie.overview, date: parseInt(movie.release_date), rating: movie.vote_average });
         if (result.length === popularMovies.data.results.length) resolve(result);
       });
     });
-    setListPopularMovies(detailPopularMovies);
+    console.log(listPopularMovies);
+    if (!unmount) setListPopularMovies(detailPopularMovies);
+    return () => (unmount = true);
   }, []);
   return width > 600 ? (
     <div className='Slide'>
@@ -55,6 +61,11 @@ export default function Slider() {
               <Button
                 variant='contained'
                 startIcon={<PlayArrowIcon style={{ fontSize: '35px' }} />}
+                onClick={async () => {
+                  const getImdbCode = await Axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/external_ids?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
+                  const codeMovie = await Axios.get(`https://yts.mx/api/v2/list_movies.json?query_term=${getImdbCode.data.imdb_id}`);
+                  history.push(`/movie/${codeMovie.data.data.movies[0].id}`);
+                }}
                 style={{
                   backgroundColor: '#ec4646',
                   color: 'white',
@@ -73,7 +84,7 @@ export default function Slider() {
                   color: 'white',
                   textTransform: 'none',
                   fontSize: '18px',
-                  minWidth:'180px',
+                  minWidth: '180px',
                   marginTop: '15px',
                 }}>
                 {ctx.Languages[ctx.Lang].AddToList}
