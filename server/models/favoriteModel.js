@@ -1,7 +1,10 @@
-const { query } = require(__dirname + '/../controllers/mysqlController')
+const { query } = require(__dirname + '/../services/mysqlService')
 
-const getFavorites = async function (userID) {
-	const favorites = await query(`SELECT *  FROM Favorites WHERE userID=?`, userID)
+const getFavorites = async function (userID, justImdbID) {
+	const needed = justImdbID
+		? justImdbID
+		: "favoriteID,imdbID,movieImage,movieLanguage,movieRelease,movieTime,movieGender,movieDescription,(SELECT COUNT(userID) FROM Viewed WHERE userID=f.userID AND imdbID=f.imdbID) AS 'watched'"
+	const favorites = await query(`SELECT ${needed} FROM Favorites f WHERE userID=?`, userID)
 	return favorites
 }
 
@@ -20,7 +23,7 @@ const checkFavoriteMovie = async function (imdbID, userID) {
 	/**
 	 * get movieTitle and movieImage From db to avoid send request
 	 */
-	const [favoriteOfSomeone] = await query('SELECT movieTitle,movieImage FROM Favorites WHERE imdbID=?', imdbID)
+	const [favoriteOfSomeone] = await query('SELECT movieImage,movieLanguage,movieRelease,movieTime,movieGender,movieDescription FROM Favorites WHERE imdbID=?', imdbID)
 	return favoriteOfSomeone || {}
 }
 
