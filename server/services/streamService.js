@@ -5,6 +5,7 @@ const torrentStream = require('torrent-stream')
 const download = require('download')
 const srt2vtt = require('srt-to-vtt')
 const ffmpeg = require('fluent-ffmpeg')
+const mkdirp = require('mkdirp')
 const { opensubtitles_config } = require('../configs/indexConfig')
 
 const convertStream = function (stream) {
@@ -31,13 +32,16 @@ const downloadSubtitles = async function (imdbID) {
 	})
 	Object.keys(subtitles).map(async (key) => {
 		if (key === 'fr' || key === 'en') {
-			const dirPath = path.join(__dirname, '..', 'downloads/subtitles')
-			const filePath = path.join(dirPath, `${imdbID}_${key}.vtt`)
-			if (!fs.existsSync(dirPath))
-				fs.mkdir(dirPath, () => {
-					fs.writeFile(filePath, '', (err) => (!err ? download(subtitles[key].url).pipe(srt2vtt()).pipe(fs.createWriteStream(filePath)) : 0))
+			const dirPath = path.join(__dirname, '..', 'downloads/subtitles', imdbID)
+			const filePath = path.join(dirPath, `${key}.vtt`)
+			console.log('DIR', dirPath, filePath)
+			if (!fs.existsSync(dirPath)) {
+				const made = await mkdirp(dirPath)
+				fs.writeFile(filePath, '', (err) => {
+					console.log(err, 'err')
+					if (!err) download(subtitles[key].url).pipe(srt2vtt()).pipe(fs.createWriteStream(filePath))
 				})
-			else fs.writeFile(filePath, '', (err) => (!err ? download(subtitles[key].url).pipe(srt2vtt()).pipe(fs.createWriteStream(filePath)) : 0))
+			} else fs.writeFile(filePath, '', (err) => (!err ? download(subtitles[key].url).pipe(srt2vtt()).pipe(fs.createWriteStream(filePath)) : 0))
 		}
 	})
 }
@@ -47,18 +51,6 @@ const downloadStream = async function (torrentHash) {
 		try {
 			const engine = torrentStream(torrentHash, {
 				path: __dirname + '/../downloads/videos',
-				trackers: [
-					'udp://open.demonii.com:1337/announce',
-					'udp://tracker.openbittorrent.com:80',
-					'udp://tracker.coppersurfer.tk:6969',
-					'udp://glotorrents.pw:6969/announce',
-					'udp://tracker.opentrackr.org:1337/announce',
-					'udp://torrent.gresille.org:80/announce',
-					'udp://p4p.arenabg.com:1337',
-					'udp://tracker.leechers-paradise.org:6969',
-					'udp://p4p.arenabg.ch:1337',
-					'udp://tracker.internetwarriors.net:1337',
-				],
 			})
 			engine.on('ready', () => {
 				/**

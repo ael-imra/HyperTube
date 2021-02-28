@@ -28,15 +28,17 @@ CREATE TABLE IF NOT EXISTS `Favorites` (
     `imdbID` VARCHAR(10) NOT NULL,
     `movieTitle` VARCHAR(100) NOT NULL,
     `movieImage` VARCHAR(100) NOT NULL,
-	`date` DATETIME DEFAULT NOW(),
+    `movieDescription` VARCHAR(512) NOT NULL,
+    `movieLanguage` VARCHAR(10) NOT NULL,
+    `movieRelease` VARCHAR(4) NOT NULL,
+    `movieTime` INT NOT NULL,
+    `movieGender` VARCHAR(255) NOT NULL,
     FOREIGN KEY (userID) REFERENCES `Users`(userID)
 );
 CREATE TABLE IF NOT EXISTS `Viewed` (
     `viewedID` INT AUTO_INCREMENT PRIMARY KEY,
     `userID` INT NOT NULL,
     `imdbID` VARCHAR(10) NOT NULL,
-    `movieTitle` VARCHAR(100) NOT NULL,
-    `movieImage` VARCHAR(100) NOT NULL,
 	`date` DATETIME DEFAULT NOW(),
     FOREIGN KEY (userID) REFERENCES `Users`(userID)
 );
@@ -44,6 +46,5 @@ CREATE TABLE IF NOT EXISTS `Movies` (
     `movieID` INT AUTO_INCREMENT PRIMARY KEY,
     `imdbID` VARCHAR(10) NOT NULL,
     `torrentHash` VARCHAR(100) NOT NULL,
-    `path` VARCHAR(255),
-	`dateLastView` DATETIME DEFAULT NOW()
+    `path` VARCHAR(255)
 );
