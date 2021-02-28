@@ -26,8 +26,10 @@ function App() {
     setSnackbarToggle(false);
   };
   React.useEffect(async () => {
+    let unmount = false;
     const result = await Axios.get('/auth', { withCredentials: true });
-    setIsLogin(result.data.isLogin);
+    if (!unmount) setIsLogin(result.data.isLogin);
+    return () => (unmount = true);
   }, []);
   return isLogin === '' ? (
     <CircularProgress color='secondary' />
