@@ -1,4 +1,4 @@
-const { query } = require(__dirname + '/../controllers/mysqlController')
+const { query } = require(__dirname + '/../services/mysqlService')
 
 const getUser = async function (dependencies, keys) {
 	const [user] = await query(`SELECT ${keys.toString()} FROM Users WHERE ?`, dependencies)
