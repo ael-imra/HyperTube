@@ -1,4 +1,4 @@
-const { query } = require(__dirname + '/../controllers/mysqlController')
+const { query } = require(__dirname + '/../services/mysqlService')
 
 const getComments = async function (imdbID) {
 	const comments = await query(`SELECT commentID,commentContent,date,u.userName,image FROM Comments c,Users u WHERE u.userID=c.userID AND imdbID=?`, imdbID)

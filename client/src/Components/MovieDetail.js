@@ -19,6 +19,7 @@ export const MovieDetail = () => {
   React.useEffect(() => {
     let unmount = false;
     async function awaitData() {
+      ctx.ref.setMovieInfo = setMovieInfo;
       const data = await GetMovie(code);
       if (!unmount) setMovieInfo(data);
     }
@@ -43,7 +44,7 @@ export const MovieDetail = () => {
       </div>
       <div className='Suggestions'>
         {movieInfo.suggestions.map((movie, key) => (
-          <MovieCart movie={movie} key={key} />
+          <MovieCart movie={movie} key={key} callBack />
         ))}
       </div>
       <Comments data={movieInfo} code={code} />

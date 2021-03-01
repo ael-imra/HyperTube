@@ -2,15 +2,17 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 const MySQLStore = require('express-mysql-session')(session);
 const passport = require('./configs/passportConfig');
-const { pool } = require('./controllers/mysqlController');
+const { pool } = require('./services/mysqlService');
 const authRoute = require('./routes/authRoute');
 const oauthRoute = require('./routes/oauthRoute');
 const profileRoute = require('./routes/profileRoute');
 const commentRoute = require('./routes/commentRoute');
 const favoriteRoute = require('./routes/favoriteRoute');
 const movieRoute = require('./routes/movieRoute');
+const subtitleRoute = require('./routes/subtitleRoute');
 const authentication = require('./middleware/authentication');
 const errorHandler = require('./middleware/errorHandler');
 const { keys } = require('./configs/indexConfig');
@@ -48,16 +50,13 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use('/oauth', oauthRoute);
-app.use((req, res, next) => {
-  console.log('HELLO', req.method);
-  next();
-});
+app.use('/oauth', oauthRoute);
 app.use('/auth', authRoute);
 app.use('/profile', authentication, profileRoute);
 app.use('/comment', authentication, commentRoute);
 app.use('/favorite', authentication, favoriteRoute);
 app.use('/movie', authentication, movieRoute);
+app.use('/subtitle', authentication, subtitleRoute);
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     res.type('.html');

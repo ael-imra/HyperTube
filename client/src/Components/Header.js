@@ -37,7 +37,7 @@ const NavWeb = (props) => {
         className={`${props.isActive === 2 ? 'LinkActive' : 'Link'}`}
         onClick={() => {
           props.setIsActive(2);
-          props.ctx.history.push('/MyList');
+          props.ctx.history.push('/FavoriteMovie');
         }}>
         <p style={{ color: `${props.isActive === 2 ? '#ec4646' : 'white'}` }}>{ctx.Languages[ctx.Lang].Mylist}</p>
       </div>
@@ -123,7 +123,7 @@ const NavMobil = (props) => {
         <MenuItem
           onClick={() => {
             setShowMenuNav(null);
-            props.ctx.history.push('/MyList');
+            props.ctx.history.push('/FavoriteMovie');
             props.setIsActive(2);
           }}>
           {ctx.Languages[ctx.Lang].Mylist}

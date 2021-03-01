@@ -8,6 +8,7 @@ import { DataContext } from '../Context/AppContext';
 import Avatar from '@material-ui/core/Avatar';
 import Dialog from '@material-ui/core/Dialog';
 import { toggleMyList } from '../Assets/toggleMyList';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 export default function MovieIntro(props) {
   const ctx = React.useContext(DataContext);
@@ -24,7 +25,7 @@ export default function MovieIntro(props) {
         <div className='CommentAndList'>
           <img src={props.data.postImage} alt='...' />
           <Button
-            startIcon={<AddIcon style={{ fontSize: '25px' }} />}
+            startIcon={props.data.isFavorite ? <DeleteOutlineIcon style={{ fontSize: '25px' }} /> : <AddIcon style={{ fontSize: '20px' }} />}
             variant='contained'
             size='small'
             style={{
@@ -40,7 +41,7 @@ export default function MovieIntro(props) {
             onClick={async () => {
               await toggleMyList('add', props.data.imdbCode);
             }}>
-            Add to list
+            {props.data.isFavorite ? ctx.Languages[ctx.Lang].RemoveFromMyList : ctx.Languages[ctx.Lang].AddToList}
           </Button>
           <Button
             startIcon={<MoreHorizIcon style={{ fontSize: '25px' }} />}
