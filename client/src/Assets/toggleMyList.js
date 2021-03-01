@@ -2,14 +2,21 @@ import Axios from 'axios';
 
 const toggleMyList = async (event, imdbCode) => {
   if (event === 'add') {
-    const test = await Axios.post(
+    await Axios.post(
       `http://localhost:1337/favorite`,
       {
         imdbID: imdbCode,
       },
       { withCredentials: true }
     );
-    console.log(test);
+  } else {
+    await Axios.delete(
+      `http://localhost:1337/favorite`,
+      {
+        imdbID: imdbCode,
+      },
+      { withCredentials: true }
+    );
   }
 };
 export { toggleMyList };

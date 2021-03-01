@@ -8,8 +8,10 @@ export const GetMovies = async (page, oldValue, search) => {
     const rog = [];
     let movies = [];
     let i = page;
+    const listFavorite = await Axios(`http://localhost:1337/favorite/imdbID`, { withCredentials: true });
     while (i) {
       arrayMovies = await Axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?page=${i}&minimum_rating=${rating}&genre=${genre}&limit=30&query_term=${title}&sort_by=${sort}&order_by=${order}`);
+
       if (arrayMovies.data.data.movies) {
         arrayMovies.data.data.movies.forEach((movie) => {
           if (oldValue.findIndex((element) => element.id === movie.id) === -1 && (!years || movie.year === years))
@@ -24,6 +26,7 @@ export const GetMovies = async (page, oldValue, search) => {
               language: movie.language,
               imdbCode: movie.imdb_code,
               id: movie.id,
+              isFavorite: listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdb_code) === -1 ? false : true,
             });
         });
         i++;

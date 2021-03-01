@@ -4,7 +4,7 @@ const { login, register, resetPassword, activeAccount } = require(__dirname + '/
 
 const authRoute = express.Router();
 authRoute.get('/', (req, res) => {
-  res.send({
+  return res.send({
     isLogin: req.isAuthenticated(),
   });
 });
