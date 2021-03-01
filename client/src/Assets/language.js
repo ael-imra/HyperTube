@@ -73,6 +73,7 @@ export const Languages = {
     runtime: 'runtime',
     AvailableIn: 'Available in',
     Details: 'Details',
+    RemoveFromMyList: 'Remove to My list',
   },
   Fr: {
     TitleLogin: 'Vous venez de trouver le meilleur site Web pour regarder des films en haute qualité',
@@ -149,5 +150,6 @@ export const Languages = {
     AvailableIn: 'Disponible en',
     Details: 'Des détails',
     Description: 'Description',
+    RemoveFromMyList: 'supprimer à ma liste',
   },
 };

@@ -63,8 +63,8 @@ export default function Slider() {
                 startIcon={<PlayArrowIcon style={{ fontSize: '35px' }} />}
                 onClick={async () => {
                   const getImdbCode = await Axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/external_ids?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
-                  const codeMovie = await Axios.get(`https://yts.mx/api/v2/list_movies.json?query_term=${getImdbCode.data.imdb_id}`);
-                  history.push(`/movie/${codeMovie.data.data.movies[0].id}`);
+                  // const codeMovie = await Axios.get(`https://yts.mx/api/v2/list_movies.json?query_term=${getImdbCode.data.imdb_id}`);
+                  history.push(`/movie/${getImdbCode.data.imdb_id}`);
                 }}
                 style={{
                   backgroundColor: '#ec4646',

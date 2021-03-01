@@ -4,6 +4,7 @@ import { DataContext } from '../Context/AppContext';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import '../Css/ListMovies.css';
 import { MovieCart } from './MovieCart';
+import PopCorn from 'popcorn-api';
 
 export default function ListMovies() {
   const ctx = React.useContext(DataContext);
@@ -12,6 +13,9 @@ export default function ListMovies() {
   React.useEffect(() => {
     let unmount = false;
     const awaitData = async () => {
+      // PopCorn.movies.sea0rch({ query: 'darko' }).then(([movie]) => {
+      //   console.log(movie); // -> Movie
+      // });
       ctx.cache.listMovies = await ctx.GetMovies(1, [], ctx.cache.filter);
       ctx.ref.setListMovies = setListMovies;
       if (!unmount) setListMovies(ctx.cache.listMovies);

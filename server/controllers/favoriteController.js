@@ -4,7 +4,8 @@ const axios = require('axios');
 
 const getAllFavorites = async function (req, res, next) {
   try {
-    const allFavorites = await getFavorites(req.user);
+    const { justImdbID } = req.params;
+    const allFavorites = await getFavorites(req.user, justImdbID);
     if (allFavorites.length > 0)
       return res.send({
         type: 'success',
@@ -23,25 +24,26 @@ const getAllFavorites = async function (req, res, next) {
 
 const addFavorite = async function (req, res, next) {
   try {
-    if (typeof req.body.imdbID !== 'string' || req.body.imdbID.trim().length > 10)
+    const { imdbID } = req.body;
+
+    if (typeof imdbID !== 'string' || imdbID.trim().length > 10)
       return res.send({
         type: 'error',
         status: 400,
         body: 'Incorrect imdbID',
       });
-    const { found, movieTitle, movieImage } = await checkFavoriteMovie(req.body.imdbID.trim());
-    if (found)
+    const movieDB = await checkFavoriteMovie(imdbID.trim(), req.user);
+    if (movieDB.found)
       return res.send({
         type: 'warning',
         status: 403,
         body: 'Already have this movie on favorite',
       });
-    if (movieTitle && movieImage) {
+    if (movieDB.movieTitle) {
       const resultInsert = await insertFavorite({
         userID: req.user,
-        imdbID: req.body.imdbID.trim(),
-        movieTitle,
-        movieImage,
+        imdbID: imdbID.trim(),
+        ...movieDB,
       });
       if (resultInsert.insertId)
         return res.send({
@@ -55,13 +57,19 @@ const addFavorite = async function (req, res, next) {
         body: 'Insert failed',
       });
     }
-    const movie = await axios.get(`https://api.themoviedb.org/3/movie/${req.body.imdbID.trim()}?api_key=${keys.themoviedb}`);
-    const { original_title, poster_path } = movie.data;
+    const movie = await axios.get(`https://api.themoviedb.org/3/movie/${imdbID.trim()}?api_key=${keys.themoviedb}`);
+    console.log(movie);
+    const { original_title, poster_path, overview, runtime, original_language, genres, release_date } = movie.data;
     const resultInsert = await insertFavorite({
       userID: req.user,
-      imdbID: req.body.imdbID.trim(),
+      imdbID: imdbID.trim(),
       movieTitle: original_title,
       movieImage: poster_path,
+      movieDescription: overview,
+      movieTime: runtime,
+      movieLanguage: original_language,
+      movieGender: JSON.stringify(genres),
+      movieRelease: new Date(release_date).getFullYear(),
     });
     if (resultInsert.insertId)
       return res.send({
@@ -87,13 +95,14 @@ const addFavorite = async function (req, res, next) {
 
 const removeFavorite = async function (req, res, next) {
   try {
-    if (typeof req.body.imdbID !== 'string' || req.body.imdbID.trim().length > 10)
+    const { imdbID } = req.body;
+    if (typeof imdbID !== 'string' || imdbID.trim().length > 10)
       return res.send({
         type: 'error',
         status: 400,
         body: 'Incorrect imdbID',
       });
-    const deleteResult = await deleteFavorite(req.body.imdbID.trim(), req.user);
+    const deleteResult = await deleteFavorite(imdbID.trim(), req.user);
     if (deleteResult)
       return res.send({
         type: 'success',
