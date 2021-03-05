@@ -41,7 +41,6 @@ const Comments = (props) => {
     });
   };
   React.useEffect(() => {
-    console.log(props.data.imdbCode);
     let unmount = false;
     ctx.ref.setShowComment = setShowComment;
     const awaitData = async () => {
@@ -64,9 +63,7 @@ const Comments = (props) => {
               {comments.comment.map((comment, key) => (
                 <div key={key}>
                   <ListItem>
-                    <ListItemAvatar>
-                      <Avatar src={user} />
-                    </ListItemAvatar>
+                    <ListItemAvatar>{comment.image ? <Avatar src={comment.image} /> : <Avatar>{comment.userName.substring(0, 2)}</Avatar>}</ListItemAvatar>
                     <ListItemText primary={comment.userName} secondary={comment.commentContent} />
                     <ListItemSecondaryAction>
                       {width > 600 ? <span className='commentDate'>{moment(comment.date).fromNow()}</span> : ''}
