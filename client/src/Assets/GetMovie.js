@@ -38,6 +38,6 @@ export const GetMovie = async (code) => {
     rating: movieInfo.rating,
     dateUploaded: movieInfo.date_uploaded,
     suggestions,
-    isFavorite: listFavorite.data.body.findIndex((a) => a.imdbID === movieInfo.imdb_code) === -1 ? false : true,
+    isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movieInfo.imdb_code) === -1 ? false : true,
   };
 };
