@@ -8,30 +8,23 @@ const ffmpeg = require('fluent-ffmpeg')
 const mkdirp = require('mkdirp')
 const { opensubtitles_config } = require('../configs/indexConfig')
 
-const convertStream = async function (res, file, completedDownload) {
-	try {
-		const ext = path.extname(file.path)
-		let begin = false
-		const filePath = path.join(__dirname, '../downloads/videos', file.path.replace(ext, '.webm'))
-		const header = {
-			'Content-Length': file.length,
-			'Content-Type': `video/${ext}`,
+const checkNeedConvert = function (filePath) {
+	const ext = path.extname(filePath).replace('.', '')
+	if (ext !== 'mp4' && ext !== 'opgg' && ext !== 'webm') return true
+	return false
+}
+const convertStream = async function (file) {
+	return new Promise((resolve) => {
+		try {
+			const streamObject = {}
+			streamObject.streamFile = new ffmpeg(file.createReadStream()).format('webm').on('error', (err) => {
+				streamObject.err = err
+			})
+			resolve(streamObject)
+		} catch (err) {
+			resolve({ err })
 		}
-		res.writeHead(206, header)
-		new ffmpeg(file.createReadStream())
-			.format('webm')
-			.save(filePath)
-			.pipe(res)
-			.on('error', (err) => {
-				console.log(err)
-			})
-			.on('end', function () {
-				completedDownload()
-			})
-	} catch (err) {
-		console.log(err)
-		return { err }
-	}
+	})
 }
 const downloadSubtitles = function (imdbID, lang) {
 	return new Promise(async (resolve) => {
@@ -73,22 +66,47 @@ const downloadStream = async function (torrentHash, completedDownload) {
 				 * sort files desc
 				 * portended the large file is video
 				 */
+				console.log('ready')
 				engine.files.sort((file1, file2) => file2.length - file1.length)
-				const ext = path.extname(engine.files[0].name).replace('.', '')
-				if (ext !== 'mp4' && ext !== 'opgg' && ext !== 'webm') needConvert = true
-				resolve({ file: engine.files[0], needConvert })
-			})
-			engine.on('download', () => {
-				if (engine.files[0].length <= engine.swarm.downloaded && !needConvert) completedDownload()
+				engine.files.map((file) => file.select())
+				resolve({ file: engine.files[0], needConvert: checkNeedConvert(engine.files[0].path) })
+				engine.on('idle', () => {
+					console.log('idle')
+					completedDownload()
+				})
 			})
 		} catch (err) {
 			resolve({ err })
 		}
 	})
 }
+const getFileStream = async function (filePath) {
+	const file = {}
+	try {
+		if (fs.existsSync(path.join(__dirname, '../downloads/videos/', filePath))) {
+			const parts = filePath.split('/')
+			const status = await fs.promises.stat(path.join(__dirname, '../downloads/videos/', filePath))
+			file.name = parts.length >= 2 ? parts[parts.length - 1] : parts[0]
+			file.path = path
+			file.length = status.size
+			file.createReadStream = function (opts) {
+				const params = [path.join(__dirname, '../downloads/videos/', filePath)]
+				if (opts) params.push(opts)
+				return fs.createReadStream(...params)
+			}
+			file.needConvert = checkNeedConvert(filePath)
+			return { file }
+		}
+		return { err: "file doesn't exist" }
+	} catch (err) {
+		return { err }
+	}
+}
 
 module.exports = {
 	downloadStream,
 	downloadSubtitles,
 	convertStream,
+	checkNeedConvert,
+	getFileStream,
 }
