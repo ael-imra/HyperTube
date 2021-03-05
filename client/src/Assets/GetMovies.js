@@ -3,15 +3,16 @@ export const GetMovies = async (page, oldValue, search) => {
   let { years, rating, order, genre, title, sort } = search;
   if (sort === '') sort = 'download_count';
   if (genre === 'All') genre = '';
+  if (sort === 'rating' && rating === 0) rating = 0.1;
   let test = await new Promise(async (resolve) => {
     let arrayMovies;
     const rog = [];
     let movies = [];
     let i = page;
     const listFavorite = await Axios(`http://localhost:1337/favorite/imdbID`, { withCredentials: true });
+    console.log(listFavorite.data.body instanceof Array, 4);
     while (i) {
       arrayMovies = await Axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?page=${i}&minimum_rating=${rating}&genre=${genre}&limit=30&query_term=${title}&sort_by=${sort}&order_by=${order}`);
-
       if (arrayMovies.data.data.movies) {
         arrayMovies.data.data.movies.forEach((movie) => {
           if (oldValue.findIndex((element) => element.id === movie.id) === -1 && (!years || movie.year === years))
@@ -26,7 +27,7 @@ export const GetMovies = async (page, oldValue, search) => {
               language: movie.language,
               imdbCode: movie.imdb_code,
               id: movie.id,
-              isFavorite: listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdb_code) === -1 ? false : true,
+              isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdb_code) !== -1 ? true : false,
             });
         });
         i++;

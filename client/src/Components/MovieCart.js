@@ -4,13 +4,16 @@ import StarIcon from '@material-ui/icons/Star';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { DataContext } from '../Context/AppContext';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 import { toggleMyList } from '../Assets/toggleMyList';
+import { GetListMovieFavorite } from '../Assets/GetListMovieFavorite';
 export const MovieCart = (props) => {
   let history = useHistory();
+  const location = useLocation();
+  console.log(location.pathname);
   const ctx = React.useContext(DataContext);
   const [movie, setMovie] = React.useState(props.movie);
   return (
@@ -41,8 +44,7 @@ export const MovieCart = (props) => {
             <Button
               variant='contained'
               startIcon={movie.isFavorite ? <DeleteOutlineIcon style={{ fontSize: '25px' }} /> : <AddIcon style={{ fontSize: '20px' }} />}
-              // dataIndex={}
-              onClick={(e) => {
+              onClick={async (e) => {
                 if (movie.isFavorite) toggleMyList('remove', movie.imdbCode);
                 else toggleMyList('add', movie.imdbCode);
                 setMovie((oldValue) => ({ ...oldValue, isFavorite: movie.isFavorite ? false : true }));
