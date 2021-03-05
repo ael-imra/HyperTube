@@ -13,19 +13,20 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 export default function MovieIntro(props) {
   const ctx = React.useContext(DataContext);
   const [showImage, setShowImage] = React.useState({ src: '', state: false });
+  const [dataMovie, setDataMovie] = React.useState(props.data);
   return (
     <div className='movieInfo'>
       <div>
-        <p>{props.data.titleLong}</p>
-        <p>imdb {props.data.rating}</p>
-        <p>{props.data.language}</p>
+        <p>{dataMovie.titleLong}</p>
+        <p>imdb {dataMovie.rating}</p>
+        <p>{dataMovie.language}</p>
       </div>
       <Divider style={{ backgroundColor: '#ffffffa3' }} />
       <div>
         <div className='CommentAndList'>
-          <img src={props.data.postImage} alt='...' />
+          <img src={dataMovie.postImage} alt='...' />
           <Button
-            startIcon={props.data.isFavorite ? <DeleteOutlineIcon style={{ fontSize: '25px' }} /> : <AddIcon style={{ fontSize: '20px' }} />}
+            startIcon={dataMovie.isFavorite ? <DeleteOutlineIcon style={{ fontSize: '25px' }} /> : <AddIcon style={{ fontSize: '20px' }} />}
             variant='contained'
             size='small'
             style={{
@@ -39,9 +40,11 @@ export default function MovieIntro(props) {
               fontWeight: '600',
             }}
             onClick={async () => {
-              await toggleMyList('add', props.data.imdbCode);
+              if (dataMovie.isFavorite) toggleMyList('remove', dataMovie.imdbCode);
+              else toggleMyList('add', dataMovie.imdbCode);
+              setDataMovie((oldValue) => ({ ...oldValue, isFavorite: dataMovie.isFavorite ? false : true }));
             }}>
-            {props.data.isFavorite ? ctx.Languages[ctx.Lang].RemoveFromMyList : ctx.Languages[ctx.Lang].AddToList}
+            {dataMovie.isFavorite ? ctx.Languages[ctx.Lang].RemoveFromMyList : ctx.Languages[ctx.Lang].AddToList}
           </Button>
           <Button
             startIcon={<MoreHorizIcon style={{ fontSize: '25px' }} />}
@@ -66,13 +69,13 @@ export default function MovieIntro(props) {
         <div className='DetailAndDescription'>
           <div className='DetailAndGallery'>
             <div className='Detail'>
-              <p>{props.data.title}</p>
+              <p>{dataMovie.title}</p>
               <div>
-                <p>{props.data.runtime} Min</p>
+                <p>{dataMovie.runtime} Min</p>
                 <Divider orientation='vertical' style={{ backgroundColor: '#ffffffa3', height: '60%', marginRight: '10px' }} />
-                <p>{props.data.genres ? props.data.genres.toString() : ''}</p>
+                <p>{dataMovie.genres ? dataMovie.genres.toString() : ''}</p>
                 <Divider orientation='vertical' style={{ backgroundColor: '#ffffffa3', height: '60%', marginRight: '10px' }} />
-                <p>{props.data.year}</p>
+                <p>{dataMovie.year}</p>
                 <Divider orientation='vertical' style={{ backgroundColor: '#ffffffa3', height: '60%', marginRight: '10px' }} />
                 <p style={{ display: 'flex', alignItems: 'center' }}>
                   <VisibilityIcon style={{ fontSize: '15px', marginRight: '5px' }} /> {11}
@@ -84,28 +87,28 @@ export default function MovieIntro(props) {
                   <p>{ctx.Languages[ctx.Lang].Details}</p>
                   <div>
                     <p style={{ marginBottom: '0px' }}>
-                      {ctx.Languages[ctx.Lang].Genre} :<span style={{ lineHeight: '2', wordBreak: 'break-all' }}>{props.data.genres.toString()}</span>
+                      {ctx.Languages[ctx.Lang].Genre} :<span style={{ lineHeight: '2', wordBreak: 'break-all' }}>{dataMovie.genres.toString()}</span>
                     </p>
                     <p style={{ marginTop: '5px', marginBottom: '0px' }}>
-                      {ctx.Languages[ctx.Lang].AvailableIn}: <span style={{ lineHeight: '2' }}>{props.data.torrents.map((item) => `${item.quality} ${item.type},`)}</span>
+                      {ctx.Languages[ctx.Lang].AvailableIn}: <span style={{ lineHeight: '2' }}>{dataMovie.torrents.map((item) => `${item.quality} ${item.type},`)}</span>
                     </p>
                     <p style={{ marginTop: '5px' }}>
-                      {ctx.Languages[ctx.Lang].runtime}: <span>{props.data.runtime} Min</span>
+                      {ctx.Languages[ctx.Lang].runtime}: <span>{dataMovie.runtime} Min</span>
                     </p>
                     <p>
-                      {ctx.Languages[ctx.Lang].Language}: <span>{props.data.language}</span>
+                      {ctx.Languages[ctx.Lang].Language}: <span>{dataMovie.language}</span>
                     </p>
                     <p>
-                      {ctx.Languages[ctx.Lang].rating}: <span>{props.data.rating}</span>
+                      {ctx.Languages[ctx.Lang].rating}: <span>{dataMovie.rating}</span>
                     </p>
                     <p>
-                      {ctx.Languages[ctx.Lang].year}: <span>{props.data.year}</span>
+                      {ctx.Languages[ctx.Lang].year}: <span>{dataMovie.year}</span>
                     </p>
                   </div>
                 </div>
                 <div className='cast'>
                   <p>{ctx.Languages[ctx.Lang].Cast}</p>
-                  {props.data.cast.map((item, key) => (
+                  {dataMovie.cast.map((item, key) => (
                     <div className='CastName' key={key}>
                       {item.url_small_image ? <img src={item.url_small_image} alt='...' /> : <Avatar style={{ backgroundColor: 'rgb(236, 70, 70)' }}>{item.name.substring(0, 2)}</Avatar>}
                       <p>{item.name}</p>
@@ -116,16 +119,16 @@ export default function MovieIntro(props) {
             </div>
             <div className='Gallery'>
               <p>{ctx.Languages[ctx.Lang].Gallery}</p>
-              {props.data.codeTrailer ? <iframe width='100%' height='55%' src={`http://www.youtube-nocookie.com/embed/${props.data.codeTrailer}`} frameBorder='0' allowFullScreen></iframe> : ''}
+              {dataMovie.codeTrailer ? <iframe width='100%' height='55%' src={`http://www.youtube-nocookie.com/embed/${dataMovie.codeTrailer}`} frameBorder='0' allowFullScreen></iframe> : ''}
               <div className='ScreenshotImage'>
-                {props.data.screenshotImage instanceof Array && props.data.screenshotImage.map((src, key) => <img src={src} key={key} style={{ width: '33%', objectFit: 'cover', height: '100%', cursor: 'pointer' }} onClick={() => setShowImage({ src: src, state: true })} />)}
+                {dataMovie.screenshotImage instanceof Array && dataMovie.screenshotImage.map((src, key) => <img src={src} key={key} style={{ width: '33%', objectFit: 'cover', height: '100%', cursor: 'pointer' }} onClick={() => setShowImage({ src: src, state: true })} />)}
               </div>
             </div>
           </div>
           <Divider style={{ backgroundColor: '#ffffffa3' }} />
           <div className='Description'>
             <p>{ctx.Languages[ctx.Lang].Description}</p>
-            <p>{props.data.description}</p>
+            <p>{dataMovie.description}</p>
           </div>
         </div>
       </div>

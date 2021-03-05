@@ -30,7 +30,7 @@ function App() {
     const result = await Axios.get('/auth', { withCredentials: true });
     if (!unmount) setIsLogin(result.data.isLogin);
     return () => (unmount = true);
-  }, []);
+  }, [ctx.Lang]);
   return isLogin === '' ? (
     <CircularProgress color='secondary' />
   ) : isLogin === true ? (

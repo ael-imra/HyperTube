@@ -10,8 +10,8 @@ const toggleMyList = async (event, imdbCode) => {
       { withCredentials: true }
     );
   } else {
-    await Axios.delete(
-      `http://localhost:1337/favorite`,
+    await Axios.post(
+      `http://localhost:1337/favorite/delete`,
       {
         imdbID: imdbCode,
       },
