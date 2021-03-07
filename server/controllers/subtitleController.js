@@ -4,9 +4,9 @@ const { downloadSubtitles } = require('../services/streamService')
 const getSubtitle = async function (req, res, next) {
 	try {
 		const { imdbID, lang } = req.params
-		if (typeof imdbID === 'string' && imdbID.length <= 10 && (lang === 'fr.vtt' || lang === 'en.vtt')) {
-			const filename = path.join(__dirname, '../downloads/subtitles', `${imdbID}/${lang}`)
-			if (!fs.existsSync(filename)) await downloadSubtitles(imdbID)
+		if (typeof imdbID === 'string' && imdbID.length <= 10 && (lang === 'fr' || lang === 'en')) {
+			const filename = path.join(__dirname, '../downloads/subtitles', `${imdbID}/${lang}.vtt`)
+			if (!fs.existsSync(filename)) await downloadSubtitles(imdbID, lang)
 			if (fs.existsSync(filename)) {
 				console.log(filename, 'FILE')
 				res.setHeader('Content-Type', 'text/vtt')

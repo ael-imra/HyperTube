@@ -7,7 +7,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import test from '../Images/test.mp4';
 import { MovieCart } from './MovieCart';
 import Comments from './Comments';
 import MovieIntro from './MovieIntro';
@@ -38,9 +37,17 @@ export const MovieDetail = () => {
             ))}
           </Tabs>
         </AppBar>
-        <video width='100%' height='700px' controls>
-          <source src={test} type='video/mp4' />
-        </video>
+        {movieInfo.torrents.map((movie, key) =>
+          quality === key ? (
+            <video width='100%' height='700px' controls crossOrigin='use-credentials' key={key}>
+              <source src={`http://localhost:1337/movie/${movieInfo.imdbCode}/${movie.hash}`} type='video/mp4' />
+              <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:1337/subtitle/${movieInfo.imdbCode}/en`} />
+              <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:1337/subtitle/${movieInfo.imdbCode}/fr`} />
+            </video>
+          ) : (
+            ''
+          )
+        )}
       </div>
       <div className='Suggestions'>
         {movieInfo.suggestions.map((movie, key) => (
@@ -55,3 +62,6 @@ export const MovieDetail = () => {
     </div>
   );
 };
+// hash: "16B087DFF9C8153072BD35C1BEC245CB831AEF4D"
+// quality: "3D"
+// type: "bluray"

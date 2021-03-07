@@ -5,7 +5,7 @@ export const GetMovie = async (code) => {
   const movieInfo = await (await Axios.get(`https://yts.mx/api/v2/movie_details.json?movie_id=${codeMovie.data.data.movies[0].id}&with_images=true&with_cast=true`)).data.data.movie;
   const images = await Axios.get(`https://api.themoviedb.org/3/movie/${movieInfo.imdb_code}/images?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
   let suggestions = await (await Axios.get(`https://yts.mx/api/v2/movie_suggestions.json?movie_id=${codeMovie.data.data.movies[0].id}`)).data.data.movies;
-  const listFavorite = await Axios(`http://localhost:1337/favorite/imdbID`, { withCredentials: true });
+  const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
   suggestions = suggestions.map((movie) => ({
     image: movie.medium_cover_image,
     id: movie.id,

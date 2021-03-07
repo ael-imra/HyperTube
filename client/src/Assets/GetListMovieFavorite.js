@@ -1,8 +1,8 @@
 import Axios from 'axios';
 
 export const GetListMovieFavorite = async () => {
-  const favoriteMovie = await Axios.get(`http://localhost:1337/favorite/`, { withCredentials: true });
-  const listFavorite = await Axios(`http://localhost:1337/favorite/imdbID`, { withCredentials: true });
+  const favoriteMovie = await Axios.get(`/favorite/`, { withCredentials: true });
+  const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
   if (favoriteMovie.data.body instanceof Array) {
     const listFavoriteMovie = favoriteMovie.data.body.map((movie) => ({
       image: `https://image.tmdb.org/t/p/original/${movie.movieImage}`,
