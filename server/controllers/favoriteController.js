@@ -1,11 +1,11 @@
 const { getFavorites, checkFavoriteMovie, insertFavorite, deleteFavorite } = require('../models/favoriteModel')
 const { keys } = require(__dirname + '/../configs/indexConfig')
-const axios = require('axios')
+const { getMovieInfo } = require('../services/movieService')
 
 const getAllFavorites = async function (req, res, next) {
 	try {
 		const { justImdbID } = req.params
-		const allFavorites = await getFavorites(req.user, justImdbID)
+		const allFavorites = await getFavorites(req.user, justImdbID ? 'imdbID' : false)
 		if (allFavorites.length > 0)
 			return res.send({
 				type: 'success',
@@ -56,17 +56,20 @@ const addFavorite = async function (req, res, next) {
 				body: 'Insert failed',
 			})
 		}
-		const movie = await axios.get(`https://api.themoviedb.org/3/movie/${imdbID.trim()}?api_key=${keys.themoviedb}`)
-		const { original_title, poster_path, overview, runtime, original_language, genres, release_date } = movie.data
+		const movie = await getMovieInfo(imdbID.trim())
+		const { original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date } = movie.data
+		const movieGenre = []
+		for (const value of genres) movieGenre.push(value.name)
 		const resultInsert = await insertFavorite({
 			userID: req.user,
 			imdbID: imdbID.trim(),
 			movieTitle: original_title,
+			movieRating: vote_average,
 			movieImage: poster_path,
 			movieDescription: overview,
 			movieTime: runtime,
 			movieLanguage: original_language,
-			movieGender: JSON.stringify(genres),
+			movieGenre: JSON.stringify(movieGenre),
 			movieRelease: new Date(release_date).getFullYear(),
 		})
 		if (resultInsert.insertId)
