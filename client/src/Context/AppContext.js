@@ -14,7 +14,14 @@ export default function AppContext(props) {
     listPopularMovies: {},
     filter: { years: '', rating: 0, title: '', order: 'desc', genre: '', sort: '' },
     listMoviesLoader: false,
+    profileLoader: false,
     movieInfo: '',
+    userInfo: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      userName: '',
+    },
   };
   return (
     <DataContext.Provider

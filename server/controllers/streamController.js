@@ -1,25 +1,33 @@
 const fs = require('fs')
-const { insertMovie, insertWatchedMovie, updateWatchedMovie } = require('../models/movieModel')
-const { downloadStream, convertStream } = require('../services/streamService')
+const { insertMovie, insertWatchedMovie, updateWatchedMovie, updateMovie } = require('../models/movieModel')
+const { downloadStream, convertStream, getFileStream } = require('../services/streamService')
 const path = require('path')
 
-const streamFromTorrent = async function (movieExist, req, res, next) {
+const stream = async function (movie, req, res, next) {
 	try {
 		const { torrentHash, imdbID } = req.params
-		const streamObject = await downloadStream(torrentHash)
+		let streamObject = {}
+		if (!movie.isDownloaded)
+			streamObject = await downloadStream(torrentHash, () => {
+				updateMovie({ isDownloaded: true }, imdbID, torrentHash)
+			})
+		else streamObject = await getFileStream(movie.path)
+		console.log(movie, 'movie', streamObject)
+		const ext = path.extname(streamObject.file.name).replace('.', '')
 		if (streamObject.err)
 			return res.send({
 				type: 'error',
 				status: 403,
 				body: 'Movie not found',
 			})
-		console.log(movieExist)
-		if (!Object.keys(movieExist).length) {
-			insertMovie({ torrentHash, imdbID, path: streamObject.file.path })
+		if (!Object.keys(movie).length) {
+			insertMovie({
+				torrentHash,
+				imdbID,
+				path: streamObject.file.path,
+			})
 			insertWatchedMovie({ imdbID, userID: req.user })
 		} else updateWatchedMovie(imdbID, req.user)
-		const ext = path.extname(streamObject.file.name).replace('.', '')
-		if (ext !== 'mp4' && ext !== 'opgg' && ext !== 'webm' && ext !== 'avi' && ext !== 'mkv') streamObject.needConvert = true
 		const { range } = req.headers
 		if (!streamObject.needConvert) {
 			if (range) {
@@ -31,7 +39,7 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 					'Content-Range': `bytes ${start}-${end}/${streamObject.file.length}`,
 					'Accept-Ranges': 'bytes',
 					'Content-Length': chunkSize,
-					'Content-Type': `video/mp4`,
+					'Content-Type': `video/${ext}`,
 				}
 				const streamFile = streamObject.file.createReadStream({
 					start,
@@ -42,19 +50,20 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 			}
 			const header = {
 				'Content-Length': streamObject.file.length,
-				'Content-Type': `video/mp4`,
+				'Content-Type': `video/${ext}`,
 			}
 			const streamFile = streamObject.file.createReadStream()
 			res.writeHead(206, header)
 			return streamFile.pipe(res)
 		}
-		const { streamFile, err } = convertStream(streamObject.file.createReadStream())
+		const { err, streamFile } = await convertStream(streamObject.file)
 		if (err)
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Failed to convert this movie',
+				body: 'Error to convert Movie',
 			})
+		console.log(streamFile)
 		return streamFile.pipe(res)
 	} catch (err) {
 		next(err)
@@ -62,5 +71,5 @@ const streamFromTorrent = async function (movieExist, req, res, next) {
 }
 
 module.exports = {
-	streamFromTorrent,
+	stream,
 }
