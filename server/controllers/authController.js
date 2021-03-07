@@ -14,34 +14,28 @@ const register = async function (req, res, next) {
 				body: error,
 			})
 		const { userName, email, password } = req.body
-		if (!(await checkUserExist(userName, email))) {
+		const checkResult = await checkUserExist(userName, email)
+		if (!checkResult) {
 			const token = generateToken(128)
-			const mailResult = await sendMail('active', email, userName, `http://${req.headers.host}/auth/active`, token)
-			if (!mailResult.error) {
-				req.body.password = await bcrypt.hash(password, 5)
-				const insertSuccessful = await insertUser({ ...req.body, token })
-				if (insertSuccessful)
-					return res.send({
-						type: 'success',
-						status: 200,
-						body: 'Registration Successful',
-					})
+			sendMail('active', email, userName, `http://${req.headers.host}/`, token)
+			req.body.password = await bcrypt.hash(password, 5)
+			const insertSuccessful = await insertUser({ ...req.body, token })
+			if (insertSuccessful)
 				return res.send({
-					type: 'error',
-					status: 400,
-					body: 'Registration Failed',
+					type: 'success',
+					status: 200,
+					body: 'Registration Successful',
 				})
-			}
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Something wrong with email',
+				body: 'Registration Failed',
 			})
 		}
 		return res.send({
 			type: 'warning',
 			status: 403,
-			body: 'User already exist',
+			body: `${checkResult} already exist`,
 		})
 	} catch (err) {
 		next(err)
@@ -115,17 +109,11 @@ const resetPassword = async function (req, res, next) {
 					status: 403,
 					body: 'Please verify your email than reset your password',
 				})
-			const mailResult = await sendMail('active', email, user.userName, `http://${req.headers.host}/token=${user.token}`)
-			if (!mailResult.error)
-				return res.send({
-					type: 'success',
-					status: 200,
-					body: 'Check your email to reset password',
-				})
+			sendMail('reset', email, user.userName, `http://${req.headers.host}/ResetPassword/${user.token}`)
 			return res.send({
-				type: 'error',
-				status: 400,
-				body: 'Something wrong with email',
+				type: 'success',
+				status: 200,
+				body: 'Check your email to reset password',
 			})
 		}
 		return res.send({
@@ -150,7 +138,7 @@ const activeAccount = async function (req, res, next) {
 		const user = await getUser({ token }, 'userName')
 		if (user) {
 			const token = generateToken(128)
-			updateUser({ userName: user.userName }, { token, isActive: 1 })
+			updateUser(req.user, { token, isActive: 1 })
 			return res.send({
 				type: 'success',
 				status: 200,

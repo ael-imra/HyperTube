@@ -51,7 +51,7 @@ const editProfile = async function (req, res, next) {
 				status: 400,
 				body: error,
 			})
-		const resultUpdate = await updateUser({ userID: req.user }, req.body)
+		const resultUpdate = await updateUser(req.user, req.body)
 		if (resultUpdate)
 			return res.send({
 				type: 'success',
@@ -86,7 +86,7 @@ const editPassword = async function (req, res, next) {
 				body: 'Incorrect password',
 			})
 		const hashNewPassword = await bcrypt.hash(req.body.newPassword, 5)
-		const resultUpdate = await updateUser({ userID: req.user }, { password: hashNewPassword })
+		const resultUpdate = await updateUser(req.user, { password: hashNewPassword })
 		if (resultUpdate)
 			return res.send({
 				type: 'success',
@@ -113,7 +113,7 @@ const editImage = async function (req, res, next) {
 			})
 		const imagePath = await createImage(req.body.image)
 		const user = await getUser({ userID: req.user }, ['image'])
-		const resultUpdate = await updateUser({ userID: req.user }, { image: imagePath })
+		const resultUpdate = await updateUser(req.user, { image: imagePath })
 		if (resultUpdate) {
 			if (user.image && fs.existsSync(__dirname + '/..' + user.image)) fs.unlink(__dirname + '/..' + user.image, (err) => console.log(err))
 			return res.send({

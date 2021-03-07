@@ -60,7 +60,6 @@ const downloadStream = async function (torrentHash, completedDownload) {
 			const engine = torrentStream('magnet:?xt=urn:btih:' + torrentHash, {
 				path: __dirname + '/../downloads/videos',
 			})
-			let needConvert = false
 			engine.on('ready', () => {
 				/**
 				 * sort files desc
