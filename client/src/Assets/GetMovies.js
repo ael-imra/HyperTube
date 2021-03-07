@@ -9,8 +9,7 @@ export const GetMovies = async (page, oldValue, search) => {
     const rog = [];
     let movies = [];
     let i = page;
-    const listFavorite = await Axios(`http://localhost:1337/favorite/imdbID`, { withCredentials: true });
-    console.log(listFavorite.data.body instanceof Array, 4);
+    const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
     while (i) {
       arrayMovies = await Axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?page=${i}&minimum_rating=${rating}&genre=${genre}&limit=30&query_term=${title}&sort_by=${sort}&order_by=${order}`);
       if (arrayMovies.data.data.movies) {

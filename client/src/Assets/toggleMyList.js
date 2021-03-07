@@ -3,7 +3,7 @@ import Axios from 'axios';
 const toggleMyList = async (event, imdbCode) => {
   if (event === 'add') {
     await Axios.post(
-      `http://localhost:1337/favorite`,
+      `/favorite`,
       {
         imdbID: imdbCode,
       },
@@ -11,7 +11,7 @@ const toggleMyList = async (event, imdbCode) => {
     );
   } else {
     await Axios.post(
-      `http://localhost:1337/favorite/delete`,
+      `/favorite/delete`,
       {
         imdbID: imdbCode,
       },

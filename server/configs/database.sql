@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `Favorites` (
     `imdbID` VARCHAR(10) NOT NULL,
     `movieTitle` VARCHAR(100) NOT NULL,
     `movieImage` VARCHAR(100) NOT NULL,
-    `movieDescription` VARCHAR(512),
+    `movieDescription` VARCHAR(512) NOT NULL,
     `movieLanguage` VARCHAR(10) NOT NULL,
     `movieRelease` VARCHAR(4) NOT NULL,
     `movieTime` INT NOT NULL,
@@ -46,5 +46,6 @@ CREATE TABLE IF NOT EXISTS `Movies` (
     `movieID` INT AUTO_INCREMENT PRIMARY KEY,
     `imdbID` VARCHAR(10) NOT NULL,
     `torrentHash` VARCHAR(100) NOT NULL,
-    `path` VARCHAR(255)
+    `path` VARCHAR(255),
+    `isDownloaded` INT DEFAULT 0
 );
