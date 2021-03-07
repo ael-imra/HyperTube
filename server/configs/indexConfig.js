@@ -24,7 +24,7 @@ module.exports = {
 			clientID: '796813640888-nrb136ms4ev2sgevu8isqli1bpvl7j6t.apps.googleusercontent.com',
 			clientSecret: 'kOFrkVFsRXt5Q8OBrYDUE-ap',
 		},
-		sessionSecret: 'b817b9f39dfe514c0105f7169f2401a26baba4582d74d8e3412629b09d3d0c76',
+		jwt: 'b817b9f39dfe514c0105f7169f2401a26baba4582d74d8e3412629b09d3d0c76',
 		themoviedb: '11f791476f04c7b213de1050fd41cdcb',
 	},
 	opensubtitles_config: {

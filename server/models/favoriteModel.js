@@ -26,10 +26,15 @@ const checkFavoriteMovie = async function (imdbID, userID) {
 	const [favoriteOfSomeone] = await query('SELECT movieImage,movieLanguage,movieRelease,movieTime,movieGender,movieDescription FROM Favorites WHERE imdbID=?', imdbID)
 	return favoriteOfSomeone || {}
 }
+const getCountFavoriteMovie = async function (userID) {
+	const favorites = await query('SELECT COUNT(*) FROM Favorites WHERE userID=?', userID)
+	return favorites
+}
 
 module.exports = {
 	getFavorites,
 	insertFavorite,
 	deleteFavorite,
 	checkFavoriteMovie,
+	getCountFavoriteMovie,
 }
