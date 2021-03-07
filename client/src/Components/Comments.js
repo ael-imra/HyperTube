@@ -29,22 +29,37 @@ const Comments = (props) => {
   });
   const sendMessage = () => {
     Axios.post(
-      `http://localhost:1337/comment/`,
+      `/comment/`,
       {
         imdbID: props.data.imdbCode,
         commentContent: comments.myComment,
       },
       { withCredentials: true }
     ).then(async (result) => {
-      const results = await Axios.get(`http://localhost:1337/comment/${props.data.imdbCode}`, { withCredentials: true });
+      const results = await Axios.get(`/comment/${props.data.imdbCode}`, { withCredentials: true });
       setComments((oldValue) => ({ comment: results.data.body, myComment: '' }));
     });
   };
+  // imdbID, commentID
+  const deleteComment = (e) => {
+    Axios.post(
+      `/comment/delete`,
+      {
+        imdbID: props.data.imdbCode,
+        commentID: parseInt(e.currentTarget.dataset.id),
+      },
+      { withCredentials: true }
+    ).then(async () => {
+      const results = await Axios.get(`/comment/${props.data.imdbCode}`, { withCredentials: true });
+      setComments((oldValue) => ({ comment: results.data.body, myComment: '' }));
+    });
+  };
+
   React.useEffect(() => {
     let unmount = false;
     ctx.ref.setShowComment = setShowComment;
     const awaitData = async () => {
-      const result = await Axios.get(`http://localhost:1337/comment/${props.data.imdbCode}`, { withCredentials: true });
+      const result = await Axios.get(`/comment/${props.data.imdbCode}`, { withCredentials: true });
       if (!unmount && result.data.body instanceof Array) setComments((oldValue) => ({ ...oldValue, comment: result.data.body }));
     };
     if (!unmount) awaitData();
@@ -67,7 +82,7 @@ const Comments = (props) => {
                     <ListItemText primary={comment.userName} secondary={comment.commentContent} />
                     <ListItemSecondaryAction>
                       {width > 600 ? <span className='commentDate'>{moment(comment.date).fromNow()}</span> : ''}
-                      <IconButton edge='end' aria-label='delete'>
+                      <IconButton edge='end' aria-label='delete' data-id={comment.commentID} onClick={deleteComment}>
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>

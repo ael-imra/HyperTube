@@ -13,7 +13,6 @@ import { GetListMovieFavorite } from '../Assets/GetListMovieFavorite';
 export const MovieCart = (props) => {
   let history = useHistory();
   const location = useLocation();
-  console.log(location.pathname);
   const ctx = React.useContext(DataContext);
   const [movie, setMovie] = React.useState(props.movie);
   return (
