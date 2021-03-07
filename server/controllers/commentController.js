@@ -9,7 +9,7 @@ const getAllComments = async function (req, res, next) {
 				status: 400,
 				body: 'Incorrect imdbID',
 			})
-		const allComments = await getComments(imdbID)
+		const allComments = await getComments(imdbID, req.user)
 		if (allComments.length > 0)
 			return res.send({
 				type: 'success',
@@ -70,7 +70,7 @@ const removeComment = async function (req, res, next) {
 				status: 400,
 				body: 'Incorrect parameters',
 			})
-		const deleteResult = await deleteComment(imdbID.trim(), req.user)
+		const deleteResult = await deleteComment(imdbID.trim(), req.user, commentID)
 		if (deleteResult)
 			return res.send({
 				type: 'success',

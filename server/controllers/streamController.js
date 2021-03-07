@@ -2,6 +2,7 @@ const fs = require('fs')
 const { insertMovie, insertWatchedMovie, updateWatchedMovie, updateMovie } = require('../models/movieModel')
 const { downloadStream, convertStream, getFileStream } = require('../services/streamService')
 const path = require('path')
+const { getMovieInfo } = require('../services/movieService')
 
 const stream = async function (movie, req, res, next) {
 	try {
@@ -12,7 +13,12 @@ const stream = async function (movie, req, res, next) {
 				updateMovie({ isDownloaded: true }, imdbID, torrentHash)
 			})
 		else streamObject = await getFileStream(movie.path)
-		console.log(movie, 'movie', streamObject)
+		if (streamObject.err)
+			return res.send({
+				type: 'error',
+				status: 403,
+				body: 'Error to find Movie',
+			})
 		const ext = path.extname(streamObject.file.name).replace('.', '')
 		if (streamObject.err)
 			return res.send({
@@ -26,7 +32,22 @@ const stream = async function (movie, req, res, next) {
 				imdbID,
 				path: streamObject.file.path,
 			})
-			insertWatchedMovie({ imdbID, userID: req.user })
+			getMovieInfo(imdbID).then(({ original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date }) => {
+				const movieGenre = []
+				for (const value of genres) movieGenre.push(value.name)
+				insertWatchedMovie({
+					userID: req.user,
+					imdbID: imdbID,
+					movieTitle: original_title,
+					movieRating: vote_average,
+					movieImage: poster_path,
+					movieDescription: overview,
+					movieTime: runtime,
+					movieLanguage: original_language,
+					movieGender: JSON.stringify(movieGenre),
+					movieRelease: new Date(release_date).getFullYear(),
+				})
+			})
 		} else updateWatchedMovie(imdbID, req.user)
 		const { range } = req.headers
 		if (!streamObject.needConvert) {
@@ -63,7 +84,6 @@ const stream = async function (movie, req, res, next) {
 				status: 403,
 				body: 'Error to convert Movie',
 			})
-		console.log(streamFile)
 		return streamFile.pipe(res)
 	} catch (err) {
 		next(err)

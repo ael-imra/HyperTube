@@ -11,36 +11,43 @@ CREATE TABLE IF NOT EXISTS `Users` (
     `lastName` VARCHAR(25),
     `password` VARCHAR(60),
 	`image` VARCHAR(255),
+    `jwt` VARCHAR(255),
 	`token` VARCHAR(172),
     `isActive` INT DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS `Comments` (
     `commentID` INT AUTO_INCREMENT PRIMARY KEY,
-    `userID` INT NOT NULL,
+    `userID` VARCHAR(40) NOT NULL,
     `imdbID` VARCHAR(10) NOT NULL,
     `commentContent` VARCHAR(100) NOT NULL,
-	`date` DATETIME DEFAULT NOW(),
-    FOREIGN KEY (userID) REFERENCES `Users`(userID)
+	`date` DATETIME DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS `Favorites` (
     `favoriteID` INT AUTO_INCREMENT PRIMARY KEY,
-    `userID` INT NOT NULL,
+    `userID` VARCHAR(40) NOT NULL,
     `imdbID` VARCHAR(10) NOT NULL,
     `movieTitle` VARCHAR(100) NOT NULL,
+    `movieRating` DECIMAL (10,2) NOT NULL,
     `movieImage` VARCHAR(100) NOT NULL,
-    `movieDescription` VARCHAR(512) NOT NULL,
+    `movieDescription` VARCHAR(1024) NOT NULL,
     `movieLanguage` VARCHAR(10) NOT NULL,
     `movieRelease` VARCHAR(4) NOT NULL,
     `movieTime` INT NOT NULL,
-    `movieGender` VARCHAR(255) NOT NULL,
-    FOREIGN KEY (userID) REFERENCES `Users`(userID)
+    `movieGenre` VARCHAR(255) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `Viewed` (
     `viewedID` INT AUTO_INCREMENT PRIMARY KEY,
-    `userID` INT NOT NULL,
+    `userID` VARCHAR(40) NOT NULL,
     `imdbID` VARCHAR(10) NOT NULL,
-	`date` DATETIME DEFAULT NOW(),
-    FOREIGN KEY (userID) REFERENCES `Users`(userID)
+    `movieTitle` VARCHAR(100) NOT NULL,
+    `movieRating` DECIMAL (10,2) NOT NULL,
+    `movieImage` VARCHAR(100) NOT NULL,
+    `movieDescription` VARCHAR(1024) NOT NULL,
+    `movieLanguage` VARCHAR(10) NOT NULL,
+    `movieRelease` VARCHAR(4) NOT NULL,
+    `movieTime` INT NOT NULL,
+    `movieGenre` VARCHAR(255) NOT NULL,
+	`date` DATETIME DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS `Movies` (
     `movieID` INT AUTO_INCREMENT PRIMARY KEY,
