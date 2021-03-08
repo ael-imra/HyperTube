@@ -9,7 +9,7 @@ oauthRoute.get('/42/callback', (req, res, next) => {
 		passport.authenticate('42', { session: false }, async (err, user) => {
 			if (user) {
 				const jwt = await getJWT(user)
-				res.cookie('jwtToken', jwt)
+				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
 				return res.redirect('/')
 			}
 			return res.redirect('/login')
@@ -37,7 +37,7 @@ oauthRoute.get('/google/callback', (req, res, next) => {
 		passport.authenticate('google', { session: false }, async (err, user) => {
 			if (user) {
 				const jwt = await getJWT(user)
-				res.cookie('jwtToken', jwt)
+				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
 				return res.redirect('/')
 			}
 			return res.redirect('/login')
