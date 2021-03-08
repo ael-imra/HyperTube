@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 	`githubID` VARCHAR(40),
 	`googleID` VARCHAR(40),
 	`42ID` VARCHAR(40),
+    `userFrom` VARCHAR(6),
     `userName` VARCHAR(40),
     `email` VARCHAR(100),
     `firstName` VARCHAR(25),

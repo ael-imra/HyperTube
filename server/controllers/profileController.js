@@ -7,7 +7,7 @@ const fs = require('fs')
 
 const getMyProfile = async function (req, res, next) {
 	try {
-		const user = await getUser({ userID: req.user }, ['userName', 'email', 'firstName', 'lastName', 'image'])
+		const user = await getUser({ userID: req.user }, ['userFrom', 'userName', 'email', 'firstName', 'lastName', 'image'])
 		return res.send({
 			type: 'success',
 			status: 200,
@@ -26,7 +26,7 @@ const getProfile = async function (req, res, next) {
 				status: 400,
 				body: error,
 			})
-		const user = await getUser({ userName: req.params.userName }, ['userName', 'firstName', 'lastName', 'image'])
+		const user = await getUser({ userName: req.params.userName }, ['userFrom', 'userName', 'firstName', 'lastName', 'image'])
 		if (user)
 			return res.send({
 				type: 'success',
@@ -51,13 +51,19 @@ const editProfile = async function (req, res, next) {
 				status: 400,
 				body: error,
 			})
-		const resultUpdate = await updateUser(req.user, req.body)
-		if (resultUpdate)
-			return res.send({
-				type: 'success',
-				status: 200,
-				body: 'Updated successful',
-			})
+		const user = await getUser(req.user, ['userName', 'email', 'firstName', 'lastName'])
+		const listNeedUpdate = {}
+		for (const key in req.body) if (req.body[key] !== user[key]) listNeedUpdate[key] = req.body[key]
+		console.log(listNeedUpdate.length)
+		if (Object.keys(listNeedUpdate).length > 0) {
+			const resultUpdate = await updateUser(req.user, listNeedUpdate)
+			if (resultUpdate)
+				return res.send({
+					type: 'success',
+					status: 200,
+					body: 'Updated successful',
+				})
+		}
 		return res.send({
 			type: 'error',
 			status: 403,

@@ -6,7 +6,7 @@ const oauthRoute = express.Router()
 oauthRoute.get('/42', passport.authenticate('42'))
 oauthRoute.get('/42/callback', (req, res, next) => {
 	if (!req.isAuthenticated())
-		passport.authenticate('42', {}, async (err, user) => {
+		passport.authenticate('42', { session: false }, async (err, user) => {
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt)
@@ -20,10 +20,10 @@ oauthRoute.get('/42/callback', (req, res, next) => {
 oauthRoute.get('/github', passport.authenticate('github'))
 oauthRoute.get('/github/callback', (req, res, next) => {
 	if (!req.isAuthenticated())
-		passport.authenticate('github', {}, async (err, user) => {
+		passport.authenticate('github', { session: false }, async (err, user) => {
 			if (user) {
 				const jwt = await getJWT(user)
-				res.cookie('jwtToken', jwt)
+				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
 				return res.redirect('/')
 			}
 			return res.redirect('/login')
@@ -34,7 +34,7 @@ oauthRoute.get('/github/callback', (req, res, next) => {
 oauthRoute.get('/google', passport.authenticate('google'))
 oauthRoute.get('/google/callback', (req, res, next) => {
 	if (!req.isAuthenticated())
-		passport.authenticate('google', {}, async (err, user) => {
+		passport.authenticate('google', { session: false }, async (err, user) => {
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt)
