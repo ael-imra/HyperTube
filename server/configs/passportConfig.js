@@ -36,6 +36,7 @@ passport.use(
 				const lastName = nameParts.length > 1 ? profile._json.name.replace(nameParts[0], '').replaceAll(' ', '') : nameParts[0]
 				const resultInsert = await insertUser({
 					githubID: 'gi_' + profile.id,
+					userFrom: 'github',
 					userName: profile.username,
 					email: profile.emails[0].value,
 					image: profile._json.avatar_url,
@@ -63,6 +64,7 @@ passport.use(
 				const token = generateToken(128)
 				const resultInsert = await insertUser({
 					'42ID': '42_' + profile._json.id,
+					userFrom: '42',
 					userName: profile._json.login,
 					email: profile._json.email,
 					image: profile._json.image_url,
@@ -93,6 +95,7 @@ passport.use(
 				const lastName = nameParts.length > 1 ? profile._json['given_name'].replace(nameParts[0], '').replaceAll(' ', '') : nameParts[0]
 				const resultInsert = await insertUser({
 					googleID: 'go_' + profile.id,
+					userFrom: 'google',
 					userName: profile._json.name,
 					email: profile._json.email,
 					image: profile._json.picture,
