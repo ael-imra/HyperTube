@@ -11,7 +11,13 @@ const insertUser = async function (values) {
 }
 
 const updateUser = async function (userID, values) {
-	const resultUpdate = await query('UPDATE Users SET ? WHERE userID=? OR 42ID=? OR githubID=? OR googleID=?', [values, userID, userID, userID, userID])
+	const resultUpdate = await query('UPDATE Users SET ? WHERE userID=? OR 42ID=? OR githubID=? OR googleID=?', [
+		values,
+		userID,
+		userID.toString(),
+		userID.toString(),
+		userID.toString(),
+	])
 	return resultUpdate.affectedRows ? resultUpdate : false
 }
 
