@@ -1,6 +1,7 @@
 const { checkUserInput } = require(__dirname + '/../services/userService')
 const { generateToken } = require(__dirname + '/../helper/indexHelper')
 const bcrypt = require('bcrypt')
+const { getJWT } = require('../services/userService')
 const { sendMail } = require(__dirname + '/../helper/mailHelper')
 const { getUser, insertUser, updateUser, checkUserExist } = require(__dirname + '/../models/userModel')
 
@@ -19,7 +20,7 @@ const register = async function (req, res, next) {
 			const token = generateToken(128)
 			sendMail('active', email, userName, `http://${req.headers.host}/`, token)
 			req.body.password = await bcrypt.hash(password, 5)
-			const insertSuccessful = await insertUser({ ...req.body, token })
+			const insertSuccessful = await insertUser({ ...req.body, userFrom: 'local', token })
 			if (insertSuccessful)
 				return res.send({
 					type: 'success',
@@ -68,7 +69,8 @@ const login = async function (req, res, next) {
 					body: 'Incorrect password',
 				})
 			if (user.isActive) {
-				req.login(user.userID, (err) => err)
+				const jwt = await getJWT(user.userID)
+				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
 				return res.send({
 					type: 'success',
 					status: 200,
@@ -101,7 +103,13 @@ const resetPassword = async function (req, res, next) {
 				body: error,
 			})
 		const { email } = req.body
-		const user = await getUser({ email }, ['userName', 'isActive', 'token'])
+		const user = await getUser({ email }, ['userFrom', 'userName', 'isActive', 'token'])
+		if (user & user.userFrom)
+			return res.send({
+				type: 'error',
+				status: 400,
+				body: 'Cannot reset password with this email',
+			})
 		if (user) {
 			if (!user.isActive)
 				return res.send({

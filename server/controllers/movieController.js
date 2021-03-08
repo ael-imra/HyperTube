@@ -16,7 +16,7 @@ const getOneMovie = async function (req, res, next) {
 		next(err)
 	}
 }
-const countWatchedMovie = async function (req, res, next) {
+const countWatchedMovies = async function (req, res, next) {
 	try {
 		const { imdbID } = req.params
 		if (typeof imdbID !== 'string' || imdbID.length > 10)
@@ -53,15 +53,8 @@ const lastWatchedMovies = async function (req, res, next) {
 		next(err)
 	}
 }
-const countWatchedMovies = async function (req, res, next) {
-	try {
-	} catch (err) {
-		next(err)
-	}
-}
 module.exports = {
 	getOneMovie,
-	countWatchedMovie,
-	lastWatchedMovies,
 	countWatchedMovies,
+	lastWatchedMovies,
 }
