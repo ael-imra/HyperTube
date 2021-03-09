@@ -34,4 +34,5 @@ module.exports = {
 	},
 	host: 'localhost',
 	port: 1337,
+	clientPort: 3000,
 }

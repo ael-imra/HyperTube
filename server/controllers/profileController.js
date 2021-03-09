@@ -36,7 +36,7 @@ const getProfile = async function (req, res, next) {
 		return res.send({
 			type: 'warning',
 			status: 400,
-			body: 'Profile not found',
+			body: { Eng: 'Profile not found', Fr: 'Profil non trouvé' },
 		})
 	} catch (err) {
 		next(err)
@@ -54,20 +54,19 @@ const editProfile = async function (req, res, next) {
 		const user = await getUser(req.user, ['userName', 'email', 'firstName', 'lastName'])
 		const listNeedUpdate = {}
 		for (const key in req.body) if (req.body[key] !== user[key]) listNeedUpdate[key] = req.body[key]
-		console.log(listNeedUpdate.length)
 		if (Object.keys(listNeedUpdate).length > 0) {
 			const resultUpdate = await updateUser(req.user, listNeedUpdate)
 			if (resultUpdate)
 				return res.send({
 					type: 'success',
 					status: 200,
-					body: 'Updated successful',
+					body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
 				})
 		}
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Update failed',
+			body: { Eng: 'Updated successful', Fr: 'Mise à jour a échoué' },
 		})
 	} catch (err) {
 		next(err)
@@ -89,7 +88,7 @@ const editPassword = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Incorrect password',
+				body: { Eng: 'Incorrect password', Fr: 'Mot de passe incorrect' },
 			})
 		const hashNewPassword = await bcrypt.hash(req.body.newPassword, 5)
 		const resultUpdate = await updateUser(req.user, { password: hashNewPassword })
@@ -97,12 +96,12 @@ const editPassword = async function (req, res, next) {
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: 'Updated successful',
+				body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
 			})
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Update failed',
+			body: { Eng: 'Updated successful', Fr: 'Mise à jour a échoué' },
 		})
 	} catch (err) {
 		next(err)
@@ -121,17 +120,17 @@ const editImage = async function (req, res, next) {
 		const user = await getUser({ userID: req.user }, ['image'])
 		const resultUpdate = await updateUser(req.user, { image: imagePath })
 		if (resultUpdate) {
-			if (user.image && fs.existsSync(__dirname + '/..' + user.image)) fs.unlink(__dirname + '/..' + user.image, (err) => console.log(err))
+			if (user.image && fs.existsSync(__dirname + '/..' + user.image)) fs.unlink(__dirname + '/..' + user.image, (err) => {})
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: 'Updated successful',
+				body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
 			})
 		}
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Update failed',
+			body: { Eng: 'Updated successful', Fr: 'Mise à jour a échoué' },
 		})
 	} catch (err) {
 		next(err)

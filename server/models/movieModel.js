@@ -4,6 +4,12 @@ const getMovie = async function (imdbID, torrentHash) {
 	const [movie] = await query('SELECT movieID,path,isDownloaded FROM Movies WHERE imdbID=? AND torrentHash=?', [imdbID, torrentHash])
 	return movie || {}
 }
+const getMovieDBInfo = async function (imdbID) {
+	const [movieFromViewed] = await query('SELECT movieImage,movieLanguage,movieRelease,movieTime,movieGenre,movieDescription FROM Viewed WHERE imdbID = ? LIMIT 1', imdbID)
+	if (movieFromViewed) return movieFromViewed
+	const [movieFromFavorite] = await query('SELECT movieImage,movieLanguage,movieRelease,movieTime,movieGenre,movieDescription FROM Favorites WHERE imdbID = ? LIMIT 1', imdbID)
+	return movieFromFavorite
+}
 const getLastWatchedMovie = async function (userID, limit) {
 	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date LIMIT ?', [userID, limit])
 	return movies
@@ -14,6 +20,10 @@ const getUnwatchedMovie = async function () {
 }
 const getCountWatchedMovie = async function (imdbID) {
 	const [{ count }] = await query('SELECT COUNT(*) as count FROM Viewed WHERE imdbID=?', imdbID)
+	return count
+}
+const getCountUserWatchedMovie = async function (imdbID, userID) {
+	const [{ count }] = await query('SELECT COUNT(*) as count FROM Viewed WHERE imdbID=? AND userID=?', [imdbID, userID])
 	return count
 }
 const insertMovie = async function (values) {
@@ -36,14 +46,21 @@ const deleteMovies = async function () {
 	const resultDelete = await query('DELETE FROM Movies WHERE DATEDIFF(NOW(),date)>=30')
 	return resultDelete.affectedRows ? resultDelete : false
 }
+const checkViewed = async function (imdbID, userID) {
+	const [user] = await query('SELECT userID FROM Viewed WHERE imdbID = ? AND userID=?', [imdbID, userID])
+	return user ? true : false
+}
 module.exports = {
 	getMovie,
+	getCountWatchedMovie,
+	getUnwatchedMovie,
+	getLastWatchedMovie,
+	getCountUserWatchedMovie,
+	getMovieDBInfo,
+	updateWatchedMovie,
 	insertMovie,
 	updateMovie,
 	deleteMovies,
 	insertWatchedMovie,
-	updateWatchedMovie,
-	getCountWatchedMovie,
-	getUnwatchedMovie,
-	getLastWatchedMovie,
+	checkViewed,
 }

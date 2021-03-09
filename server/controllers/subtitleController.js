@@ -8,7 +8,6 @@ const getSubtitle = async function (req, res, next) {
 			const filename = path.join(__dirname, '../downloads/subtitles', `${imdbID}/${lang}.vtt`)
 			if (!fs.existsSync(filename)) await downloadSubtitles(imdbID, lang)
 			if (fs.existsSync(filename)) {
-				console.log(filename, 'FILE')
 				res.setHeader('Content-Type', 'text/vtt')
 				return res.send(fs.readFileSync(filename).toString())
 			}
@@ -16,7 +15,7 @@ const getSubtitle = async function (req, res, next) {
 		return res.send({
 			type: 'error',
 			status: 400,
-			body: 'Incorrect parameters',
+			body: { Eng: 'Incorrect parameters', Fr: 'Paramètres incorrects' },
 		})
 	} catch (err) {
 		next(err)

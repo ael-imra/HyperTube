@@ -1,7 +1,8 @@
 const express = require('express')
-const { getAllFavorites, removeFavorite, addFavorite } = require('../controllers/favoriteController')
+const { getAllFavorites, getCountFavorite, removeFavorite, addFavorite } = require('../controllers/favoriteController')
 const favoriteRoute = express.Router()
 
+favoriteRoute.get('/count/:userName', getCountFavorite)
 favoriteRoute.get('/:justImdbID', getAllFavorites)
 favoriteRoute.get('/', getAllFavorites)
 favoriteRoute.delete('/', removeFavorite)
