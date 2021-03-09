@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { insertMovie, insertWatchedMovie, updateWatchedMovie, updateMovie } = require('../models/movieModel')
+const { insertMovie, insertWatchedMovie, updateWatchedMovie, updateMovie, checkViewed, getMovieDBInfo } = require('../models/movieModel')
 const { downloadStream, convertStream, getFileStream } = require('../services/streamService')
 const path = require('path')
 const { getMovieInfo } = require('../services/movieService')
@@ -17,14 +17,14 @@ const stream = async function (movie, req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Error to find Movie',
+				body: { Eng: 'Error to find Movie', Fr: 'Erreur de recherche du film' },
 			})
 		const ext = path.extname(streamObject.file.name).replace('.', '')
 		if (streamObject.err)
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Movie not found',
+				body: { Eng: 'Movie not found', Fr: 'Film introuvable' },
 			})
 		if (!Object.keys(movie).length) {
 			insertMovie({
@@ -32,22 +32,42 @@ const stream = async function (movie, req, res, next) {
 				imdbID,
 				path: streamObject.file.path,
 			})
-			getMovieInfo(imdbID).then(({ original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date }) => {
-				const movieGenre = []
-				for (const value of genres) movieGenre.push(value.name)
+		}
+		const checkViewedMovie = await checkViewed(imdbID, req.user)
+		if (!checkViewedMovie) {
+			const movieDB = await getMovieDBInfo(imdbID)
+			if (!movieDB)
+				getMovieInfo(imdbID).then(({ original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date }) => {
+					if (overview) {
+						const movieGenre = []
+						if (genres) for (const value of genres) movieGenre.push(value.name)
+						insertWatchedMovie({
+							userID: req.user,
+							imdbID: imdbID,
+							movieTitle: original_title,
+							movieRating: vote_average,
+							movieImage: poster_path,
+							movieDescription: [...overview].splice(0, 1024).toString().replaceAll(',', ''),
+							movieTime: runtime,
+							movieLanguage: original_language,
+							movieGenre: JSON.stringify(movieGenre),
+							movieRelease: new Date(release_date).getFullYear(),
+						})
+					}
+				})
+			else
 				insertWatchedMovie({
 					userID: req.user,
-					imdbID: imdbID,
-					movieTitle: original_title,
-					movieRating: vote_average,
-					movieImage: poster_path,
-					movieDescription: overview,
-					movieTime: runtime,
-					movieLanguage: original_language,
-					movieGender: JSON.stringify(movieGenre),
-					movieRelease: new Date(release_date).getFullYear(),
+					imdbID: movieDB.imdbID,
+					movieTitle: movieDB.movieTitle,
+					movieRating: movieDB.movieRating,
+					movieImage: movieDB.movieImage,
+					movieDescription: movieDB.movieDescription,
+					movieTime: movieDB.movieTime,
+					movieLanguage: movieDB.movieLanguage,
+					movieGenre: movieDB.movieGenre,
+					movieRelease: movieDB.movieRelease,
 				})
-			})
 		} else updateWatchedMovie(imdbID, req.user)
 		const { range } = req.headers
 		if (!streamObject.needConvert) {
@@ -82,7 +102,7 @@ const stream = async function (movie, req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Error to convert Movie',
+				body: { Eng: 'Error to convert Movie', Fr: 'Erreur de conversion du film' },
 			})
 		return streamFile.pipe(res)
 	} catch (err) {

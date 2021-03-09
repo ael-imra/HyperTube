@@ -25,18 +25,18 @@ const register = async function (req, res, next) {
 				return res.send({
 					type: 'success',
 					status: 200,
-					body: 'Registration Successful',
+					body: { Eng: 'Registration successful', Fr: 'Inscription réussi' },
 				})
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Registration Failed',
+				body: { Eng: 'Registration Failed', Fr: "Échec de l'enregistrement" },
 			})
 		}
 		return res.send({
 			type: 'warning',
 			status: 403,
-			body: `${checkResult} already exist`,
+			body: { Eng: `${checkResult} already exist`, Fr: `${checkResult} existe déjà` },
 		})
 	} catch (err) {
 		next(err)
@@ -59,14 +59,14 @@ const login = async function (req, res, next) {
 				return res.send({
 					type: 'warning',
 					status: 403,
-					body: "You can't login with this username",
+					body: { Eng: "You can't login with this username", Fr: "Vous ne pouvez pas vous connecter avec ce nom d'utilisateur" },
 				})
 			const checkPassword = await bcrypt.compare(password, user.password)
 			if (!checkPassword)
 				return res.send({
 					type: 'error',
 					status: 401,
-					body: 'Incorrect password',
+					body: { Eng: 'Incorrect password', Fr: 'Mot de passe incorrect' },
 				})
 			if (user.isActive) {
 				const jwt = await getJWT(user.userID)
@@ -74,19 +74,19 @@ const login = async function (req, res, next) {
 				return res.send({
 					type: 'success',
 					status: 200,
-					body: 'user authenticated',
+					body: { Eng: 'user authenticated', Fr: 'utilisateur authentifié' },
 				})
 			} else if (user.isActive === 0)
 				return res.send({
 					type: 'warning',
 					status: 403,
-					body: 'You must activate the account',
+					body: { Eng: 'You must activate the account', Fr: 'Vous devez activer le compte' },
 				})
 		}
 		return res.send({
 			type: 'error',
 			status: 401,
-			body: 'Incorrect userName or password',
+			body: { Eng: 'Incorrect userName or password', Fr: 'Identifiant ou mot de passe incorrect' },
 		})
 	} catch (err) {
 		next(err)
@@ -108,26 +108,26 @@ const resetPassword = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Cannot reset password with this email',
+				body: { Eng: 'Cannot reset password with this email', Fr: 'Impossible de réinitialiser le mot de passe avec cet e-mail' },
 			})
 		if (user) {
 			if (!user.isActive)
 				return res.send({
 					type: 'warning',
 					status: 403,
-					body: 'Please verify your email than reset your password',
+					body: { Eng: 'Please verify your email than reset your password', Fr: 'Veuillez vérifier votre adresse e-mail avant de réinitialiser votre mot de passe' },
 				})
 			sendMail('reset', email, user.userName, `http://${req.headers.host}/ResetPassword/${user.token}`)
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: 'Check your email to reset password',
+				body: { Eng: 'Check your email to reset password', Fr: 'Vérifiez votre messagerie pour réinitialiser le mot de passe' },
 			})
 		}
 		return res.send({
 			type: 'error',
 			status: 400,
-			body: 'Incorrect email',
+			body: { Eng: 'Incorrect email', Fr: 'Adresse Email incorrecte' },
 		})
 	} catch (err) {
 		next(err)
@@ -150,13 +150,13 @@ const activeAccount = async function (req, res, next) {
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: 'Your account has been activated successfully',
+				body: { Eng: 'Your account has been activated successfully', Fr: 'Votre compte a été activé avec succès' },
 			})
 		}
 		return res.send({
 			type: 'error',
 			status: 400,
-			body: 'Incorrect token',
+			body: { Eng: 'Incorrect token', Fr: 'Jeton incorrect' },
 		})
 	} catch (err) {
 		next(err)

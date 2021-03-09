@@ -1,5 +1,4 @@
 const errorHandler = function (err, req, res, next) {
-	console.log(err)
 	if (err)
 		res.send({
 			type: 'error',

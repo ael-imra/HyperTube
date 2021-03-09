@@ -12,7 +12,7 @@ const deleteMoviesNotWatched = async function () {
 }
 const getMovieInfo = async function (imdbID) {
 	const movie = await axios.get(`https://api.themoviedb.org/3/movie/${imdbID}?api_key=${keys.themoviedb}`)
-	return movie
+	return movie.data
 }
 module.exports = {
 	getMovieInfo,

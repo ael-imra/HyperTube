@@ -1,4 +1,5 @@
 const express = require('express')
+const { clientPort } = require('../configs/indexConfig')
 const { getJWT } = require('../services/userService')
 const passport = require(__dirname + '/../configs/passportConfig')
 const oauthRoute = express.Router()
@@ -10,11 +11,11 @@ oauthRoute.get('/42/callback', (req, res, next) => {
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
-				return res.redirect('/')
+				return res.redirect(`http://localhost:${clientPort}`)
 			}
-			return res.redirect('/login')
+			return res.redirect(`http://localhost:${clientPort}/login`)
 		})(req, res, next)
-	else res.redirect('/')
+	else res.redirect(`http://localhost:${clientPort}`)
 })
 
 oauthRoute.get('/github', passport.authenticate('github'))
@@ -24,11 +25,11 @@ oauthRoute.get('/github/callback', (req, res, next) => {
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
-				return res.redirect('/')
+				return res.redirect(`http://localhost:${clientPort}`)
 			}
-			return res.redirect('/login')
+			return res.redirect(`http://localhost:${clientPort}/login`)
 		})(req, res, next)
-	else res.redirect('/')
+	else res.redirect(`http://localhost:${clientPort}`)
 })
 
 oauthRoute.get('/google', passport.authenticate('google'))
@@ -38,10 +39,10 @@ oauthRoute.get('/google/callback', (req, res, next) => {
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
-				return res.redirect('/')
+				return res.redirect(`http://localhost:${clientPort}`)
 			}
-			return res.redirect('/login')
+			return res.redirect(`http://localhost:${clientPort}/login`)
 		})(req, res, next)
-	else res.redirect('/')
+	else res.redirect(`http://localhost:${clientPort}`)
 })
 module.exports = oauthRoute

@@ -1,5 +1,5 @@
-const { getFavorites, checkFavoriteMovie, insertFavorite, deleteFavorite } = require('../models/favoriteModel')
-const { keys } = require(__dirname + '/../configs/indexConfig')
+const { getFavorites, getCountFavoriteMovie, checkFavorite, insertFavorite, deleteFavorite } = require('../models/favoriteModel')
+const { getUser } = require(__dirname + '/../models/userModel')
 const { getMovieInfo } = require('../services/movieService')
 
 const getAllFavorites = async function (req, res, next) {
@@ -15,7 +15,7 @@ const getAllFavorites = async function (req, res, next) {
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Favorites not found',
+			body: { Eng: 'Favorites not found', Fr: 'Favoris non trouvés' },
 		})
 	} catch (err) {
 		next(err)
@@ -29,16 +29,17 @@ const addFavorite = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Incorrect imdbID',
+				body: { Eng: 'Incorrect imdbID', Fr: 'Incorrect imdbID' },
 			})
-		const movieDB = await checkFavoriteMovie(imdbID.trim(), req.user)
-		if (movieDB.found)
+		const found = await checkFavorite(imdbID.trim(), req.user)
+		if (found)
 			return res.send({
 				type: 'warning',
 				status: 403,
-				body: 'Already have this movie on favorite',
+				body: { Eng: 'Already have this movie on favorite', Fr: "J'ai déjà ce film en favori" },
 			})
-		if (movieDB.movieTitle) {
+		const movieDB = await getMovieInfo(imdbID.trim())
+		if (movieDB && movieDB.movieTitle) {
 			const resultInsert = await insertFavorite({
 				userID: req.user,
 				imdbID: imdbID.trim(),
@@ -53,20 +54,20 @@ const addFavorite = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Insert failed',
+				body: { Eng: 'Insert failed', Fr: "L'insertion a échoué" },
 			})
 		}
 		const movie = await getMovieInfo(imdbID.trim())
 		const { original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date } = movie.data
 		const movieGenre = []
-		for (const value of genres) movieGenre.push(value.name)
+		if (genres) for (const value of genres) movieGenre.push(value.name)
 		const resultInsert = await insertFavorite({
 			userID: req.user,
 			imdbID: imdbID.trim(),
 			movieTitle: original_title,
 			movieRating: vote_average,
 			movieImage: poster_path,
-			movieDescription: overview,
+			movieDescription: [...overview].splice(0, 1024).toString().replaceAll(',', ''),
 			movieTime: runtime,
 			movieLanguage: original_language,
 			movieGenre: JSON.stringify(movieGenre),
@@ -81,14 +82,14 @@ const addFavorite = async function (req, res, next) {
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Insert failed',
+			body: { Eng: 'Insert failed', Fr: "L'insertion a échoué" },
 		})
 	} catch (err) {
 		if (err.response)
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Movie not found',
+				body: { Eng: 'Movie not found', Fr: 'Film introuvable' },
 			})
 		next(err)
 	}
@@ -101,19 +102,48 @@ const removeFavorite = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: 'Incorrect imdbID',
+				body: { Eng: 'Incorrect imdbID', Fr: 'Incorrect imdbID' },
 			})
 		const deleteResult = await deleteFavorite(imdbID.trim(), req.user)
 		if (deleteResult)
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: 'Deleted successful',
+				body: { Eng: 'Deleted successful', Fr: 'Supprimé avec succès' },
 			})
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: 'Deleted failed',
+			body: { Eng: 'Deleted failed', Fr: 'Supprimé a échoué' },
+		})
+	} catch (err) {
+		next(err)
+	}
+}
+
+const getCountFavorite = async function (req, res, next) {
+	try {
+		const { userName } = req.params
+		if (userName && userName.length <= 40) {
+			const user = await getUser({ userName }, 'userID')
+			if (user && user.userID) {
+				const count = await getCountFavoriteMovie(user.userID)
+				return res.send({
+					type: 'success',
+					status: 200,
+					body: count,
+				})
+			}
+			return res.send({
+				type: 'error',
+				status: 400,
+				body: { Eng: 'username not found', Fr: "Nom d'utilisateur introuvable" },
+			})
+		}
+		return res.send({
+			type: 'error',
+			status: 400,
+			body: { Eng: 'Wrong username', Fr: "Mauvais nom d'utilisateur" },
 		})
 	} catch (err) {
 		next(err)
@@ -124,4 +154,5 @@ module.exports = {
 	getAllFavorites,
 	addFavorite,
 	removeFavorite,
+	getCountFavorite,
 }
