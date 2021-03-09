@@ -65,12 +65,10 @@ const downloadStream = async function (torrentHash, completedDownload) {
 				 * sort files desc
 				 * portended the large file is video
 				 */
-				console.log('ready')
 				engine.files.sort((file1, file2) => file2.length - file1.length)
 				engine.files.map((file) => file.select())
 				resolve({ file: engine.files[0], needConvert: checkNeedConvert(engine.files[0].path) })
 				engine.on('idle', () => {
-					console.log('idle')
 					completedDownload()
 				})
 			})

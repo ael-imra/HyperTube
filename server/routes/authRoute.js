@@ -9,11 +9,11 @@ authRoute.post('/login', (req, res, next) => {
 			return await login(req, res, next)
 		})(req, res, next)
 	}
-	return res.redirect('/')
+	return res.redirect(`http://localhost:${clientPort}`)
 })
 authRoute.post('/register', async (req, res, next) => {
 	if (!req.isAuthenticated()) return await register(req, res, next)
-	return res.redirect('/')
+	return res.redirect(`http://localhost:${clientPort}`)
 })
 authRoute.post('/reset', resetPassword)
 authRoute.post('/active', activeAccount)

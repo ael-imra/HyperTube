@@ -11,11 +11,9 @@ const authentication = function (req, res, next) {
 }
 const jwt = async function (req, res, next) {
 	const { jwtToken } = req.cookies
-	console.log(jwtToken, 'OK')
 	try {
 		if (jwtToken) {
 			const payload = verify(jwtToken, keys.jwt)
-			console.log(payload)
 			const user = await getUser({ userID: payload.userID }, 'userID')
 			if (user) {
 				req.user = user.userID
