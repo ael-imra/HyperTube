@@ -15,7 +15,7 @@ const LogoWebSite = () => {
   let history = useHistory();
   const width = UseWindowSize();
   return (
-    <div className='Logo' onClick={() => history.push('/')}>
+    <div className='Logo' onClick={() => (location.href = '/')}>
       <img src={Logo} alt='...' />
       {width <= 700 ? '' : <p>Hypertube</p>}
     </div>

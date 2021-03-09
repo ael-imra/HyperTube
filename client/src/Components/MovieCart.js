@@ -16,7 +16,7 @@ export const MovieCart = (props) => {
   const ctx = React.useContext(DataContext);
   const [movie, setMovie] = React.useState(props.movie);
   return (
-    <div className='PostMovie'>
+    <div className='PostMovie' style={props.style ? { ...props.style } : {}}>
       <div className='movieImage'>
         <img src={movie.image} alt='movie' />
         <div className='moreInfoMovie'>
