@@ -9,13 +9,17 @@ import { UpdatePassword } from './UpdatePassword';
 import { GetUserInfo } from '../Assets/GetInfoUser';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import Divider from '@material-ui/core/Divider';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { DataContext } from '../Context/AppContext';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Avatar from '@material-ui/core/Avatar';
+import { MovieCart } from './MovieCart';
+import Axios from 'axios';
+import CropOriginalIcon from '@material-ui/icons/PhotoCamera';
 
 export const Profile = () => {
   const [actionProfile, setActionProfile] = React.useState(0);
+  // const [listMovies, setListMovies] = React.useState(0);
   const ctx = React.useContext(DataContext);
   const [userInfo, setUserInfo] = React.useState({
     firstName: '',
@@ -27,48 +31,76 @@ export const Profile = () => {
     fixEmailName: '',
     fixUserName: '',
     middleware: false,
+    listMovies: [],
   });
-
   const [contentMessage, setContentMessage] = React.useState({ type: '', content: '', state: false });
   const handleCloseMessage = () => {
     setContentMessage({ type: 'info', content: '', state: false });
   };
+  const updateImageProfile = (e) => {
+    let reader = new FileReader();
+    reader.onload = async () => {
+      const imageData = await Axios.put(`/profile/image`, { image: reader.result }, { withCredentials: true });
+      console.log(imageData.data);
+      setUserInfo((oldValue) => ({ ...oldValue, image: reader.result }));
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
   React.useEffect(() => {
     async function awaitData() {
       const data = await GetUserInfo();
-      setUserInfo({ ...data, middleware: true, fixFirstName: data.firstName, fixLastName: data.lastName, fixEmailName: data.email, fixUserName: data.userName });
+
+      setUserInfo({ ...data, middleware: true, fixFirstName: data.firstName, fixLastName: data.lastName, fixEmailName: data.email, fixUserName: data.userName, listMovies: await GetLastMovies() });
     }
     awaitData();
   }, []);
-
+  const GetLastMovies = async () => {
+    const lastMovies = await ctx.GetMovies(1, [], { years: '', rating: 0, title: '', order: 'desc', genre: '', sort: '' });
+    const last = await Axios.get('/movie/lastWatched', { withCredentials: true });
+    console.log(last.data.body);
+    return lastMovies.list;
+  };
   return (
     <div className='Profile'>
       {userInfo.middleware ? (
         <>
           <div className='detailUser'>
             <div className='UserInfo'>
-              {userInfo.image ? <img src={userInfo.image} /> : <Avatar style={{ width: '250px', height: '250px', marginTop: '15px', fontSize: '90px', backgroundColor: 'rgb(236, 70, 70)' }}>H</Avatar>}
-
+              <div className='ImageProfile'>
+                {userInfo.image ? (
+                  userInfo.image === 'X' ? (
+                    <Skeleton variant='circle' width={40} height={40} />
+                  ) : (
+                    <img src={userInfo.image.includes('http://') || userInfo.image.includes('https://') || userInfo.image.includes('data:image/') ? userInfo.image : `http://localhost:1337${userInfo.image}`} />
+                  )
+                ) : (
+                  <Avatar style={{ width: '200px', height: '200px', marginTop: '15px', fontSize: '90px', backgroundColor: 'rgb(236, 70, 70)' }}>{userInfo.userName.substring(0, 2).toUpperCase()}</Avatar>
+                )}
+                <input type='file' accept='image/*' style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0', top: '0', left: '0', borderRadius: '50%', cursor: 'pointer', zIndex: '8' }} onChange={updateImageProfile} />
+                <div>
+                  <CropOriginalIcon style={{ fontSize: '47px', color: 'rgb(34, 40, 49)' }} />
+                </div>
+              </div>
               <p>{userInfo.fixUserName}</p>
               <p>{userInfo.fixEmailName}</p>
               <div className='CountWatchAndFavorite'>
                 <div>
                   <p>100</p>
-                  <p>{`Watch`}</p>
+                  <p>{ctx.Languages[ctx.Lang].Watch}</p>
                 </div>
                 <div></div>
                 <div>
                   <p>10</p>
-                  <p>Favorite</p>
+                  <p>{ctx.Languages[ctx.Lang].Favorite}</p>
                 </div>
               </div>
             </div>
             <div className='ActionInfo'>
-              <AppBar style={{ backgroundColor: '#222831', height: '48px' }} position='static'>
+              <AppBar style={{ backgroundColor: 'transparent', height: '48px' }} position='static'>
                 <Tabs variant='scrollable' value={actionProfile} onChange={(event, newValue) => setActionProfile(newValue)}>
-                  <Tab label='Information' />
-                  <Tab label='Update Information' />
-                  <Tab label='Update Password' />
+                  <Tab label={ctx.Languages[ctx.Lang].Information} />
+                  <Tab label={ctx.Languages[ctx.Lang].UpdateInformation} />
+                  {userInfo.userFrom === 'local' ? <Tab label={ctx.Languages[ctx.Lang].UpdatePassword} /> : ''}
                 </Tabs>
               </AppBar>
               {actionProfile === 0 ? (
@@ -82,7 +114,12 @@ export const Profile = () => {
           </div>
           <div className='MoviesWatch'>
             <p>Last watch</p>
-            {console.log(ctx.cache.listMovies.list)}
+            {/* <Divider /> */}
+            <div className='lastMovies'>
+              {userInfo.listMovies.map((movie, key) => (
+                <MovieCart movie={movie} key={key} style={{ position: 'absolute', left: key * 320 }} />
+              ))}
+            </div>
           </div>
         </>
       ) : (
