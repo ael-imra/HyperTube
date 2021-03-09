@@ -26,7 +26,7 @@ export const UpdateInfoUser = (props) => {
   return (
     <div className='Info' style={{ justifyContent: 'start' }}>
       <div className='ew'>
-        <p>FirstName</p>
+        <p>{ctx.Languages[ctx.Lang].FirstName}</p>
         <Input
           DefaultValue={props.userInfo.firstName}
           Onchange={(userName) => {
@@ -41,7 +41,7 @@ export const UpdateInfoUser = (props) => {
         />
       </div>
       <div className='ew'>
-        <p>lastName</p>
+        <p>{ctx.Languages[ctx.Lang].LastName}</p>
         <Input
           DefaultValue={props.userInfo.lastName}
           Onchange={(userName) => {
@@ -56,7 +56,7 @@ export const UpdateInfoUser = (props) => {
         />
       </div>
       <div className='ew'>
-        <p>Email</p>
+        <p>{ctx.Languages[ctx.Lang].Email}</p>
         <Input
           DefaultValue={props.userInfo.email}
           Onchange={(userName) => {
@@ -71,7 +71,7 @@ export const UpdateInfoUser = (props) => {
         />
       </div>
       <div className='ew'>
-        <p>UserName</p>
+        <p>{ctx.Languages[ctx.Lang].UserName}</p>
         <Input
           DefaultValue={props.userInfo.userName}
           Onchange={(userName) => {
