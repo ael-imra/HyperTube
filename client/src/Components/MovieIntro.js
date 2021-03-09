@@ -78,7 +78,7 @@ export default function MovieIntro(props) {
                 <p>{dataMovie.year}</p>
                 <Divider orientation='vertical' style={{ backgroundColor: '#ffffffa3', height: '60%', marginRight: '10px' }} />
                 <p style={{ display: 'flex', alignItems: 'center' }}>
-                  <VisibilityIcon style={{ fontSize: '15px', marginRight: '5px' }} /> {11}
+                  <VisibilityIcon style={{ fontSize: '15px', marginRight: '5px' }} /> {dataMovie.countWatchedMovies}
                 </p>
               </div>
               <Divider style={{ backgroundColor: '#ffffffa3', width: '90%', marginTop: '0px' }} />

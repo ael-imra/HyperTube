@@ -6,6 +6,7 @@ export const GetMovie = async (code) => {
   const images = await Axios.get(`https://api.themoviedb.org/3/movie/${movieInfo.imdb_code}/images?api_key=7a518fe1d1c5359a4929ef4765c347fb`);
   let suggestions = await (await Axios.get(`https://yts.mx/api/v2/movie_suggestions.json?movie_id=${codeMovie.data.data.movies[0].id}`)).data.data.movies;
   const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
+  const countWatchedMovies = await Axios.get(`/movie/${movieInfo.imdb_code}`, { withCredentials: true });
   suggestions = suggestions.map((movie) => ({
     image: movie.medium_cover_image,
     id: movie.id,
@@ -39,5 +40,6 @@ export const GetMovie = async (code) => {
     dateUploaded: movieInfo.date_uploaded,
     suggestions,
     isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movieInfo.imdb_code) === -1 ? false : true,
+    countWatchedMovies: countWatchedMovies.data.body,
   };
 };
