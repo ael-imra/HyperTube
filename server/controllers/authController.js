@@ -3,7 +3,7 @@ const { generateToken } = require(__dirname + '/../helper/indexHelper')
 const bcrypt = require('bcrypt')
 const { getJWT } = require('../services/userService')
 const { sendMail } = require(__dirname + '/../helper/mailHelper')
-const { getUser, insertUser, updateUser, checkUserExist } = require(__dirname + '/../models/userModel')
+const { getUser, insertLocalUser, updateUser, checkUserExist } = require(__dirname + '/../models/userModel')
 
 const register = async function (req, res, next) {
 	try {
@@ -20,7 +20,7 @@ const register = async function (req, res, next) {
 			const token = generateToken(128)
 			sendMail('active', email, userName, `http://${req.headers.host}/`, token)
 			req.body.password = await bcrypt.hash(password, 5)
-			const insertSuccessful = await insertUser({ ...req.body, userFrom: 'local', token })
+			const insertSuccessful = await insertLocalUser({ ...req.body, userFrom: 'local', token })
 			if (insertSuccessful)
 				return res.send({
 					type: 'success',
@@ -53,9 +53,9 @@ const login = async function (req, res, next) {
 				body: error,
 			})
 		const { userName, password } = req.body
-		const user = await getUser({ userName: userName }, ['userID', 'githubID', 'googleID', '42ID', 'password', 'isActive'])
+		const user = await getUser({ userName: userName }, ['userID', 'password', 'isActive'])
 		if (user) {
-			if (user.githubID || user.googleID || user['42ID'])
+			if (user.userID.indexOf('go') > -1 || user.userID.indexOf('gi') > -1 || user.userID.indexOf('42') > -1)
 				return res.send({
 					type: 'warning',
 					status: 403,

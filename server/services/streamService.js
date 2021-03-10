@@ -70,6 +70,7 @@ const downloadStream = async function (torrentHash, completedDownload) {
 				resolve({ file: engine.files[0], needConvert: checkNeedConvert(engine.files[0].path) })
 				engine.on('idle', () => {
 					completedDownload()
+					engine.destroy()
 				})
 			})
 		} catch (err) {

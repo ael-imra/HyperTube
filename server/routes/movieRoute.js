@@ -1,10 +1,11 @@
-const express = require('express');
-const { getOneMovie, countWatchedMovies, lastWatchedMovies, countUserWatchedMovie } = require('../controllers/movieController');
+const express = require("express");
+const { getOneMovie, countWatchedMovies, lastWatchedMovies, countUserWatchedMovies, watchedMovies } = require("../controllers/movieController");
 const movieRoute = express.Router();
 
-movieRoute.get('/count/:userName', countUserWatchedMovie);
-movieRoute.get('/lastWatched', lastWatchedMovies);
-movieRoute.get('/:imdbID/:torrentHash', getOneMovie);
-movieRoute.get('/:imdbID', countWatchedMovies);
+movieRoute.get("/count/:userName", countUserWatchedMovies);
+movieRoute.get("/lastWatched", lastWatchedMovies);
+movieRoute.get("/watched", watchedMovies);
+movieRoute.get("/:imdbID/:torrentHash", getOneMovie);
+movieRoute.get("/:imdbID", countWatchedMovies);
 
 module.exports = movieRoute;
