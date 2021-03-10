@@ -1,4 +1,4 @@
-const { getMovie, getCountWatchedMovie, getLastWatchedMovie, getCountUserWatchedMovie } = require('../models/movieModel')
+const { getMovie, getCountWatchedMovie, getLastWatchedMovie, getCountUserWatchedMovie, getWatchedMovies } = require('../models/movieModel')
 const { stream } = require('./streamController')
 const { getUser } = require(__dirname + '/../models/userModel')
 
@@ -54,7 +54,7 @@ const lastWatchedMovies = async function (req, res, next) {
 		next(err)
 	}
 }
-const countUserWatchedMovie = async function (req, res, next) {
+const countUserWatchedMovies = async function (req, res, next) {
 	try {
 		const { userName, imdbID } = req.params
 		if (userName && userName.length <= 40) {
@@ -82,9 +82,22 @@ const countUserWatchedMovie = async function (req, res, next) {
 		next(err)
 	}
 }
+const watchedMovies = async function (req, res, next) {
+	try {
+		const movies = await getWatchedMovies(req.user)
+		return res.send({
+			type: 'success',
+			status: 200,
+			body: movies,
+		})
+	} catch (err) {
+		next(err)
+	}
+}
 module.exports = {
 	getOneMovie,
+	watchedMovies,
 	countWatchedMovies,
 	lastWatchedMovies,
-	countUserWatchedMovie,
+	countUserWatchedMovies,
 }
