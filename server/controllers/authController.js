@@ -18,7 +18,7 @@ const register = async function (req, res, next) {
 		const checkResult = await checkUserExist(userName, email)
 		if (!checkResult) {
 			const token = generateToken(128)
-			sendMail('active', email, userName, `http://${req.headers.host}/`, token)
+			sendMail('active', email, userName, `http://localhost:1337/auth/active`, token)
 			req.body.password = await bcrypt.hash(password, 5)
 			const insertSuccessful = await insertLocalUser({ ...req.body, userFrom: 'local', token })
 			if (insertSuccessful)
