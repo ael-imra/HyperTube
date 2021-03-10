@@ -1,10 +1,8 @@
 CREATE DATABASE IF NOT EXISTS `HyperTube`;
 USE `HyperTube`;
 CREATE TABLE IF NOT EXISTS `Users` (
-    `userID` INT AUTO_INCREMENT PRIMARY KEY,
-	`githubID` VARCHAR(40),
-	`googleID` VARCHAR(40),
-	`42ID` VARCHAR(40),
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+	`userID` VARCHAR(40),
     `userFrom` VARCHAR(6),
     `userName` VARCHAR(40),
     `email` VARCHAR(100),

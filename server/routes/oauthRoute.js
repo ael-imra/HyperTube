@@ -36,6 +36,7 @@ oauthRoute.get('/google', passport.authenticate('google'))
 oauthRoute.get('/google/callback', (req, res, next) => {
 	if (!req.isAuthenticated())
 		passport.authenticate('google', { session: false }, async (err, user) => {
+			console.log(err, user)
 			if (user) {
 				const jwt = await getJWT(user)
 				res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false })
