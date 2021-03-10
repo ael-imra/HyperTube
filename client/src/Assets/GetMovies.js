@@ -1,9 +1,9 @@
-import Axios from 'axios';
+import Axios from "axios";
 export const GetMovies = async (page, oldValue, search) => {
   let { rating, order, genre, title, sort } = search;
-  if (sort === '') sort = 'download_count';
-  if (genre === 'All') genre = '';
-  if (sort === 'rating' && rating === 0) rating = 0.1;
+  if (sort === "") sort = "download_count";
+  if (genre === "All") genre = "";
+  if (sort === "rating" && rating === 0) rating = 0.1;
   let test = await new Promise(async (resolve) => {
     let arrayMovies;
     const rog = [];
@@ -12,7 +12,9 @@ export const GetMovies = async (page, oldValue, search) => {
     const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
     try {
       while (i) {
-        arrayMovies = await Axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?page=${i}&minimum_rating=${rating}&genre=${genre}&limit=30&query_term=${title}&sort_by=${sort}&order_by=${order}`);
+        arrayMovies = await Axios.get(
+          `https://yts.megaproxy.info/api/v2/list_movies.json?page=${i}&minimum_rating=${rating}&genre=${genre}&limit=30&query_term=${title}&sort_by=${sort}&order_by=${order}`
+        );
         if (arrayMovies.data.data.movies) {
           arrayMovies.data.data.movies.forEach((movie) => {
             if (oldValue.findIndex((element) => element.id === movie.id) === -1)
@@ -45,8 +47,8 @@ export const GetMovies = async (page, oldValue, search) => {
 
 export const GetMoviesBackup = async (page, oldValue, search) => {
   let { genre, title, sort } = search;
-  genre = genre === 'All' ? '' : `&genre=${genre}`;
-  if (sort === 'rating') sort = 'seeds';
+  genre = genre === "All" ? "" : `&genre=${genre}`;
+  if (sort === "rating") sort = "seeds";
   let test = await new Promise(async (resolve) => {
     let arrayMovies;
     const rog = [];
@@ -65,7 +67,7 @@ export const GetMoviesBackup = async (page, oldValue, search) => {
               rating: movie.rating,
               runtime: movie.runtime,
               genres: movie.genres,
-              language: 'none',
+              language: "none",
               imdbCode: movie.imdb,
               id: movie.id,
             });
