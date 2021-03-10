@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
 }
-.ImageProfile > div {
+.ImageProfile .UpdateImage {
   position: absolute;
   z-index: 5;
   display: flex;
@@ -43,10 +43,10 @@
 .ImageProfile:hover:after {
   width: 100%;
 }
-.ImageProfile:hover.ImageProfile > div {
+.ImageProfile:hover .UpdateImage {
   opacity: 1;
 }
-.ImageProfile > div {
+.UpdateImage {
   transition: all 0.5s 0.2s;
 }
 .ImageProfile > img {
