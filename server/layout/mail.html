@@ -1,9 +1,9 @@
-<form method="POST" action="${url}" style="width: 100%; height: 100%; background: black; color: white">
-	<input type="hidden" name="token" value="${token}" />
+<div style="width: 100%; height: 100%; background: black; color: white">
 	<div style="margin: 0 auto; padding: 20px; width: fit-content"><span style="font-size: 24px">Hello,</span><span>${userName}</span></div>
 	<div style="margin: 25px auto; width: fit-content">You can ${message} by clicking on the button below</div>
 	<div style="width: fit-content; margin: 0 auto">
-		<button
+		<a
+			href="${url}/${token}"
 			type="submit"
 			style="
 				width: 150px;
@@ -16,10 +16,11 @@
 				color: white;
 				margin: 20px auto;
 				outline: none;
+				padding: 15px;
 			"
 		>
 			${button}
-		</button>
+		</a>
 	</div>
 	<div style="margin-top: 15px; font-size: 13px; margin-left: auto; width: fit-content; margin-right: 10px; padding: 15px 0px">@Team HyperTube</div>
-</form>
+</div>
