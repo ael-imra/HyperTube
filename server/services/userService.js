@@ -1,4 +1,8 @@
+const { sign } = require('jsonwebtoken')
+
 const { validator } = require(__dirname + '/../helper/validatorHelper')
+const { getUser, updateUser } = require(__dirname + '/../models/userModel')
+const { keys } = require(__dirname + '/../configs/indexConfig')
 
 /**
  * CHECK USER INPUT BY CHECKING KEYS AND VALIDATE VALUE BY VALIDATOR
@@ -16,6 +20,15 @@ const checkUserInput = function (inputs, properties) {
 	return 'Incorrect Input'
 }
 
+const getJWT = async function (userID) {
+	const user = await getUser({ userID }, 'jwt')
+	if (user && user.jwt) return user.jwt
+	const jwt = sign({ userID }, keys.jwt)
+	updateUser(userID, { jwt })
+	return jwt
+}
+
 module.exports = {
 	checkUserInput,
+	getJWT,
 }
