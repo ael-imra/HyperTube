@@ -1,10 +1,23 @@
 const { checkUserInput } = require(__dirname + '/../services/userService')
-const { getUser, updateUser } = require(__dirname + '/../models/userModel')
+const { getUser, updateUser, getAllUsers } = require(__dirname + '/../models/userModel')
 const bcrypt = require('bcrypt')
 const { createImage } = require('../helper/indexHelper')
 const { validateImage } = require('../helper/validatorHelper')
 const fs = require('fs')
 
+const allProfiles = async function (req, res, next) {
+	try {
+		const { search } = req.params
+		const profiles = await getAllUsers(search, req.user)
+		return res.send({
+			type: 'success',
+			status: 200,
+			body: profiles,
+		})
+	} catch (err) {
+		next(err)
+	}
+}
 const getMyProfile = async function (req, res, next) {
 	try {
 		const user = await getUser({ userID: req.user }, ['userFrom', 'userName', 'email', 'firstName', 'lastName', 'image'])
@@ -44,7 +57,7 @@ const getProfile = async function (req, res, next) {
 }
 const editProfile = async function (req, res, next) {
 	try {
-		const error = checkUserInput(req.body, ['userName', 'email', 'firstName', 'lastName', 'userFrom'])
+		const error = checkUserInput(req.body, ['userName', 'email', 'firstName', 'lastName'])
 		if (error)
 			return res.send({
 				type: 'error',
@@ -138,6 +151,7 @@ const editImage = async function (req, res, next) {
 }
 
 module.exports = {
+	allProfiles,
 	getMyProfile,
 	getProfile,
 	editProfile,

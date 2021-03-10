@@ -1,5 +1,10 @@
 const { query } = require(__dirname + '/../services/mysqlService')
 
+const getAllUsers = async function (search, userID) {
+	search = search ? `%${search}%` : '%%'
+	const users = await query('SELECT userName,firstName,lastName,image FROM Users WHERE userName LIKE ? AND userID!=?', [search, userID])
+	return users
+}
 const getUser = async function (dependencies, keys) {
 	const [user] = await query(`SELECT ${keys.toString()} FROM Users WHERE ?`, dependencies)
 	return user
@@ -36,6 +41,7 @@ const checkUserExist = async function (username, email) {
 }
 
 module.exports = {
+	getAllUsers,
 	getUser,
 	insertUser,
 	insertLocalUser,

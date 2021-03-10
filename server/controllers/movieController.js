@@ -43,7 +43,7 @@ const lastWatchedMovies = async function (req, res, next) {
 			return res.send({
 				type: 'success',
 				status: 200,
-				body: movies,
+				body: movies.reverse(),
 			})
 		return res.send({
 			type: 'error',
@@ -56,11 +56,11 @@ const lastWatchedMovies = async function (req, res, next) {
 }
 const countUserWatchedMovies = async function (req, res, next) {
 	try {
-		const { userName, imdbID } = req.params
+		const { userName } = req.params
 		if (userName && userName.length <= 40) {
 			const user = await getUser({ userName }, 'userID')
 			if (user && user.userID) {
-				const count = await getCountUserWatchedMovie(imdbID, user.userID)
+				const count = await getCountUserWatchedMovie(user.userID)
 				return res.send({
 					type: 'success',
 					status: 200,

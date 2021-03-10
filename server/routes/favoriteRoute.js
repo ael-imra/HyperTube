@@ -5,7 +5,7 @@ const favoriteRoute = express.Router()
 favoriteRoute.get('/count/:userName', getCountFavorite)
 favoriteRoute.get('/:justImdbID', getAllFavorites)
 favoriteRoute.get('/', getAllFavorites)
-favoriteRoute.delete('/', removeFavorite)
+favoriteRoute.post('/delete', removeFavorite)
 favoriteRoute.post('/', addFavorite)
 
 module.exports = favoriteRoute
