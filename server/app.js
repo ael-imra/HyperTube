@@ -1,65 +1,49 @@
-const express = require('express')
-const session = require('express-session')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const MySQLStore = require('express-mysql-session')(session)
-const passport = require('./configs/passportConfig')
-const { pool } = require('./controllers/mysqlController')
-const authRoute = require('./routes/authRoute')
-const oauthRoute = require('./routes/oauthRoute')
-const profileRoute = require('./routes/profileRoute')
-const commentRoute = require('./routes/commentRoute')
-const authentication = require('./middleware/authentication')
-const errorHandler = require('./middleware/errorHandler')
-const { keys } = require('./configs/indexConfig')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const passport = require('./configs/passportConfig');
+const authRoute = require('./routes/authRoute');
+const oauthRoute = require('./routes/oauthRoute');
+const profileRoute = require('./routes/profileRoute');
+const commentRoute = require('./routes/commentRoute');
+const favoriteRoute = require('./routes/favoriteRoute');
+const movieRoute = require('./routes/movieRoute');
+const subtitleRoute = require('./routes/subtitleRoute');
+const { authentication, jwt } = require('./middleware/authentication');
+const errorHandler = require('./middleware/errorHandler');
+const { clientPort } = require('./configs/indexConfig');
+const cron = require('./configs/cron');
 
-const sessionStore = new MySQLStore(
-	{
-		connectionLimit: 1,
-		checkExpirationInterval: 2147483647,
-		expiration: 2147483647000,
-		createDatabaseTable: true,
-		schema: {
-			tableName: 'LoginRequests',
-			columnNames: {
-				session_id: 'loginID',
-				expires: 'expires',
-				data: 'data',
-			},
-		},
-	},
-	pool
-)
-const app = express()
-app.use(cors())
-app.use(bodyParser.json({ limit: '50mb' }))
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
-app.use(
-	session({
-		key: 'session_id',
-		secret: keys.sessionSecret,
-		cookie: { secure: false, expires: 2147483647000 },
-		store: sessionStore,
-		resave: false,
-		saveUninitialized: false,
-	})
-)
-app.use(passport.initialize())
-app.use(passport.session())
-app.use('/oauth', oauthRoute)
-app.use('/auth', authRoute)
-app.use('/profile', authentication, profileRoute)
-app.use('/comment', authentication, commentRoute)
+const app = express();
+cron();
+app.use(cors({ credentials: true, origin: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(cookieParser());
+app.use(jwt);
+app.use(passport.initialize());
+app.use('/oauth', oauthRoute);
+app.use('/auth', authRoute);
+app.use('/profile', authentication, profileRoute);
+app.use('/comment', authentication, commentRoute);
+app.use('/favorite', authentication, favoriteRoute);
+app.use('/movie', authentication, movieRoute);
+app.use('/subtitle', authentication, subtitleRoute);
+app.use('/image', express.static('image'));
 app.get('/', (req, res) => {
-	if (req.isAuthenticated()) return res.send('Welcome LLLLLL')
-	return res.redirect('/login')
-})
+  if (req.isAuthenticated()) {
+    res.type('.html');
+    return res.sendFile(__dirname + '/public/index.html');
+  }
+  return res.redirect(`http://localhost:${clientPort}`);
+});
 app.get('/login', (req, res) => {
-	if (!req.isAuthenticated()) {
-		res.contentType('text/html')
-		return res.sendFile(__dirname + '/public/index.html')
-	}
-	return res.redirect('/')
-})
-app.use(errorHandler)
-module.exports = app
+  if (!req.isAuthenticated()) {
+    res.type('.html');
+    return res.sendFile(__dirname + '/public/login.html');
+  }
+  return res.redirect(`http://localhost:${clientPort}`);
+});
+app.use(errorHandler);
+module.exports = app;
