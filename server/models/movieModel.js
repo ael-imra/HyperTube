@@ -22,8 +22,8 @@ const getCountWatchedMovie = async function (imdbID) {
   const [{ count }] = await query('SELECT COUNT(*) as count FROM Viewed WHERE imdbID=?', imdbID);
   return count;
 };
-const getCountUserWatchedMovie = async function (imdbID, userID) {
-  const [{ count }] = await query('SELECT COUNT(*) as count FROM Viewed WHERE imdbID=? AND userID=?', [imdbID, userID]);
+const getCountUserWatchedMovie = async function (userID) {
+  const [{ count }] = await query('SELECT COUNT(*) as count FROM Viewed WHERE  userID=?', [userID]);
   return count;
 };
 const insertMovie = async function (values) {

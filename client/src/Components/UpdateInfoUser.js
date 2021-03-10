@@ -20,7 +20,7 @@ export const UpdateInfoUser = (props) => {
         state: true,
       });
     else {
-      UpdateUser(props.setUserInfo, props.userInfo, props.setContentMessage);
+      UpdateUser(props.setUserInfo, props.userInfo, props.setContentMessage, ctx.Lang);
     }
   };
   return (
