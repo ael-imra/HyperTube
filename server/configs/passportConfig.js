@@ -27,15 +27,15 @@ passport.use(
 			scope: ['user:email'],
 		},
 		async function (accessToken, refreshToken, profile, done) {
-			const user = await getUser({ githubID: profile.id }, 'githubID')
-			if (user) return done(null, user.githubID)
+			const user = await getUser({ userID: `gi_${profile.id}` }, 'userID')
+			if (user) return done(null, user.userID)
 			if (profile && profile._json && !(await checkUserExist(profile.username, profile.emails[0].value))) {
 				const token = generateToken(128)
 				const nameParts = profile._json.name ? profile._json.name.split(' ') : ['avatar']
 				const firstName = nameParts[0]
 				const lastName = nameParts.length > 1 ? profile._json.name.replace(nameParts[0], '').replaceAll(' ', '') : nameParts[0]
-				const resultInsert = await insertUser({
-					githubID: 'gi_' + profile.id,
+				insertUser({
+					userID: 'gi_' + profile.id,
 					userFrom: 'github',
 					userName: profile.username,
 					email: profile.emails[0].value,
@@ -44,7 +44,7 @@ passport.use(
 					lastName,
 					token,
 				})
-				return done(null, resultInsert.insertId)
+				return done(null, `gi_${profile.id}`)
 			}
 			return done(null, false)
 		}
@@ -58,12 +58,12 @@ passport.use(
 			callbackURL: `http://${host}:1337/oauth/42/callback`,
 		},
 		async function (accessToken, refreshToken, profile, done) {
-			const user = await getUser({ '42ID': profile.id }, '42ID')
-			if (user) return done(null, user['42ID'])
+			const user = await getUser({ userID: `42_${profile.id}` }, 'userID')
+			if (user) return done(null, user.userID)
 			if (profile && profile._json && !(await checkUserExist(profile._json.login, profile._json.email))) {
 				const token = generateToken(128)
-				const resultInsert = await insertUser({
-					'42ID': '42_' + profile._json.id,
+				insertUser({
+					userID: '42_' + profile._json.id,
 					userFrom: '42',
 					userName: profile._json.login,
 					email: profile._json.email,
@@ -72,7 +72,7 @@ passport.use(
 					lastName: profile._json['last_name'],
 					token,
 				})
-				return done(null, resultInsert.insertId)
+				return done(null, `42_${profile.id}`)
 			} else return done(null, false)
 		}
 	)
@@ -86,15 +86,15 @@ passport.use(
 			scope: ['profile', 'email'],
 		},
 		async function (accessToken, refreshToken, profile, done) {
-			const user = await getUser({ googleID: profile.id }, 'googleID')
-			if (user) return done(null, user.googleID)
+			const user = await getUser({ userID: `go_${profile.id}` }, 'userID')
+			if (user) return done(null, user.userID)
 			if (profile && profile._json && !(await checkUserExist(profile._json.name, profile._json.email))) {
 				const token = generateToken(128)
 				const nameParts = profile._json['given_name'].split(' ')
 				const firstName = nameParts[0]
 				const lastName = nameParts.length > 1 ? profile._json['given_name'].replace(nameParts[0], '').replaceAll(' ', '') : nameParts[0]
-				const resultInsert = await insertUser({
-					googleID: 'go_' + profile.id,
+				await insertUser({
+					userID: 'go_' + profile.id,
 					userFrom: 'google',
 					userName: profile._json.name,
 					email: profile._json.email,
@@ -103,7 +103,7 @@ passport.use(
 					lastName,
 					token,
 				})
-				return done(null, resultInsert.insertId)
+				return done(null, `go_${profile.id}`)
 			}
 			return done(null, false)
 		}

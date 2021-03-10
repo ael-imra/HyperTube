@@ -1,15 +1,20 @@
-import React from 'react';
-import Slider from './Slider';
-import '../Css/Dashboard.css';
-import ListMovies from './ListMovies';
-import SortAndFilter from './SortAndFilter';
-import { Switch, Route } from 'react-router-dom';
-import { MovieDetail } from './MovieDetail';
-import { FavoriteMovie } from './FavoriteMovie';
-import { Profile } from './Profile';
-
+import React from "react";
+import Slider from "./Slider";
+import "../Css/Dashboard.css";
+import ListMovies from "./ListMovies";
+import SortAndFilter from "./SortAndFilter";
+import { Switch, Route, useHistory } from "react-router-dom";
+import { MovieDetail } from "./MovieDetail";
+import { FavoriteMovie } from "./FavoriteMovie";
+import { Profile } from "./Profile";
+const NotFound = () => {
+  const history = useHistory();
+  React.useEffect(() => {
+    history.push("/");
+  }, []);
+  return <div></div>;
+};
 export default function Dashboard() {
-  console.log('Dashboard');
   return (
     <>
       <Switch>
@@ -26,6 +31,9 @@ export default function Dashboard() {
         </Route>
         <Route exact path='/Profile'>
           <Profile />
+        </Route>
+        <Route path='*'>
+          <NotFound />
         </Route>
       </Switch>
     </>

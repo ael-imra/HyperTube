@@ -79,7 +79,8 @@ export const MovieCart = (props) => {
         <div className='PostRating'>
           <StarIcon style={{ color: "#ffb400", fontSize: "20px", marginRight: "5px" }} /> <p style={{ color: "#ffb400", fontSize: "14px", margin: "0px" }}>{movie.rating}</p>
         </div>
-        <VisibilityIcon style={{ color: "#ec4646", fontSize: "17px", marginRight: "5px" }} />
+        {/* {movie.isWatched ? <VisibilityIcon style={{ color: `${movie.isWatched ? "#ec4646" : "#636161"}`, fontSize: "17px", marginRight: "5px" }} /> : ""} */}
+        <VisibilityIcon style={{ color: `${movie.isWatched ? "#ec4646" : "#636161"}`, fontSize: "17px", marginRight: "5px" }} />
       </div>
     </div>
   );

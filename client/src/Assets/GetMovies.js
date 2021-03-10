@@ -9,7 +9,8 @@ export const GetMovies = async (page, oldValue, search) => {
     const rog = [];
     let movies = [];
     let i = page;
-    const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
+    const listFavorite = await Axios.get(`/favorite/imdbID`, { withCredentials: true });
+    const listWatch = await Axios.get(`/movie/watched`, { withCredentials: true });
     try {
       while (i) {
         arrayMovies = await Axios.get(
@@ -30,6 +31,7 @@ export const GetMovies = async (page, oldValue, search) => {
                 imdbCode: movie.imdb_code,
                 id: movie.id,
                 isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdb_code) !== -1 ? true : false,
+                isWatched: listWatch.data.body instanceof Array && listWatch.data.body.findIndex((a) => a.imdbID === movie.imdb_code) !== -1 ? true : false,
               });
           });
           i++;
