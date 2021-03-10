@@ -16,11 +16,12 @@ const getMovieDBInfo = async function (imdbID) {
 	)
 	return movieFromFavorite
 }
+const getWatchedMovies = async function (userID) {
+	const movies = await query('SELECT imdbID FROM Viewed WHERE userID=?', [userID])
+	return movies
+}
 const getLastWatchedMovie = async function (userID, limit) {
-	const movies = await query(
-		"SELECT *,(SELECT COUNT(userID) FROM Viewed WHERE userID=f.userID AND imdbID=f.imdbID) AS 'watched' FROM Viewed WHERE userID=? ORDER BY date DESC LIMIT ?",
-		[userID, limit]
-	)
+	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date LIMIT ?', [userID, limit])
 	return movies
 }
 const getUnwatchedMovie = async function () {
@@ -66,6 +67,7 @@ module.exports = {
 	getLastWatchedMovie,
 	getCountUserWatchedMovie,
 	getMovieDBInfo,
+	getWatchedMovies,
 	updateWatchedMovie,
 	insertMovie,
 	updateMovie,

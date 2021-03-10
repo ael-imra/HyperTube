@@ -130,7 +130,7 @@ const editImage = async function (req, res, next) {
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: { Eng: 'Updated successful', Fr: 'Mise à jour a échoué' },
+			body: { Eng: 'Updated failed', Fr: 'Mise à jour a échoué' },
 		})
 	} catch (err) {
 		next(err)
