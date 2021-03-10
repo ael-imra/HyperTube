@@ -2,23 +2,24 @@ const { getComments, deleteComment, insertComment } = require('../models/comment
 
 const getAllComments = async function (req, res, next) {
 	try {
-		if (typeof req.params.imdbID !== 'string' || req.body.imdbID.length > 10)
+		const { imdbID } = req.params
+		if (typeof imdbID !== 'string' || imdbID.length > 10)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
-				body: 'Incorrect imdbID',
+				body: { Eng: 'Incorrect imdbID', Fr: 'Incorrect imdbID' },
 			})
-		const allComments = await getComments(req.params.imdbID)
+		const allComments = await getComments(imdbID, req.user)
 		if (allComments.length > 0)
 			return res.send({
-				type: 'Success',
+				type: 'success',
 				status: 200,
 				body: allComments,
 			})
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 403,
-			body: 'Comments not found',
+			body: { Eng: 'Comments not found', Fr: 'Commentaires non trouvés' },
 		})
 	} catch (err) {
 		next(err)
@@ -26,58 +27,60 @@ const getAllComments = async function (req, res, next) {
 }
 const addComment = async function (req, res, next) {
 	try {
+		const { imdbID, commentContent } = req.body
 		if (
-			typeof req.body.imdbID !== 'string' ||
-			!req.body.imdbID.trim() ||
-			req.body.imdbID.trim().length > 10 ||
-			typeof req.body.commentContent !== 'string' ||
-			!req.body.commentContent.trim() ||
-			req.body.commentContent.trim().length > 100
+			typeof imdbID !== 'string' ||
+			!imdbID.trim() ||
+			imdbID.trim().length > 10 ||
+			typeof commentContent !== 'string' ||
+			!commentContent.trim() ||
+			commentContent.trim().length > 100
 		)
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
-				body: 'Incorrect information',
+				body: { Eng: 'Incorrect information', Fr: 'Information incorrecte' },
 			})
 		const resultInsert = await insertComment({
 			userID: req.user,
-			imdbID: req.body.imdbID.trim(),
-			commentContent: req.body.commentContent.trim(),
+			imdbID: imdbID.trim(),
+			commentContent: commentContent.trim(),
 		})
 		if (resultInsert.insertId)
 			return res.send({
-				type: 'Success',
+				type: 'success',
 				status: 200,
 				body: resultInsert.insertId,
 			})
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 403,
-			body: 'Insert failed',
+			body: { Eng: 'Insert failed', Fr: "L'insertion a échoué" },
 		})
 	} catch (err) {
 		next(err)
 	}
 }
-const deleteOneComment = async function (req, res, next) {
+const removeComment = async function (req, res, next) {
 	try {
-		if (typeof req.body.imdbID !== 'string' || !req.body.imdbID.trim() || req.body.imdbID.trim().length > 10)
+		const { imdbID, commentID } = req.body
+		if (typeof imdbID !== 'string' || !imdbID.trim() || imdbID.trim().length > 10 || typeof commentID !== 'number')
 			return res.send({
-				type: 'Error',
+				type: 'error',
 				status: 400,
-				body: 'Incorrect imdbID',
+				body: { Eng: 'Incorrect parameters', Fr: 'Paramètres incorrects' },
 			})
-		const deleteResult = await deleteComment(req.body.imdbID, req.user)
+		const deleteResult = await deleteComment(imdbID.trim(), req.user, commentID)
 		if (deleteResult)
 			return res.send({
-				type: 'Success',
+				type: 'success',
 				status: 200,
-				body: 'Deleted successful',
+				body: { Eng: 'Deleted successful', Fr: 'Supprimé avec succès' },
 			})
 		return res.send({
-			type: 'Error',
+			type: 'error',
 			status: 403,
-			body: 'Deleted failed',
+			body: { Eng: 'Deleted failed', Fr: 'Supprimé a échoué' },
 		})
 	} catch (err) {
 		next(err)
@@ -86,6 +89,6 @@ const deleteOneComment = async function (req, res, next) {
 
 module.exports = {
 	getAllComments,
-	deleteOneComment,
+	removeComment,
 	addComment,
 }
