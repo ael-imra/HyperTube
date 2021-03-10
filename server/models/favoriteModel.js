@@ -3,7 +3,7 @@ const { query } = require(__dirname + '/../services/mysqlService')
 const getFavorites = async function (userID, justImdbID) {
 	const needed = justImdbID
 		? justImdbID
-		: "favoriteID,imdbID,movieTitle,movieImage,movieLanguage,movieRelease,movieTime,movieGenre,movieDescription,(SELECT COUNT(userID) FROM Viewed WHERE userID=f.userID AND imdbID=f.imdbID) AS 'watched'"
+		: "favoriteID,imdbID,movieTitle,movieImage,movieLanguage,movieRelease,movieRating,movieTime,movieGenre,movieDescription,(SELECT COUNT(userID) FROM Viewed WHERE userID=f.userID AND imdbID=f.imdbID) AS 'watched'"
 	const favorites = await query(`SELECT ${needed} FROM Favorites f WHERE userID=?`, userID)
 	return favorites
 }

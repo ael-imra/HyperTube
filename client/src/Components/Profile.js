@@ -79,6 +79,7 @@ export const Profile = () => {
       imdbCode: movie.imdbID,
       id: movie.viewedID,
       isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdbID) !== -1 ? true : false,
+      isWatched: true,
     }));
     return data;
   };
