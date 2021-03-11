@@ -2,7 +2,7 @@ const { query } = require(__dirname + '/../services/mysqlService')
 
 const getComments = async function (imdbID, userID) {
 	const comments = await query(
-		`SELECT IF(u.userID = ?,1,0) AS 'myComment',commentID,commentContent,date,u.userName,image FROM Comments c,Users u WHERE u.userID=c.userID AND imdbID=? ORDER BY date DESC`,
+		`SELECT IF(u.userID = ?,1,0) AS 'myComment',u.userID,commentID,commentContent,date,u.userName,image FROM Comments c,Users u WHERE u.userID=c.userID AND imdbID=? ORDER BY date DESC`,
 		[userID, imdbID]
 	)
 	return comments
