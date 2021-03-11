@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const { getJWT } = require('../services/userService')
 const { sendMail } = require(__dirname + '/../helper/mailHelper')
 const { getUser, insertLocalUser, updateUser, checkUserExist } = require(__dirname + '/../models/userModel')
+const { clientPort } = require(__dirname + '/../configs/indexConfig')
 
 const register = async function (req, res, next) {
 	try {
@@ -117,7 +118,7 @@ const resetPassword = async function (req, res, next) {
 					status: 403,
 					body: { Eng: 'Please verify your email than reset your password', Fr: 'Veuillez vérifier votre adresse e-mail avant de réinitialiser votre mot de passe' },
 				})
-			sendMail('reset', email, user.userName, `http://${req.headers.host}/ResetPassword/${user.token}`)
+			sendMail('reset', email, user.userName, `http://localhost:${clientPort}/ResetPassword/${user.token}`)
 			return res.send({
 				type: 'success',
 				status: 200,
@@ -135,18 +136,18 @@ const resetPassword = async function (req, res, next) {
 }
 const activeAccount = async function (req, res, next) {
 	try {
-		const error = checkUserInput(req.body, ['token'])
+		const error = checkUserInput(req.params, ['token'])
 		if (error)
 			return res.send({
 				type: 'error',
 				status: 400,
 				body: error,
 			})
-		const { token } = req.body
-		const user = await getUser({ token }, 'userName')
+		const { token } = req.params
+		const user = await getUser({ token }, 'userID')
 		if (user) {
 			const token = generateToken(128)
-			updateUser(req.user, { token, isActive: 1 })
+			updateUser(user.userID, { token, isActive: 1 })
 			return res.send({
 				type: 'success',
 				status: 200,

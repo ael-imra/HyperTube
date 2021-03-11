@@ -15,10 +15,8 @@ const insertUser = async function (values) {
 	return resultInsert.affectedRows ? resultInsert : false
 }
 const insertLocalUser = async function (values) {
-	const resultInsert = await query(
-		"INSERT INTO Users SET userID=CONCAT('lo_',(SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='HyperTube' AND TABLE_NAME='Users')),?",
-		[values]
-	)
+	const [{ id }] = await query('SELECT MAX(id) AS id FROM Users')
+	const resultInsert = await query("INSERT INTO Users SET userID=CONCAT('lo_',?),?", [id === null ? 1 : id + 1, values])
 	return resultInsert.affectedRows ? resultInsert : false
 }
 
