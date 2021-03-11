@@ -10,14 +10,14 @@ const { keys } = require(__dirname + '/../configs/indexConfig')
  **/
 const checkUserInput = function (inputs, properties) {
 	if (inputs instanceof Object) {
-		for (const key in inputs) if (properties.indexOf(key) === -1) return `Error unsupported key ${key}`
+		for (const key in inputs) if (properties.indexOf(key) === -1) return { Eng: `Error unsupported key ${key}`, Fr: `Erreur clé non prise en charge ${key}` }
 		for (const key of properties) {
-			if (Object.keys(inputs).indexOf(key) === -1) return 'Error missing some inputs'
-			if (!validator(key, inputs[key])) return `Incorrect ${key}`
+			if (Object.keys(inputs).indexOf(key) === -1) return { Eng: 'Error missing some inputs', Fr: 'Erreur manquant certaines entrées' }
+			if (!validator(key, inputs[key])) return { Eng: `Incorrect ${key}`, Fr: `Incorrect ${key}` }
 		}
 		return ''
 	}
-	return 'Incorrect Input'
+	return { Eng: `Incorrect input`, Fr: `Entrée incorrecte` }
 }
 
 const getJWT = async function (userID) {

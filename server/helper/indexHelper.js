@@ -3,7 +3,7 @@ const Jimp = require('jimp')
  * CREATE TOKEN DEPENDING ON LENGTH AND CONVERT IT INTO BASE64
  **/
 const generateToken = function (lengthChar) {
-	const allChar = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+	const allChar = '!"#$%&\'()*+,-.0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~'
 	let token = ''
 	for (let i = 0; i < lengthChar; i++) {
 		const random = Math.floor(Math.random() * allChar.length)
