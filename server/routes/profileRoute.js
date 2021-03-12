@@ -1,11 +1,13 @@
 const express = require('express')
-const router = express.Router()
-const { getProfile, getMyProfile, editProfile, editPassword, editImage } = require(__dirname + '/../controllers/profileController')
+const profileRoute = express.Router()
+const { allProfiles, getProfile, getMyProfile, editProfile, editPassword, editImage } = require(__dirname + '/../controllers/profileController')
 
-router.get('/:userName', getProfile)
-router.get('/', getMyProfile)
-router.put('/', editProfile)
-router.put('/password', editPassword)
-router.put('/image', editImage)
+profileRoute.get('/allProfiles', allProfiles)
+profileRoute.get('/allProfiles/:search', allProfiles)
+profileRoute.get('/:userName', getProfile)
+profileRoute.get('/', getMyProfile)
+profileRoute.put('/', editProfile)
+profileRoute.put('/password', editPassword)
+profileRoute.put('/image', editImage)
 
-module.exports = router
+module.exports = profileRoute

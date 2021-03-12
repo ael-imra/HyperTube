@@ -12,7 +12,7 @@ export const GetListMovieFavorite = async () => {
       description: movie.movieDescription,
       rating: movie.movieRating,
       runtime: movie.movieTime,
-      genres: movie.movieGenre,
+      genres: movie.movieGenre ? JSON.parse(movie.movieGenre) : [],
       language: movie.movieLanguage,
       imdbCode: movie.imdbID,
       id: movie.favoriteID,
