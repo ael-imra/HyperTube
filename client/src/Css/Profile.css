@@ -222,14 +222,6 @@
   }
 }
 @media only screen and (max-width: 550px) {
-  /* .detailUser {
-    flex-direction: column;
-    height: auto;
-    align-items: center;
-  }
-  .Profile {
-    justify-content: start;
-  }*/
   .CountWatchAndFavorite {
     width: 90%;
   }

@@ -1,10 +1,11 @@
 import Axios from "axios";
-import { DataContext } from "../Context/AppContext";
-export const GetUserInfo = async () => {
-  const userInfo = await Axios.get(`/profile`, { withCredentials: true });
+export const GetUserInfo = async (userName) => {
+  let userInfo;
+  if (!userName) userInfo = await Axios.get(`/profile`, { withCredentials: true });
+  else userInfo = await Axios.get(`/profile/${userName}`, { withCredentials: true });
   const countMoviesWatch = await Axios.get(`/movie/count/${userInfo.data.body.userName}`, { withCredentials: true });
   const countFavorite = await Axios.get(`/favorite/count/${userInfo.data.body.userName}`, { withCredentials: true });
-  return { ...userInfo.data.body, countMoviesWatch: countMoviesWatch.data.body, countFavorite: countFavorite.data.body };
+  return { ...userInfo.data.body, countMoviesWatch: countMoviesWatch.data.body, countFavorite: countFavorite.data.body, isProfileOfYou: userName ? false : true };
 };
 export const UpdateUser = async (setUpdate, dataUser, setError, lang) => {
   const updateData = await Axios.put(
