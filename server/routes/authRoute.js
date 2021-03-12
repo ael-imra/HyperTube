@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require(__dirname + '/../configs/passportConfig')
-const { login, register, resetPassword, activeAccount } = require(__dirname + '/../controllers/authController')
+const { login, register, resetPassword, activeAccount, checkToken, updatePassword } = require(__dirname + '/../controllers/authController')
+const { clientPort } = require(__dirname + '/../configs/indexConfig')
 
 const authRoute = express.Router()
 authRoute.get('/', (req, res) => {
@@ -21,6 +22,8 @@ authRoute.post('/register', async (req, res, next) => {
 	return res.redirect(`http://localhost:${clientPort}`)
 })
 authRoute.post('/reset', resetPassword)
-authRoute.post('/active', activeAccount)
+authRoute.post('/updatePassword', updatePassword)
+authRoute.get('/active/:token', activeAccount)
+authRoute.get('/check/:token', checkToken)
 
 module.exports = authRoute
