@@ -102,7 +102,7 @@ const NavMobil = (props) => {
         {props.ctx.Lang === "Eng" ? "Eng" : "Fre"}
       </Button>
       <MenuIcon style={{ color: "white", display: "flex", fontSize: "40px", cursor: "pointer", marginRight: "15px" }} onClick={(event) => setShowMenuNav(event.currentTarget)} />
-      <Menu anchorEl={showMenuNav} keepMounted open={Boolean(showMenuNav)} onClose={() => setShowMenuNav(null)}>
+      <Menu anchorEl={showMenuNav} open={Boolean(showMenuNav)} onClose={() => setShowMenuNav(null)}>
         <MenuItem
           onClick={() => {
             setShowMenuNav(null);
@@ -160,7 +160,7 @@ export default function Header(props) {
     );
   else
     return (
-      <div className='Header' style={{ position: "sticky", top: "-3px", zIndex: "999999", height: "60px", backgroundColor: "rgba(34, 40, 49, 0.46)" }}>
+      <div className='Header' style={{ position: "sticky", top: "-3px", zIndex: "10", height: "60px", backgroundColor: "rgba(34, 40, 49, 0.46)" }}>
         <LogoWebSite ctx={ctx} />
         {width < 840 ? (
           <NavMobil isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} />
