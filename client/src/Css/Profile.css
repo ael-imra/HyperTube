@@ -31,7 +31,7 @@
   opacity: 0;
 }
 .ImageProfile::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0%;
   height: 100%;
@@ -179,6 +179,9 @@
   position: relative;
   overflow-y: hidden;
   overflow-x: scroll;
+}
+.lastMovies > div:nth-last-child(1) {
+  bottom: 5px;
 }
 
 .lastMovies::-webkit-scrollbar {
