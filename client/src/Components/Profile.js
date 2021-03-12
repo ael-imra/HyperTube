@@ -16,9 +16,12 @@ import Avatar from "@material-ui/core/Avatar";
 import { MovieCart } from "./MovieCart";
 import Axios from "axios";
 import CropOriginalIcon from "@material-ui/icons/PhotoCamera";
+import { useParams } from "react-router-dom";
+import { ImageProfile } from "./ImageProfile";
 
 export const Profile = () => {
   const [actionProfile, setActionProfile] = React.useState(0);
+  const { userName } = useParams();
   const ctx = React.useContext(DataContext);
   const [userInfo, setUserInfo] = React.useState({
     firstName: "",
@@ -42,7 +45,6 @@ export const Profile = () => {
     reader.onload = async () => {
       const backupImage = userInfo;
       const imageData = await Axios.put(`/profile/image`, { image: reader.result }, { withCredentials: true });
-      console.log(imageData.data.body);
       if (imageData.data.type === "success") setUserInfo((oldValue) => ({ ...oldValue, image: reader.result }));
       else setUserInfo({ ...backupImage });
       setContentMessage({ type: imageData.data.type, content: imageData.data.body[ctx.Lang], state: true });
@@ -51,7 +53,7 @@ export const Profile = () => {
   };
   React.useEffect(() => {
     async function awaitData() {
-      const data = await GetUserInfo();
+      const data = await GetUserInfo(userName);
       setUserInfo({
         ...data,
         middleware: true,
@@ -86,82 +88,85 @@ export const Profile = () => {
   return (
     <div className='Profile'>
       {userInfo.middleware ? (
-        <>
-          <div className='detailUser'>
-            <div className='UserInfo'>
-              <div className='ImageProfile'>
-                {userInfo.image ? (
-                  userInfo.image === "X" ? (
+        userInfo.hasOwnProperty("firstName") ? (
+          <>
+            <div className='detailUser'>
+              <div className='UserInfo'>
+                <div className={`${userInfo.isProfileOfYou ? "ImageProfile" : ""}`}>
+                  {userInfo.image === "X" ? (
                     <Skeleton variant='circle' width={200} height={200} style={{ backgroundColor: "rgb(165 165 165)" }} />
                   ) : (
-                    <img
-                      src={
-                        userInfo.image.includes("http://") || userInfo.image.includes("https://") || userInfo.image.includes("data:image/")
-                          ? userInfo.image
-                          : `http://localhost:1337${userInfo.image}`
-                      }
+                    <ImageProfile image={userInfo.image} userName={userInfo.userName} style={{ width: "200px", height: "200px", fontSize: "70px" }} />
+                  )}
+                  {userInfo.image === "X" || !userInfo.isProfileOfYou ? (
+                    ""
+                  ) : (
+                    <input
+                      type='file'
+                      accept='image/*'
+                      style={{ position: "absolute", width: "100%", height: "100%", opacity: "0", top: "0", left: "0", borderRadius: "50%", cursor: "pointer", zIndex: "8" }}
+                      onChange={updateImageProfile}
                     />
-                  )
-                ) : (
-                  <Avatar style={{ width: "200px", height: "200px", fontSize: "90px", backgroundColor: "rgb(236, 70, 70)" }}>
-                    {userInfo.userName.substring(0, 2).toUpperCase()}
-                  </Avatar>
-                )}
-                {userInfo.image === "X" ? (
-                  ""
-                ) : (
-                  <input
-                    type='file'
-                    accept='image/*'
-                    style={{ position: "absolute", width: "100%", height: "100%", opacity: "0", top: "0", left: "0", borderRadius: "50%", cursor: "pointer", zIndex: "8" }}
-                    onChange={updateImageProfile}
+                  )}
+                  {userInfo.isProfileOfYou ? (
+                    <div className='UpdateImage'>
+                      <CropOriginalIcon style={{ fontSize: "47px", color: "rgb(34, 40, 49)" }} />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <p>{userInfo.fixUserName}</p>
+                <p>{userInfo.fixEmailName}</p>
+                <div className='CountWatchAndFavorite'>
+                  <div>
+                    <p>{userInfo.countMoviesWatch}</p>
+                    <p>{ctx.Languages[ctx.Lang].Watch}</p>
+                  </div>
+                  <div></div>
+                  <div>
+                    <p>{userInfo.countFavorite}</p>
+                    <p>{ctx.Languages[ctx.Lang].Favorite}</p>
+                  </div>
+                </div>
+              </div>
+              <div className='ActionInfo'>
+                <AppBar style={{ backgroundColor: "transparent", height: "48px" }} position='static'>
+                  <Tabs variant='scrollable' value={actionProfile} onChange={(event, newValue) => setActionProfile(newValue)}>
+                    <Tab label={ctx.Languages[ctx.Lang].Information} />
+                    {userInfo.isProfileOfYou ? <Tab label={ctx.Languages[ctx.Lang].UpdateInformation} /> : ""}
+                    {userInfo.userFrom === "local" && userInfo.isProfileOfYou ? <Tab label={ctx.Languages[ctx.Lang].UpdatePassword} /> : ""}
+                  </Tabs>
+                </AppBar>
+                {actionProfile === 0 ? (
+                  <InformationUser
+                    UserInfo={{
+                      firstName: userInfo.fixFirstName,
+                      lastName: userInfo.fixLastName,
+                      userName: userInfo.fixUserName,
+                      email: userInfo.fixEmailName,
+                      isProfileOfYou: userInfo.isProfileOfYou,
+                    }}
                   />
+                ) : actionProfile === 1 ? (
+                  <UpdateInfoUser setUserInfo={setUserInfo} userInfo={userInfo} setContentMessage={setContentMessage} />
+                ) : (
+                  <UpdatePassword setContentMessage={setContentMessage} />
                 )}
-
-                <div className='UpdateImage'>
-                  <CropOriginalIcon style={{ fontSize: "47px", color: "rgb(34, 40, 49)" }} />
-                </div>
-              </div>
-              <p>{userInfo.fixUserName}</p>
-              <p>{userInfo.fixEmailName}</p>
-              <div className='CountWatchAndFavorite'>
-                <div>
-                  <p>{userInfo.countMoviesWatch}</p>
-                  <p>{ctx.Languages[ctx.Lang].Watch}</p>
-                </div>
-                <div></div>
-                <div>
-                  <p>{userInfo.countFavorite}</p>
-                  <p>{ctx.Languages[ctx.Lang].Favorite}</p>
-                </div>
               </div>
             </div>
-            <div className='ActionInfo'>
-              <AppBar style={{ backgroundColor: "transparent", height: "48px" }} position='static'>
-                <Tabs variant='scrollable' value={actionProfile} onChange={(event, newValue) => setActionProfile(newValue)}>
-                  <Tab label={ctx.Languages[ctx.Lang].Information} />
-                  <Tab label={ctx.Languages[ctx.Lang].UpdateInformation} />
-                  {userInfo.userFrom === "local" ? <Tab label={ctx.Languages[ctx.Lang].UpdatePassword} /> : ""}
-                </Tabs>
-              </AppBar>
-              {actionProfile === 0 ? (
-                <InformationUser UserInfo={{ firstName: userInfo.fixFirstName, lastName: userInfo.fixLastName, userName: userInfo.fixUserName, email: userInfo.fixEmailName }} />
-              ) : actionProfile === 1 ? (
-                <UpdateInfoUser setUserInfo={setUserInfo} userInfo={userInfo} setContentMessage={setContentMessage} />
-              ) : (
-                <UpdatePassword setContentMessage={setContentMessage} />
-              )}
+            <div className='MoviesWatch'>
+              <p>Last watch</p>
+              <div className='lastMovies'>
+                {userInfo.listMovies.map((movie, key) => (
+                  <MovieCart movie={movie} key={key} style={{ position: "absolute", left: key * 320 }} />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className='MoviesWatch'>
-            <p>Last watch</p>
-            <div className='lastMovies'>
-              {userInfo.listMovies.map((movie, key) => (
-                <MovieCart movie={movie} key={key} style={{ position: "absolute", left: key * 320 }} />
-              ))}
-            </div>
-          </div>
-        </>
+          </>
+        ) : (
+          <p>Ups!... no results found</p>
+        )
       ) : (
         <CircularProgress color='secondary' />
       )}
