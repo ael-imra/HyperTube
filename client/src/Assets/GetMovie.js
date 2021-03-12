@@ -21,7 +21,6 @@ export const GetMovie = async (code) => {
     imdbCode: movie.imdb_code,
   }));
   images.data.backdrops.sort((a, b) => b.width - a.width);
-  console.log(listFavorite.data.body instanceof Array);
   return {
     titleLong: movieInfo.title_long,
     title: movieInfo.title,

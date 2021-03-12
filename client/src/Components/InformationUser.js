@@ -1,5 +1,5 @@
-import React from 'react';
-import { DataContext } from '../Context/AppContext';
+import React from "react";
+import { DataContext } from "../Context/AppContext";
 export const InformationUser = (props) => {
   const ctx = React.useContext(DataContext);
   return (
@@ -12,10 +12,14 @@ export const InformationUser = (props) => {
         <p>{ctx.Languages[ctx.Lang].LastName}</p>
         <p>{props.UserInfo.lastName}</p>
       </div>
-      <div className='ew'>
-        <p>{ctx.Languages[ctx.Lang].Email}</p>
-        <p>{props.UserInfo.email}</p>
-      </div>
+      {props.UserInfo.isProfileOfYou ? (
+        <div className='ew'>
+          <p>{ctx.Languages[ctx.Lang].Email}</p>
+          <p>{props.UserInfo.email}</p>
+        </div>
+      ) : (
+        ""
+      )}
       <div className='ew'>
         <p>{ctx.Languages[ctx.Lang].UserName}</p>
         <p>{props.UserInfo.userName}</p>
