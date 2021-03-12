@@ -32,6 +32,9 @@ export default function Dashboard() {
         <Route exact path='/Profile'>
           <Profile />
         </Route>
+        <Route exact path='/Profile/:userName'>
+          <Profile />
+        </Route>
         <Route path='*'>
           <NotFound />
         </Route>
