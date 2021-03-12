@@ -7,6 +7,7 @@ import { Switch, Route, useHistory } from "react-router-dom";
 import { MovieDetail } from "./MovieDetail";
 import { FavoriteMovie } from "./FavoriteMovie";
 import { Profile } from "./Profile";
+import { Users } from "./Users";
 const NotFound = () => {
   const history = useHistory();
   React.useEffect(() => {
@@ -18,21 +19,24 @@ export default function Dashboard() {
   return (
     <>
       <Switch>
-        <Route exact path='/'>
+        <Route exact path="/">
           <Slider />
           <SortAndFilter />
           <ListMovies />
         </Route>
-        <Route exact path='/movie/:code'>
+        <Route exact path="/movie/:code">
           <MovieDetail />
         </Route>
-        <Route exact path='/FavoriteMovie'>
+        <Route exact path="/FavoriteMovie">
           <FavoriteMovie />
         </Route>
-        <Route exact path='/Profile'>
+        <Route exact path="/Profile">
           <Profile />
         </Route>
-        <Route path='*'>
+        <Route exact path="/Users">
+          <Users />
+        </Route>
+        <Route path="*">
           <NotFound />
         </Route>
       </Switch>
