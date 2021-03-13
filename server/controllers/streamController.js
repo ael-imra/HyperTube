@@ -110,7 +110,6 @@ const stream = async function (movie, req, res, next) {
 			})
 		return streamFile.pipe(res)
 	} catch (err) {
-		console.log(err, 'ERROR')
 		return res.send({
 			type: 'error',
 			status: 403,
