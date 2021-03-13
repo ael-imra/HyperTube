@@ -49,11 +49,11 @@ export const MovieDetail = () => {
           )
         )}
       </div>
-      <div className='Suggestions'>
+      {/* <div className='Suggestions'>
         {movieInfo.suggestions.map((movie, key) => (
           <MovieCart movie={movie} key={key} callBack />
         ))}
-      </div>
+      </div> */}
       <Comments data={movieInfo} code={code} />
     </div>
   ) : (
