@@ -27,9 +27,7 @@ export const MovieDetail = () => {
   }, [code, ctx.Lang]);
   return movieInfo instanceof Object ? (
     <div className='MovieDetail'>
-      <div className='movieDetailImage'>
-        {movieInfo.coverImage !== "" ? <img src={movieInfo.coverImage ? movieInfo.coverImage : ""} /> : <p style={{ color: "white", fontSize: "45px" }}>Image Not Found</p>}
-      </div>
+      <div className='movieDetailImage'>{movieInfo.coverImage !== "" ? <img src={movieInfo.coverImage ? movieInfo.coverImage : ""} /> : null}</div>
       <MovieIntro data={movieInfo} />
       <div className='Stream'>
         <AppBar style={{ backgroundColor: "#222831", height: "48px" }} position='static'>
