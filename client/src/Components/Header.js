@@ -148,6 +148,15 @@ const NavMobil = (props) => {
         >
           {ctx.Languages[ctx.Lang].Mylist}
         </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setShowMenuNav(null);
+            props.ctx.history.push("/Users");
+            props.setIsActive(4);
+          }}
+        >
+          {ctx.Languages[ctx.Lang].User}
+        </MenuItem>
         <MenuItem onClick={() => setShowMenuNav(null)}>{ctx.Languages[ctx.Lang].Logout}</MenuItem>
       </Menu>
     </div>
