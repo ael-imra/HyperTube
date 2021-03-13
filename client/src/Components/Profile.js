@@ -96,7 +96,11 @@ export const Profile = () => {
                   {userInfo.image === "X" ? (
                     <Skeleton variant='circle' width={200} height={200} style={{ backgroundColor: "rgb(165 165 165)" }} />
                   ) : (
-                    <ImageProfile image={userInfo.image} userName={userInfo.userName} style={{ width: "200px", height: "200px", fontSize: "70px" }} />
+                    <ImageProfile
+                      image={userInfo.image}
+                      userName={userInfo.userName}
+                      style={{ width: "200px", height: "200px", fontSize: "70px", borderRadius: "50%", marginTop: `${userInfo.isProfileOfYou ? "0px" : "15px"}` }}
+                    />
                   )}
                   {userInfo.image === "X" || !userInfo.isProfileOfYou ? (
                     ""
@@ -130,7 +134,7 @@ export const Profile = () => {
                   </div>
                 </div>
               </div>
-              <div className='ActionInfo'>
+              <div className='ActionInfo' style={{ height: userInfo.isProfileOfYou ? "400px" : "300px" }}>
                 <AppBar style={{ backgroundColor: "transparent", height: "48px" }} position='static'>
                   <Tabs variant='scrollable' value={actionProfile} onChange={(event, newValue) => setActionProfile(newValue)}>
                     <Tab label={ctx.Languages[ctx.Lang].Information} />
@@ -156,16 +160,18 @@ export const Profile = () => {
               </div>
             </div>
             <div className='MoviesWatch'>
-              <p>Last watch</p>
+              <p>{ctx.Languages[ctx.Lang].LastWatch}</p>
               <div className='lastMovies'>
-                {userInfo.listMovies.map((movie, key) => (
-                  <MovieCart movie={movie} key={key} style={{ position: "absolute", left: key * 320 }} />
-                ))}
+                {userInfo.listMovies.length !== 0 ? (
+                  userInfo.listMovies.map((movie, key) => <MovieCart movie={movie} key={key} style={{ position: "absolute", left: key * 320 }} />)
+                ) : (
+                  <p className='alertNoResult'>{ctx.Languages[ctx.Lang].NoResult}</p>
+                )}
               </div>
             </div>
           </>
         ) : (
-          <p>Ups!... no results found</p>
+          <p className='alertNoResult'>{ctx.Languages[ctx.Lang].NoResult}</p>
         )
       ) : (
         <CircularProgress color='secondary' />
