@@ -16,8 +16,8 @@ const getMovieDBInfo = async function (imdbID) {
 	)
 	return movieFromFavorite
 }
-const getWatchedMovies = async function (dependencies) {
-	const movies = await query('SELECT imdbID FROM Viewed WHERE ?', [dependencies])
+const getWatchedMovies = async function (userID) {
+	const movies = await query('SELECT imdbID FROM Viewed WHERE userID', [userID])
 	return movies
 }
 const getLastWatchedMovie = async function (userID, limit) {

@@ -1,38 +1,24 @@
 const { getUser } = require(__dirname + '/../models/userModel')
-const { getCountWatchedMovie, getLastWatchedMovie, getCountUserWatchedMovie, getWatchedMovies } = require(__dirname + '/../models/movieModel')
+const { getCountWatchedMovie, getLastWatchedMovie, getCountUserWatchedMovie } = require(__dirname + '/../models/movieModel')
 
-const countWatchedMovies = async function (req, res, next) {
-	try {
-		const { imdbID } = req.params
-		if (typeof imdbID !== 'string' || imdbID.length > 10)
-			return res.send({
-				type: 'error',
-				status: 400,
-				body: { Eng: 'Incorrect parameters', Fr: 'Paramètres incorrects' },
-			})
-		const count = await getCountWatchedMovie(imdbID)
-		return res.send({
-			type: 'success',
-			status: 200,
-			body: count,
-		})
-	} catch (err) {
-		next(err)
-	}
-}
 const lastWatchedMovies = async function (req, res, next) {
 	try {
-		const movies = await getLastWatchedMovie(req.params || { userID: req.userID }, 10)
-		if (movies)
-			return res.send({
-				type: 'success',
-				status: 200,
-				body: movies.reverse(),
-			})
+		let user = null
+		if ('userName' in req.params) user = await getUser({ userName: req.params.userName }, 'userID')
+		else user = { userID: req.user }
+		if (user && user.userID) {
+			const movies = await getLastWatchedMovie(user.userID, 10)
+			if (movies)
+				return res.send({
+					type: 'success',
+					status: 200,
+					body: movies.reverse(),
+				})
+		}
 		return res.send({
 			type: 'error',
 			status: 403,
-			body: { Eng: 'No movie found', Fr: 'Aucun film trouvé' },
+			body: [],
 		})
 	} catch (err) {
 		next(err)
@@ -54,25 +40,13 @@ const countUserWatchedMovies = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: { Eng: 'username not found', Fr: "Nom d'utilisateur introuvable" },
+				body: 0,
 			})
 		}
 		return res.send({
 			type: 'error',
 			status: 400,
-			body: { Eng: 'Wrong username', Fr: "Mauvais nom d'utilisateur" },
-		})
-	} catch (err) {
-		next(err)
-	}
-}
-const watchedMovies = async function (req, res, next) {
-	try {
-		const movies = await getWatchedMovies(req.user)
-		return res.send({
-			type: 'success',
-			status: 200,
-			body: movies,
+			body: 0,
 		})
 	} catch (err) {
 		next(err)
@@ -80,8 +54,6 @@ const watchedMovies = async function (req, res, next) {
 }
 
 module.exports = {
-	watchedMovies,
-	countWatchedMovies,
 	lastWatchedMovies,
 	countUserWatchedMovies,
 }

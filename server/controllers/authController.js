@@ -1,5 +1,5 @@
 const { checkUserInput } = require(__dirname + '/../services/userService')
-const { generateToken } = require(__dirname + '/../helper/indexHelper')
+const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const { getJWT } = require('../services/userService')
 const { sendMail } = require(__dirname + '/../helper/mailHelper')
@@ -18,7 +18,7 @@ const register = async function (req, res, next) {
 		const { userName, email, password } = req.body
 		const checkResult = await checkUserExist(userName, email)
 		if (!checkResult) {
-			const token = generateToken(128)
+			const token = crypto.randomUUID()
 			sendMail('active', email, userName, `http://localhost:1337/auth/active`, token)
 			req.body.password = await bcrypt.hash(password, 5)
 			const insertSuccessful = await insertLocalUser({ ...req.body, userFrom: 'local', token })
@@ -152,7 +152,7 @@ const activeAccount = async function (req, res, next) {
 		const { token } = req.params
 		const user = await getUser({ token }, 'userID')
 		if (user) {
-			const token = generateToken(128)
+			const token = crypto.randomUUID()
 			updateUser(user.userID, { token, isActive: 1 })
 			return res.redirect(`http://localhost:${clientPort}/failed`)
 		}
