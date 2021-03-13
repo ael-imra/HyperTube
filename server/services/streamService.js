@@ -57,7 +57,6 @@ const downloadSubtitles = function (imdbID, lang) {
 const downloadStream = async function (torrentHash, completedDownload) {
 	return new Promise((resolve) => {
 		try {
-			console.log('OKO')
 			const engine = torrentStream(torrentHash, {
 				path: __dirname + '/../downloads/videos',
 			})
@@ -66,7 +65,6 @@ const downloadStream = async function (torrentHash, completedDownload) {
 				 * sort files desc
 				 * portended the large file is video
 				 */
-				console.log('OK')
 				engine.files.sort((file1, file2) => file2.length - file1.length)
 				engine.files.map((file) => file.select())
 				resolve({ file: engine.files[0], needConvert: checkNeedConvert(engine.files[0].path) })
