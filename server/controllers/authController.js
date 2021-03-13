@@ -97,71 +97,38 @@ const login = async function (req, res, next) {
 const resetPassword = async function (req, res, next) {
 	try {
 		const error = checkUserInput(req.body, ['email'])
-		if (error)
-			return res.send({
-				type: 'error',
-				status: 400,
-				body: error,
-			})
+		if (error) return res.redirect(`http://localhost:${clientPort}/failed`)
 		const { email } = req.body
 		const user = await getUser({ email }, ['userFrom', 'userName', 'isActive', 'token'])
-		if (user & user.userFrom)
-			return res.redirect(
-				`http://localhost:${clientPort}/failed/${JSON.stringify({
-					Eng: 'Cannot reset password with this email',
-					Fr: 'Impossible de réinitialiser le mot de passe avec cet e-mail',
-				})}`
-			)
+		if (user & user.userFrom) return res.redirect(`http://localhost:${clientPort}/failed`)
 		if (user) {
-			if (!user.isActive)
-				return res.redirect(
-					`http://localhost:${clientPort}/failed/${JSON.stringify({
-						Eng: 'Please verify your email than reset your password',
-						Fr: 'Veuillez vérifier votre adresse e-mail avant de réinitialiser votre mot de passe',
-					})}`
-				)
-			sendMail('reset', email, user.userName, `http://localhost:${clientPort}/ResetPassword/${user.token}`)
-			return res.redirect(
-				`http://localhost:${clientPort}/success/${JSON.stringify({
-					Eng: 'Check your email to reset password',
-					Fr: 'Vérifiez votre messagerie pour réinitialiser le mot de passe',
-				})}`
-			)
+			if (!user.isActive) return res.redirect(`http://localhost:${clientPort}/failed`)
+			sendMail('reset', email, user.userName, `http://localhost:${clientPort}`)
+			return res.redirect(`http://localhost:${clientPort}/success`)
 		}
-		return res.redirect(`http://localhost:${clientPort}/failed/${JSON.stringify({ Eng: 'Incorrect email', Fr: 'Adresse Email incorrecte' })}`)
+		return res.redirect(`http://localhost:${clientPort}/failed`)
 	} catch (err) {
 		next(err)
 	}
 }
 const updatePassword = async function (req, res, next) {
 	try {
-		const { token, oldPassword, newPassword } = req.body
+		const { token, newPassword } = req.body
 		const tokenError = checkUserInput({ token }, ['token'])
 		const newPasswordError = checkUserInput({ password: newPassword }, ['password'])
-		const oldPasswordError = checkUserInput({ password: oldPassword }, ['password'])
-		if (tokenError || newPasswordError || oldPasswordError)
+		if (tokenError || newPasswordError)
 			return res.send({
 				type: 'error',
 				status: 400,
-				body: tokenError || newPasswordError || oldPasswordError,
+				body: tokenError || newPasswordError,
 			})
-		const user = await getUser({ token }, ['password', 'userID'])
-		console.log(user, 'TOKEN')
-		if (user && user.password) {
-			return bcrypt.compare(oldPassword, user.password, async (err, compare) => {
-				console.log(compare, 'comp')
-				if (err || !compare)
-					return res.send({
-						type: 'error',
-						status: 400,
-						body: { Eng: "old password doesn't match", Fr: "l'ancien mot de passe ne correspond pas" },
-					})
-				updateUser(user.userID, { password: await bcrypt.hash(newPassword, 5) })
-				return res.send({
-					type: 'error',
-					status: 400,
-					body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
-				})
+		const user = await getUser({ token }, ['userID'])
+		if (user && user.userID) {
+			updateUser(user.userID, { password: await bcrypt.hash(newPassword, 5) })
+			return res.send({
+				type: 'error',
+				status: 400,
+				body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
 			})
 		}
 		return res.send({
@@ -187,17 +154,9 @@ const activeAccount = async function (req, res, next) {
 		if (user) {
 			const token = generateToken(128)
 			updateUser(user.userID, { token, isActive: 1 })
-			return res.send({
-				type: 'success',
-				status: 200,
-				body: { Eng: 'Your account has been activated successfully', Fr: 'Votre compte a été activé avec succès' },
-			})
+			return res.redirect(`http://localhost:${clientPort}/failed`)
 		}
-		return res.send({
-			type: 'error',
-			status: 400,
-			body: { Eng: 'Incorrect token', Fr: 'Jeton incorrect' },
-		})
+		return res.redirect(`http://localhost:${clientPort}/failed`)
 	} catch (err) {
 		next(err)
 	}
