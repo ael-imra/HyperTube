@@ -17,7 +17,7 @@
   object-position: top;
 }
 .movieDetailImage::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -98,14 +98,10 @@
   display: flex;
   flex-direction: column;
 }
-.DetailAndGallery {
-  width: 100%;
-  height: 70%;
-  display: flex;
-}
+
 .Detail {
-  width: 65%;
-  height: 100%;
+  width: 90%;
+  height: 65%;
   display: flex;
   flex-direction: column;
 }
@@ -157,28 +153,12 @@
   object-fit: cover;
   height: 80%;
 }
-.Gallery {
-  width: 45%;
-  height: 100%;
-}
-.Gallery > p {
-  color: white;
-  font-size: 22px;
-  letter-spacing: 1.5px;
-  margin-top: 0px;
-  margin-bottom: 10px;
-}
+
 .Description {
   width: 100%;
   height: 20%;
 }
-.ScreenshotImage {
-  margin-top: 5%;
-  width: 100%;
-  height: 25%;
-  display: flex;
-  justify-content: space-between;
-}
+
 .Description > p:nth-of-type(1) {
   color: white;
   font-size: 20px;
@@ -240,13 +220,13 @@
   background-color: white;
 }
 .MuiListItemText-primary.MuiTypography-body2 {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
   font-size: 17px !important;
   font-weight: 900 !important;
   letter-spacing: 0 !important;
 }
 .MuiTypography-colorTextSecondary.MuiTypography-body2 {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
   font-size: 15px !important;
   font-weight: 900 !important;
   letter-spacing: 0 !important;
@@ -261,12 +241,8 @@
   width: auto !important;
   max-width: 100% !important;
 }
-/* .movieInfo .MuiDialog-paperWidthSm {
-  width: auto !important;
-  max-width: auto !important;
-} */
 .commentDate {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 13px;
   font-weight: 900;
   color: rgba(0, 0, 0, 0.54);
@@ -281,9 +257,6 @@
   display: none;
 }
 @media only screen and (max-width: 1280px) {
-  .Gallery {
-    display: none;
-  }
   .movieInfo {
     min-width: 100%;
   }

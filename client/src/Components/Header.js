@@ -135,7 +135,7 @@ const NavMobil = (props) => {
 export default function Header(props) {
   const ctx = React.useContext(DataContext);
   let location = useLocation();
-  const [isActive, setIsActive] = React.useState(location.pathname === "/FavoriteMovie" ? 2 : location.pathname === "/Profile" ? 3 : 1);
+  const [isActive, setIsActive] = React.useState(location.pathname === "/FavoriteMovie" ? 2 : location.pathname === "/Profile" ? 3 : location.pathname === "/" ? 1 : 0);
   const width = UseWindowSize();
   if (props.type === "notLogin")
     return (
