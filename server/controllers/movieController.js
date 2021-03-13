@@ -22,8 +22,9 @@ const getMovieInfo = async function (req, res, next) {
 	try {
 		const { imdbID } = req.params
 		if (typeof imdbID === 'string') {
-			const codeMovie = await axios.get(`https://yts.mx/api/v2/list_movies.json?query_term=${imdbID}`)
-			const movieInfo = await (await axios.get(`https://yts.mx/api/v2/movie_details.json?movie_id=${codeMovie.data.data.movies[0].id}&with_images=true`)).data.data.movie
+			const codeMovie = await axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?query_term=${imdbID}`)
+			const movieInfo = await (await axios.get(`https://yts.megaproxy.info/api/v2/movie_details.json?movie_id=${codeMovie.data.data.movies[0].id}&with_images=true`)).data
+				.data.movie
 			const images = await axios.get(`https://api.themoviedb.org/3/movie/${movieInfo.imdb_code}/images?api_key=7a518fe1d1c5359a4929ef4765c347fb`)
 			const credits = await axios.get(`https://api.themoviedb.org/3/movie/${movieInfo.imdb_code}/credits?api_key=7a518fe1d1c5359a4929ef4765c347fb`)
 			credits.data.cast = credits.data.cast.map((cst) => ({
@@ -31,6 +32,21 @@ const getMovieInfo = async function (req, res, next) {
 				character_name: cst.character,
 				url_small_image: `https://image.tmdb.org/t/p/original/${cst.profile_path}`,
 				imdb_code: cst.id,
+			}))
+			const movies = await Axios.get(`https://yts.megaproxy.info/api/v2/movie_suggestions.json?movie_id=${codeMovie.data.data.movies[0].id}`)
+			let suggestions = movies.data.data.movies
+			const countWatchedMovies = await Axios.get(`/movie/${movieInfo.imdb_code}`, { withCredentials: true })
+			suggestions = suggestions.map((movie) => ({
+				image: movie.medium_cover_image,
+				id: movie.id,
+				titre: movie.title,
+				year: movie.year,
+				runtime: movie.runtime,
+				rating: movie.rating,
+				language: movie.language,
+				genres: movie.genres,
+				description: movie.description_full,
+				imdbCode: movie.imdb_code,
 			}))
 			credits.data.cast.length = credits.data.cast.length > 5 ? 5 : credits.data.cast.length
 			const listFavorite = await getFavorites(req.user, 'imdbID')
@@ -56,6 +72,8 @@ const getMovieInfo = async function (req, res, next) {
 							: '',
 					runtime: movieInfo.runtime,
 					codeTrailer: movieInfo.yt_trailer_code,
+					screenshotImage: [movieInfo.large_screenshot_image1, movieInfo.large_screenshot_image2, movieInfo.large_screenshot_image3],
+					suggestions,
 					torrents: movieInfo.torrents.map((item) => ({ quality: item.quality, hash: item.hash, type: item.type })),
 					rating: movieInfo.rating,
 					dateUploaded: movieInfo.date_uploaded,
@@ -110,6 +128,8 @@ const getMovieInfoBackup = async function (req, res, next) {
 						: '',
 				runtime: movieInfo.runtime,
 				codeTrailer: movieInfo.trailer,
+				screenshotImage: [],
+				suggestions: [],
 				torrents: movieInfo.items.map((item, index) => (index <= 5 ? { quality: item.quality, hash: item.id, type: '' } : null)),
 				rating: movieInfo.rating,
 				isFavorite: listFavorite instanceof Array && listFavorite.findIndex((a) => a.imdbID === movieInfo.imdb) !== -1 ? true : false,
