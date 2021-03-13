@@ -59,7 +59,14 @@ const addFavorite = async function (req, res, next) {
 			})
 		}
 		const movie = await getMovieInfo(imdbID.trim())
+		console.log(movie)
 		const { original_title, poster_path, vote_average, overview, runtime, original_language, genres, release_date } = movie
+		if (!overview)
+			return res.send({
+				type: 'error',
+				status: 403,
+				body: { Eng: 'Movie not found', Fr: 'Film introuvable' },
+			})
 		const movieGenre = []
 		if (genres) for (const value of genres) movieGenre.push(value.name)
 		const resultInsert = await insertFavorite({
