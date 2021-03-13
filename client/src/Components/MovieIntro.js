@@ -67,59 +67,77 @@ export default function MovieIntro(props) {
           </Button>
         </div>
         <div className='DetailAndDescription'>
-          <div className='Detail'>
-            <p>{dataMovie.title}</p>
-            <div>
-              <p>{dataMovie.runtime} Min</p>
-              <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
-              <p>{dataMovie.genres ? dataMovie.genres.toString() : ""}</p>
-              <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
-              <p>{dataMovie.year}</p>
-              <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
-              <p style={{ display: "flex", alignItems: "center" }}>
-                <VisibilityIcon style={{ fontSize: "15px", marginRight: "5px" }} /> {dataMovie.countWatchedMovies}
-              </p>
-            </div>
-            <Divider style={{ backgroundColor: "#ffffffa3", width: "90%", marginTop: "0px" }} />
-            <div className='InfoCast'>
-              <div className='Details'>
-                <p>{ctx.Languages[ctx.Lang].Details}</p>
-                <div>
-                  <p style={{ marginBottom: "0px" }}>
-                    {ctx.Languages[ctx.Lang].Genre} :<span style={{ lineHeight: "2", wordBreak: "break-all" }}>{dataMovie.genres.toString()}</span>
-                  </p>
-                  <p style={{ marginTop: "5px", marginBottom: "0px" }}>
-                    {ctx.Languages[ctx.Lang].AvailableIn}: <span style={{ lineHeight: "2" }}>{dataMovie.torrents.map((item) => `${item.quality} ${item.type},`)}</span>
-                  </p>
-                  <p style={{ marginTop: "5px" }}>
-                    {ctx.Languages[ctx.Lang].runtime}: <span>{dataMovie.runtime} Min</span>
-                  </p>
-                  <p>
-                    {ctx.Languages[ctx.Lang].Language}: <span>{dataMovie.language}</span>
-                  </p>
-                  <p>
-                    {ctx.Languages[ctx.Lang].rating}: <span>{dataMovie.rating}</span>
-                  </p>
-                  <p>
-                    {ctx.Languages[ctx.Lang].year}: <span>{dataMovie.year}</span>
-                  </p>
+          <div className='DetailAndGallery'>
+            <div className='Detail'>
+              <p>{dataMovie.title}</p>
+              <div>
+                <p>{dataMovie.runtime} Min</p>
+                <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
+                <p>{dataMovie.genres ? dataMovie.genres.toString() : ""}</p>
+                <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
+                <p>{dataMovie.year}</p>
+                <Divider orientation='vertical' style={{ backgroundColor: "#ffffffa3", height: "60%", marginRight: "10px" }} />
+                <p style={{ display: "flex", alignItems: "center" }}>
+                  <VisibilityIcon style={{ fontSize: "15px", marginRight: "5px" }} /> {dataMovie.countWatchedMovies}
+                </p>
+              </div>
+              <Divider style={{ backgroundColor: "#ffffffa3", width: "90%", marginTop: "0px" }} />
+              <div className='InfoCast'>
+                <div className='Details'>
+                  <p>{ctx.Languages[ctx.Lang].Details}</p>
+                  <div>
+                    <p style={{ marginBottom: "0px" }}>
+                      {ctx.Languages[ctx.Lang].Genre} :<span style={{ lineHeight: "2", wordBreak: "break-all" }}>{dataMovie.genres.toString()}</span>
+                    </p>
+                    <p style={{ marginTop: "5px", marginBottom: "0px" }}>
+                      {ctx.Languages[ctx.Lang].AvailableIn}: <span style={{ lineHeight: "2" }}>{dataMovie.torrents.map((item) => `${item.quality} ${item.type},`)}</span>
+                    </p>
+                    <p style={{ marginTop: "5px" }}>
+                      {ctx.Languages[ctx.Lang].runtime}: <span>{dataMovie.runtime} Min</span>
+                    </p>
+                    <p>
+                      {ctx.Languages[ctx.Lang].Language}: <span>{dataMovie.language}</span>
+                    </p>
+                    <p>
+                      {ctx.Languages[ctx.Lang].rating}: <span>{dataMovie.rating}</span>
+                    </p>
+                    <p>
+                      {ctx.Languages[ctx.Lang].year}: <span>{dataMovie.year}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className='cast'>
+                  <p>{ctx.Languages[ctx.Lang].Cast}</p>
+                  {dataMovie.cast.map((item, key) => (
+                    <div className='CastName' key={key}>
+                      {item.url_small_image ? (
+                        <img src={item.url_small_image} alt='...' />
+                      ) : (
+                        <Avatar style={{ backgroundColor: "rgb(236, 70, 70)" }}>{item.name.substring(0, 2)}</Avatar>
+                      )}
+                      <p>{item.name}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className='cast'>
-                <p>{ctx.Languages[ctx.Lang].Cast}</p>
-                {dataMovie.cast.map((item, key) => (
-                  <div className='CastName' key={key}>
-                    {item.url_small_image ? (
-                      <img src={item.url_small_image} alt='...' />
-                    ) : (
-                      <Avatar style={{ backgroundColor: "rgb(236, 70, 70)" }}>{item.name.substring(0, 2)}</Avatar>
-                    )}
-                    <p>{item.name}</p>
-                  </div>
-                ))}
+            </div>
+            <div className='Gallery'>
+              <p>{ctx.Languages[ctx.Lang].Gallery}</p>
+              {/* {dataMovie.codeTrailer ? <iframe width='100%' height='55%' src={`http://www.youtube-nocookie.com/embed/${dataMovie.codeTrailer}`} frameBorder='0' allowFullScreen></iframe> : ''} */}
+              <div className='ScreenshotImage'>
+                {dataMovie.screenshotImage instanceof Array &&
+                  dataMovie.screenshotImage.map((src, key) => (
+                    <img
+                      src={src}
+                      key={key}
+                      style={{ width: "33%", objectFit: "cover", height: "100%", cursor: "pointer" }}
+                      onClick={() => setShowImage({ src: src, state: true })}
+                    />
+                  ))}
               </div>
             </div>
           </div>
+
           <Divider style={{ backgroundColor: "#ffffffa3" }} />
           <div className='Description'>
             <p>{ctx.Languages[ctx.Lang].Description}</p>
