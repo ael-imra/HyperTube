@@ -7,8 +7,10 @@ const fs = require("fs");
 
 const allProfiles = async function (req, res, next) {
   try {
+    const { offSet } = req.query;
     const { search } = req.params;
-    const profiles = await getAllUsers(search, req.user);
+    const profiles = await getAllUsers(search, offSet, req.user);
+    if (profiles.length <= 0) profiles.push("noMoreData");
     return res.send({
       type: "success",
       status: 200,
