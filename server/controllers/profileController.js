@@ -127,7 +127,7 @@ const editImage = async function (req, res, next) {
 			return res.send({
 				type: 'error',
 				status: 403,
-				body: 'Incorrect image',
+				body: { Eng: 'Incorrect image', Fr: 'Image incorrecte' },
 			})
 		const imagePath = await createImage(req.body.image)
 		const user = await getUser({ userID: req.user }, 'image')
