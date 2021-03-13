@@ -1,6 +1,8 @@
-import Axios from "axios";
+import axios from 'axios'
+import Axios from 'axios'
 
 export const GetMovie = async (code) => {
+<<<<<<< HEAD
   const codeMovie = await Axios.get(`https://yts.mx/api/v2/list_movies.json?query_term=${code}`);
   const movieInfo = await (await Axios.get(`https://yts.mx/api/v2/movie_details.json?movie_id=${codeMovie.data.data.movies[0].id}&with_images=true&with_cast=true`)).data.data
     .movie;
@@ -45,3 +47,8 @@ export const GetMovie = async (code) => {
     countWatchedMovies: countWatchedMovies.data.body,
   };
 };
+=======
+	const movieInfo = await Axios.get(`/movie/${code}`, { withCredentials: true })
+	return movieInfo.data.body
+}
+>>>>>>> ael-imra
