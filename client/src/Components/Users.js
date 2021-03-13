@@ -31,24 +31,28 @@ export function Users() {
     if (users[users.length - 1] !== "noMoreData") {
       if (offsetHeight + scrollTop + 300 > scrollHeight) {
         changeDisplay("block");
-        changeNext(nextUsers + 25);
         await axios.get(`http://localhost:1337/profile/allProfiles/${search}?offSet=${nextUsers}`, { withCredentials: true }).then((res) => {
           let newArray = [];
           newArray.push(...users, res.data.body[0]);
           changeUsers(newArray);
           changeDisplay("none");
+          changeNext(nextUsers + 25);
         });
       }
     }
   }
   useEffect(async () => {
+    let unmount = false;
+
     changeDisplay("block");
     await axios.get(`http://localhost:1337/profile/allProfiles?offSet=0`, { withCredentials: true }).then((res) => {
-      changeUsers(res.data.body);
-      changeDisplay("none");
+      if (!unmount) {
+        changeUsers(res.data.body);
+        changeDisplay("none");
+      }
     });
+    return () => (unmount = true); // eslint-disable-next-line
   }, []);
-  console.log(users);
   return (
     <div style={{ display: "flex", flexFlow: "column", marginTop: "50px" }}>
       <div className="searchUsers">
@@ -92,7 +96,7 @@ export function Users() {
                     }
                   />
                 ) : (
-                  <Avatar style={{ width: "150px", height: "150px", fontSize: "50px", backgroundColor: "rgb(236, 70, 70)", marginTop: "22px" }}>
+                  <Avatar style={{ width: "155px", height: "150px", fontSize: "50px", backgroundColor: "rgb(236, 70, 70)", marginTop: "22px" }}>
                     {value.userName.substring(0, 2).toUpperCase()}
                   </Avatar>
                 )}
