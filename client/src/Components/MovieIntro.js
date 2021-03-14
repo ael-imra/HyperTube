@@ -130,11 +130,16 @@ export default function MovieIntro(props) {
                       <img
                         src={src}
                         key={key}
-                        style={{ width: "100%", objectFit: "cover", cursor: "pointer", marginBottom: "5px" }}
+                        style={{ width: "100%", objectFit: "cover", cursor: "pointer", marginBottom: "5px", height: "50%" }}
                         onClick={() => setShowImage({ src: src, state: true })}
                       />
                     ) : (
-                      <img src={src} key={key} style={{ width: "49%", objectFit: "cover", cursor: "pointer" }} onClick={() => setShowImage({ src: src, state: true })} />
+                      <img
+                        src={src}
+                        key={key}
+                        style={{ width: "49%", objectFit: "cover", cursor: "pointer", height: "49%" }}
+                        onClick={() => setShowImage({ src: src, state: true })}
+                      />
                     )
                   )}
               </div>

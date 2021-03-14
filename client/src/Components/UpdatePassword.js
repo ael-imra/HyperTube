@@ -53,7 +53,7 @@ export const UpdatePassword = (props) => {
           }}
           Style={{ backgroundColor: "#bdbdbd", width: "50%", color: "black" }}
           Disabled='false'
-          Type='text'
+          Type='password'
         />
       </div>
       <div className='ew'>
@@ -68,7 +68,7 @@ export const UpdatePassword = (props) => {
           }}
           Style={{ backgroundColor: "#bdbdbd", width: "50%", color: "black" }}
           Disabled='false'
-          Type='text'
+          Type='password'
         />
       </div>
       <div className='ew'>
@@ -83,7 +83,7 @@ export const UpdatePassword = (props) => {
           }}
           Style={{ backgroundColor: "#bdbdbd", width: "50%", color: "black" }}
           Disabled='false'
-          Type='text'
+          Type='password'
         />
       </div>
       <Button
