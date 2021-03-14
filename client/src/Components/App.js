@@ -15,6 +15,8 @@ import ResetPassword from "./ResetPassword";
 import Dashboard from "./Dashboard";
 import Axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { NotFound } from "./Dashboard";
+import { IntroSuccessOrFailed } from "./IntroSuccessOrFailed";
 
 function App() {
   const [snackbarToggle, setSnackbarToggle] = React.useState(false);
@@ -52,7 +54,7 @@ function App() {
         if (e.target.scrollTop >= 750) document.querySelector(".Header").style.backgroundColor = "rgba(34, 40, 49, 0.78)";
         else document.querySelector(".Header").style.backgroundColor = "rgba(34, 40, 49, 0.46)";
       }}>
-      <Header type='Login' search={{ search, setSearch }} />
+      <Header type='Login' search={{ search, setSearch }} setIsLogin={setIsLogin} />
       <Dashboard />
     </div>
   ) : (
@@ -89,6 +91,12 @@ function App() {
                 }}
               />
             </Route>
+            <Route exact path='/success'>
+              <IntroSuccessOrFailed type='success' />
+            </Route>
+            <Route exact path='/failed'>
+              <IntroSuccessOrFailed type='failed' />
+            </Route>
             <Route exact path='/ResetPassword/:token'>
               <ResetPassword
                 handleShowMessage={(type, content) => {
@@ -96,6 +104,9 @@ function App() {
                   setSnackbarToggle(true);
                 }}
               />
+            </Route>
+            <Route path='*'>
+              <NotFound />
             </Route>
           </Switch>
           <Snackbar open={snackbarToggle} autoHideDuration={5000} onClose={handleCloseMessage}>

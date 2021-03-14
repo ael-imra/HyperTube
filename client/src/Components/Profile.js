@@ -53,7 +53,6 @@ export const Profile = () => {
   React.useEffect(() => {
     async function awaitData() {
       const data = await GetUserInfo(userName);
-      console.log(data);
       setUserInfo({
         ...data,
         middleware: true,
