@@ -122,8 +122,10 @@
 }
 .ScreenshotImage {
   margin-top: 5%;
+  max-width: 520px;
   width: 100%;
-  height: 25%;
+  flex-wrap: wrap;
+  height: 75%;
   display: flex;
   justify-content: space-between;
 }
@@ -174,6 +176,7 @@
   border-radius: 50%;
   object-fit: cover;
   height: 80%;
+  width: 40px;
 }
 
 .Description {
