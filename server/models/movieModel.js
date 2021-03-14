@@ -17,11 +17,11 @@ const getMovieDBInfo = async function (imdbID) {
 	return movieFromFavorite
 }
 const getWatchedMovies = async function (userID) {
-	const movies = await query('SELECT imdbID FROM Viewed WHERE userID', [userID])
+	const movies = await query('SELECT imdbID FROM Viewed WHERE userID=?', [userID])
 	return movies
 }
 const getLastWatchedMovie = async function (userID, limit) {
-	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date LIMIT ?', [userID, limit])
+	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date DESC LIMIT ?', [userID, limit])
 	return movies
 }
 const getUnwatchedMovie = async function () {
@@ -53,8 +53,7 @@ const updateWatchedMovie = async function (imdbID, userID) {
 	return resultUpdate.affectedRows ? resultUpdate : false
 }
 const deleteMovies = async function () {
-	const resultDelete = await query('DELETE FROM Movies WHERE DATEDIFF(NOW(),date)>=30')
-	return resultDelete.affectedRows ? resultDelete : false
+	query('DELETE Movies,Viewed FROM Movies,Viewed WHERE Movies.imdbID=Viewed.imdbID AND DATEDIFF(NOW(),Viewed.date)>=30')
 }
 const checkViewed = async function (imdbID, userID) {
 	const [user] = await query('SELECT userID FROM Viewed WHERE imdbID = ? AND userID=?', [imdbID, userID])
