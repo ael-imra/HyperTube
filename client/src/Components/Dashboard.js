@@ -7,7 +7,7 @@ import { Switch, Route, useHistory } from "react-router-dom";
 import { MovieDetail } from "./MovieDetail";
 import { FavoriteMovie } from "./FavoriteMovie";
 import { Profile } from "./Profile";
-const NotFound = () => {
+export const NotFound = () => {
   const history = useHistory();
   React.useEffect(() => {
     history.push("/");
