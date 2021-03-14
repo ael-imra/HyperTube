@@ -82,6 +82,8 @@ export const Languages = {
     Watch: "Watch",
     LastWatch: "Last watch",
     NoResult: "Ups!... no results found",
+    showComment: "show comment",
+    send: "send",
   },
   Fr: {
     TitleLogin: "Vous venez de trouver le meilleur site Web pour regarder des films en haute qualité",
@@ -167,5 +169,7 @@ export const Languages = {
     Watch: "regarder",
     LastWatch: "Dernière montre",
     NoResult: "UPS! ... Aucun résultat trouvé",
+    showComment: "afficher le commentaire",
+    send: "envoyer",
   },
 };
