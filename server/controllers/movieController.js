@@ -135,7 +135,7 @@ const getMoviesInfo = async function (req, res, next) {
 		let pageCounter = page
 		const movies = []
 		const listFavorite = await getFavorites(req.user, 'imdbID')
-		const listWatch = await getWatchedMovies({ userID: req.user })
+		const listWatch = await getWatchedMovies(req.user)
 		while (movies.length <= 20) {
 			const moviesData = await axios.get(
 				`https://yts.megaproxy.info/api/v2/list_movies.json?page=${pageCounter}&minimum_rating=${minRating}&limit=30&genre=${genre}&limit=30&query_term=${query}&sort_by=${sort}&order_by=${order}`
@@ -162,7 +162,7 @@ const getMoviesInfo = async function (req, res, next) {
 		return res.send({
 			type: 'success',
 			status: 200,
-			body: { list: movies, page: pageCounter, next: movies.length !== 0, middleware: false },
+			body: { list: movies, page: pageCounter, next: movies.length === 30, middleware: false },
 		})
 	} catch (err) {
 		getMoviesInfoBackup(req, res, next)
@@ -199,7 +199,7 @@ const getMoviesInfoBackup = async function (req, res, next) {
 		return res.send({
 			type: 'success',
 			status: 200,
-			body: { list: movies, page: pageCounter, next: movies.length !== 0, middleware: false },
+			body: { list: movies, page: pageCounter, next: movies.length === 75, middleware: false },
 		})
 	} catch (err) {
 		if (err.response)
