@@ -2,15 +2,12 @@ import React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
-import user from "../Images/large_sel-hamr.jpg";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
 import { DataContext } from "../Context/AppContext";
 import Axios from "axios";
 import Divider from "@material-ui/core/Divider";
@@ -79,14 +76,12 @@ const Comments = (props) => {
               {comments.comment.map((comment, key) => (
                 <div key={key}>
                   <ListItem>
-                    {/* <ListItemAvatar>{comment.image ? <Avatar src={comment.image} /> : <Avatar>{comment.userName.substring(0, 2)}</Avatar>}</ListItemAvatar> */}
-                    {/* <ListItemAvatar> */}
                     <ImageProfile
                       image={comment.image}
                       userName={comment.userName}
                       style={{ width: "48px", height: "48px", objectFit: "cover", borderRadius: "50%", marginRight: "8px" }}
                     />
-                    {/* </ListItemAvatar> */}
+
                     <ListItemText primary={comment.userName} secondary={comment.commentContent} />
                     <ListItemSecondaryAction>
                       {width > 600 ? <span className='commentDate'>{moment(comment.date).fromNow()}</span> : ""}
@@ -100,7 +95,7 @@ const Comments = (props) => {
               ))}
             </List>
           ) : (
-            <p style={{ fontSize: "17px", textAlign: "center", color: "rgba(82, 82, 82, 0.87)" }}>No comment yat</p>
+            <p style={{ fontSize: "17px", textAlign: "center", color: "rgba(82, 82, 82, 0.87)" }}>{ctx.Languages[ctx.Lang].NoResult}</p>
           )}
         </div>
         <TextField
@@ -133,7 +128,7 @@ const Comments = (props) => {
             marginRight: "15px",
             display: "flex",
           }}>
-          send
+          {ctx.Languages[ctx.Lang].send}
         </Button>
       </DialogContent>
     </Dialog>
