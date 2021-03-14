@@ -21,7 +21,7 @@ const getWatchedMovies = async function (userID) {
 	return movies
 }
 const getLastWatchedMovie = async function (userID, limit) {
-	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date DESC LIMIT ?', [userID, limit])
+	const movies = await query('SELECT * FROM Viewed WHERE userID=? ORDER BY date LIMIT ?', [userID, limit])
 	return movies
 }
 const getUnwatchedMovie = async function () {

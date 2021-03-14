@@ -118,7 +118,7 @@ const resetPassword = async function (req, res, next) {
 					status: 403,
 					body: { Eng: 'Active your account than reset password', Fr: 'Activez votre compte plutôt que de réinitialiser le mot de passe' },
 				})
-			sendMail('reset', email, user.userName, `http://localhost:${clientPort}`)
+			sendMail('reset', email, user.userName, `http://localhost:${clientPort}/ResetPassword`, user.token)
 			return res.send({
 				type: 'success',
 				status: 200,
@@ -147,10 +147,10 @@ const updatePassword = async function (req, res, next) {
 			})
 		const user = await getUser({ token }, ['userID'])
 		if (user && user.userID) {
-			updateUser(user.userID, { password: await bcrypt.hash(newPassword, 5) })
+			updateUser(user.userID, { password: await bcrypt.hash(newPassword, 5), token: crypto.randomUUID() })
 			return res.send({
-				type: 'error',
-				status: 400,
+				type: 'success',
+				status: 200,
 				body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
 			})
 		}
