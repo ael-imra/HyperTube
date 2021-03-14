@@ -63,7 +63,7 @@ export default function MovieIntro(props) {
               fontSize: "15px",
               fontWeight: "600",
             }}>
-            show comment
+            {ctx.Languages[ctx.Lang].showComment}
           </Button>
         </div>
         <div className='DetailAndDescription'>
@@ -123,17 +123,20 @@ export default function MovieIntro(props) {
             </div>
             <div className='Gallery'>
               <p>{ctx.Languages[ctx.Lang].Gallery}</p>
-              {/* {dataMovie.codeTrailer ? <iframe width='100%' height='55%' src={`http://www.youtube-nocookie.com/embed/${dataMovie.codeTrailer}`} frameBorder='0' allowFullScreen></iframe> : ''} */}
               <div className='ScreenshotImage'>
                 {dataMovie.screenshotImage instanceof Array &&
-                  dataMovie.screenshotImage.map((src, key) => (
-                    <img
-                      src={src}
-                      key={key}
-                      style={{ width: "33%", objectFit: "cover", height: "100%", cursor: "pointer" }}
-                      onClick={() => setShowImage({ src: src, state: true })}
-                    />
-                  ))}
+                  dataMovie.screenshotImage.map((src, key) =>
+                    key === 0 ? (
+                      <img
+                        src={src}
+                        key={key}
+                        style={{ width: "100%", objectFit: "cover", cursor: "pointer", marginBottom: "5px" }}
+                        onClick={() => setShowImage({ src: src, state: true })}
+                      />
+                    ) : (
+                      <img src={src} key={key} style={{ width: "49%", objectFit: "cover", cursor: "pointer" }} onClick={() => setShowImage({ src: src, state: true })} />
+                    )
+                  )}
               </div>
             </div>
           </div>

@@ -12,7 +12,6 @@ import Alert from "@material-ui/lab/Alert";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { DataContext } from "../Context/AppContext";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Avatar from "@material-ui/core/Avatar";
 import { MovieCart } from "./MovieCart";
 import Axios from "axios";
 import CropOriginalIcon from "@material-ui/icons/PhotoCamera";
@@ -54,6 +53,7 @@ export const Profile = () => {
   React.useEffect(() => {
     async function awaitData() {
       const data = await GetUserInfo(userName);
+      console.log(data);
       setUserInfo({
         ...data,
         middleware: true,
@@ -61,28 +61,30 @@ export const Profile = () => {
         fixLastName: data.lastName,
         fixEmailName: data.email,
         fixUserName: data.userName,
-        listMovies: await GetLastMovies(),
       });
     }
     awaitData();
   }, []);
   const GetLastMovies = async () => {
-    const lastMovies = await Axios.get("/movie/lastWatched", { withCredentials: true });
+    const lastMovies = await Axios.get(`/watchedMovie/lastWatchedMovies/sel-hamr`, { withCredentials: true });
     const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
-    const data = lastMovies.data.body.map((movie, key) => ({
-      image: `https://image.tmdb.org/t/p/original/${movie.movieImage}`,
-      year: movie.movieRelease,
-      titre: movie.movieTitle,
-      description: movie.movieDescription,
-      rating: movie.movieRating,
-      runtime: movie.movieTime,
-      genres: movie.movieGenre ? JSON.parse(movie.movieGenre) : [],
-      language: movie.movieLanguage,
-      imdbCode: movie.imdbID,
-      id: movie.viewedID,
-      isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdbID) !== -1 ? true : false,
-      isWatched: true,
-    }));
+    const data =
+      lastMovies.data.body instanceof Array
+        ? lastMovies.data.body.map((movie, key) => ({
+            image: `https://image.tmdb.org/t/p/original/${movie.movieImage}`,
+            year: movie.movieRelease,
+            titre: movie.movieTitle,
+            description: movie.movieDescription,
+            rating: movie.movieRating,
+            runtime: movie.movieTime,
+            genres: movie.movieGenre ? JSON.parse(movie.movieGenre) : [],
+            language: movie.movieLanguage,
+            imdbCode: movie.imdbID,
+            id: movie.viewedID,
+            isFavorite: listFavorite.data.body instanceof Array && listFavorite.data.body.findIndex((a) => a.imdbID === movie.imdbID) !== -1 ? true : false,
+            isWatched: true,
+          }))
+        : [];
     return data;
   };
   return (
