@@ -97,16 +97,39 @@ const login = async function (req, res, next) {
 const resetPassword = async function (req, res, next) {
 	try {
 		const error = checkUserInput(req.body, ['email'])
-		if (error) return res.redirect(`http://localhost:${clientPort}/failed`)
+		if (error)
+			return res.send({
+				type: 'error',
+				status: 400,
+				body: error,
+			})
 		const { email } = req.body
 		const user = await getUser({ email }, ['userFrom', 'userName', 'isActive', 'token'])
-		if (user & user.userFrom) return res.redirect(`http://localhost:${clientPort}/failed`)
+		if (user & (user.userFrom !== 'local'))
+			return res.send({
+				type: 'error',
+				status: 403,
+				body: { Eng: 'Cannot reset password for this account', Fr: 'Impossible de réinitialiser le mot de passe pour ce compte' },
+			})
 		if (user) {
-			if (!user.isActive) return res.redirect(`http://localhost:${clientPort}/failed`)
+			if (!user.isActive)
+				return res.send({
+					type: 'error',
+					status: 403,
+					body: { Eng: 'Active your account than reset password', Fr: 'Activez votre compte plutôt que de réinitialiser le mot de passe' },
+				})
 			sendMail('reset', email, user.userName, `http://localhost:${clientPort}`)
-			return res.redirect(`http://localhost:${clientPort}/success`)
+			return res.send({
+				type: 'success',
+				status: 200,
+				body: { Eng: 'Check your email to reset password', Fr: 'Vérifiez votre e-mail pour réinitialiser le mot de passe' },
+			})
 		}
-		return res.redirect(`http://localhost:${clientPort}/failed`)
+		return res.send({
+			type: 'error',
+			status: 400,
+			body: { Eng: 'Invalid token', Fr: 'Jeton invalide' },
+		})
 	} catch (err) {
 		next(err)
 	}
@@ -154,7 +177,7 @@ const activeAccount = async function (req, res, next) {
 		if (user) {
 			const token = crypto.randomUUID()
 			updateUser(user.userID, { token, isActive: 1 })
-			return res.redirect(`http://localhost:${clientPort}/failed`)
+			return res.redirect(`http://localhost:${clientPort}/success`)
 		}
 		return res.redirect(`http://localhost:${clientPort}/failed`)
 	} catch (err) {
