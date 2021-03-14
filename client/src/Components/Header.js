@@ -75,7 +75,11 @@ const NavWeb = (props) => {
           display: "flex",
           marginRight: "10px",
         }}
-        onClick={() => props.ctx.setLang((oldValue) => (oldValue === "Eng" ? "Fr" : "Eng"))}>
+        onClick={() => {
+          document.cookie = "jwtToken=;expires=-5s";
+          props.ctx.history.push("/");
+          props.setIsLogin(false);
+        }}>
         {ctx.Languages[ctx.Lang].Logout}
       </Button>
     </div>
@@ -127,7 +131,14 @@ const NavMobil = (props) => {
           }}>
           {ctx.Languages[ctx.Lang].Mylist}
         </MenuItem>
-        <MenuItem onClick={() => setShowMenuNav(null)}>{ctx.Languages[ctx.Lang].Logout}</MenuItem>
+        <MenuItem
+          onClick={() => {
+            document.cookie = "jwtToken=;expires=-5s";
+            props.ctx.history.push("/");
+            props.setIsLogin(false);
+          }}>
+          {ctx.Languages[ctx.Lang].Logout}
+        </MenuItem>
       </Menu>
     </div>
   );
@@ -163,9 +174,9 @@ export default function Header(props) {
       <div className='Header' style={{ position: "sticky", top: "-3px", zIndex: "10", height: "60px", backgroundColor: "rgba(34, 40, 49, 0.46)" }}>
         <LogoWebSite ctx={ctx} />
         {width < 840 ? (
-          <NavMobil isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} />
+          <NavMobil isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} setIsLogin={props.setIsLogin} />
         ) : (
-          <NavWeb isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} />
+          <NavWeb isActive={isActive} setIsActive={setIsActive} ctx={ctx} search={props.search} setIsLogin={props.setIsLogin} />
         )}
       </div>
     );
