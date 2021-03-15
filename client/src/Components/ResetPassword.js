@@ -18,7 +18,9 @@ export default function ResetPassword(props) {
 
   const ResetPassword = async () => {
     if (ctx.Validator("password", password.newPassword) && password.newPassword === password.confirmPassword) {
-      const result = await Axios.post(`/auth/updatePassword`, { newPassword: password.newPassword });
+      const result = await Axios.post(`/auth/updatePassword`, { newPassword: password.newPassword, token: token });
+      if (result.data.type === "success") history.push("/");
+      props.handleShowMessage(result.data.type, result.data.body[ctx.Lang]);
     } else props.handleShowMessage("error", ctx.Languages[ctx.Lang].passwordNotMatch);
   };
   React.useEffect(() => {
