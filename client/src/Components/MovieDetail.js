@@ -7,7 +7,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { MovieCart } from "./MovieCart";
 import Comments from "./Comments";
 import MovieIntro from "./MovieIntro";
 export const MovieDetail = () => {
@@ -49,12 +48,11 @@ export const MovieDetail = () => {
           )
         )}
       </div>
-      {/* <div className='Suggestions'>
-        {movieInfo.suggestions.map((movie, key) => (
-          <MovieCart movie={movie} key={key} callBack />
-        ))}
-      </div> */}
       <Comments data={movieInfo} code={code} />
+    </div>
+  ) : movieInfo === "not found" ? (
+    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <p className='alertNoResult'>{ctx.Languages[ctx.Lang].NoResult}</p>
     </div>
   ) : (
     <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -62,6 +60,3 @@ export const MovieDetail = () => {
     </div>
   );
 };
-// hash: "16B087DFF9C8153072BD35C1BEC245CB831AEF4D"
-// quality: "3D"
-// type: "bluray"
