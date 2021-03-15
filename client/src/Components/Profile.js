@@ -51,18 +51,21 @@ export const Profile = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
   React.useEffect(() => {
+    let unmount = false;
     async function awaitData() {
       const data = await GetUserInfo(userName);
-      setUserInfo({
-        ...data,
-        middleware: true,
-        fixFirstName: data.firstName,
-        fixLastName: data.lastName,
-        fixEmailName: data.email,
-        fixUserName: data.userName,
-      });
+      if (!unmount)
+        setUserInfo({
+          ...data,
+          middleware: true,
+          fixFirstName: data.firstName,
+          fixLastName: data.lastName,
+          fixEmailName: data.email,
+          fixUserName: data.userName,
+        });
     }
-    awaitData();
+    if (!unmount) awaitData();
+    return () => (unmount = true);
   }, []);
   const GetLastMovies = async () => {
     const lastMovies = await Axios.get(`/watchedMovie/lastWatchedMovies/sel-hamr`, { withCredentials: true });
