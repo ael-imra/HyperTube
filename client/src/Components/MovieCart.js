@@ -48,7 +48,7 @@ export const MovieCart = (props) => {
                 textTransform: "none",
                 fontSize: "12px",
               }}>
-              Watch
+              {ctx.Languages[ctx.Lang].Watch}
             </Button>
             <Button
               variant='contained'
