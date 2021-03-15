@@ -1,337 +1,337 @@
 .MovieDetail {
-  width: 100%;
-  margin-top: -60px;
+    width: 100%;
+    margin-top: -60px;
 }
 .movieDetailImage {
-  width: 100%;
-  height: 760px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: 760px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .movieDetailImage > img:nth-of-type(1) {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
 }
 .movieDetailImage::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .movieInfo {
-  z-index: 9;
-  position: relative;
-  width: 75%;
-  min-width: 1258px;
-  display: flex;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: -250px;
+    z-index: 9;
+    position: relative;
+    width: 75%;
+    min-width: 1258px;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -250px;
 }
 .movieInfo > div:nth-of-type(1) {
-  display: flex;
+    display: flex;
 }
 .movieInfo > div:nth-of-type(1) > p:nth-of-type(1) {
-  margin-top: 0px;
-  font-size: 35px;
-  margin-bottom: 20px;
-  letter-spacing: 2px;
-  color: white;
+    margin-top: 0px;
+    font-size: 35px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    color: white;
 }
 .movieInfo > div:nth-of-type(1) > p:nth-of-type(2) {
-  height: 25px;
-  border-radius: 5px;
-  margin-top: 0px;
-  font-size: 14px;
-  margin-bottom: 0px;
-  color: white;
-  background-color: rgba(99, 99, 99, 0.43);
-  padding: 5px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  margin-left: auto;
+    height: 25px;
+    border-radius: 5px;
+    margin-top: 0px;
+    font-size: 14px;
+    margin-bottom: 0px;
+    color: white;
+    background-color: rgba(99, 99, 99, 0.43);
+    padding: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 .movieInfo > div:nth-of-type(1) > p:nth-of-type(3) {
-  height: 19px;
-  border-radius: 5px;
-  margin-top: 0px;
-  font-size: 14px;
-  margin-bottom: 0px;
-  color: white;
-  border: 1px white solid;
-  padding: 7px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  margin-left: 25px;
+    height: 19px;
+    border-radius: 5px;
+    margin-top: 0px;
+    font-size: 14px;
+    margin-bottom: 0px;
+    color: white;
+    border: 1px white solid;
+    padding: 7px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
 }
 .movieInfo > div:nth-of-type(2) {
-  width: 100%;
-  height: 600px;
-  margin-top: 25px;
-  display: flex;
+    width: 100%;
+    height: 600px;
+    margin-top: 25px;
+    display: flex;
 }
 .CommentAndList {
-  /* max-width: 350px; */
-  width: 25%;
-  height: 600px;
-  display: flex;
-  flex-direction: column;
+    /* max-width: 350px; */
+    width: 25%;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
 }
 .CommentAndList > img {
-  width: 300px;
-  object-fit: cover;
-  border-radius: 4px;
+    width: 300px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 .DetailAndDescription {
-  width: 75%;
-  height: 600px;
-  display: flex;
-  flex-direction: column;
+    width: 75%;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
 }
 .DetailAndGallery {
-  width: 100%;
-  height: 70%;
-  display: flex;
+    width: 100%;
+    height: 70%;
+    display: flex;
 }
 .Detail {
-  width: 65%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .Gallery {
-  width: 45%;
-  height: 100%;
+    width: 45%;
+    height: 100%;
 }
 .Gallery > p {
-  color: white;
-  font-size: 22px;
-  letter-spacing: 1.5px;
-  margin-top: 0px;
-  margin-bottom: 10px;
+    color: white;
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    margin-top: 0px;
+    margin-bottom: 10px;
 }
 .ScreenshotImage {
-  margin-top: 5%;
-  max-width: 520px;
-  width: 100%;
-  flex-wrap: wrap;
-  height: 75%;
-  display: flex;
-  justify-content: space-between;
+    margin-top: 5%;
+    max-width: 520px;
+    width: 100%;
+    flex-wrap: wrap;
+    height: 75%;
+    display: flex;
+    justify-content: space-between;
 }
 .Detail > div:nth-of-type(1) {
-  width: 100%;
-  flex-wrap: wrap;
-  display: flex;
-  align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
 }
 .Detail > div:nth-of-type(1) > p {
-  color: white;
-  font-size: 13px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 10px;
+    color: white;
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
 .InfoCast {
-  width: 100%;
-  height: 70%;
-  display: flex;
-  align-items: center;
+    width: 100%;
+    height: 70%;
+    display: flex;
+    align-items: center;
 }
 .Details {
-  width: 60%;
-  height: 100%;
+    width: 60%;
+    height: 100%;
 }
 .cast {
-  width: 40%;
-  height: 100%;
+    width: 40%;
+    height: 100%;
 }
 .cast > p:nth-of-type(1),
 .Details > p:nth-of-type(1) {
-  color: white;
-  font-size: 22px;
-  margin-bottom: 15px;
+    color: white;
+    font-size: 22px;
+    margin-bottom: 15px;
 }
 .CastName {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 50px;
 }
 .CastName > p {
-  color: white;
-  margin-left: 15px;
+    color: white;
+    margin-left: 15px;
 }
 .CastName > img {
-  border-radius: 50%;
-  object-fit: cover;
-  height: 80%;
-  width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    height: 80%;
+    width: 40px;
 }
 
 .Description {
-  width: 100%;
-  height: 20%;
+    width: 100%;
+    height: 20%;
 }
 
 .Description > p:nth-of-type(1) {
-  color: white;
-  font-size: 20px;
+    color: white;
+    font-size: 20px;
 }
 .Description > p:nth-of-type(2) {
-  color: white;
-  font-size: 15px;
-  max-height: 90px;
-  overflow: auto;
+    color: white;
+    font-size: 15px;
+    max-height: 90px;
+    overflow: auto;
 }
 .Detail > p:nth-of-type(1) {
-  color: white;
-  font-size: 25px;
-  margin-bottom: 10px;
+    color: white;
+    font-size: 25px;
+    margin-bottom: 10px;
 }
 
 .Details > div > p {
-  color: white;
-  font-size: 15px;
+    color: white;
+    font-size: 15px;
 }
 .Details span {
-  font-size: 14px;
-  color: #818181e0;
-  margin-left: 10px;
+    font-size: 14px;
+    color: #818181e0;
+    margin-left: 10px;
 }
 .Stream {
-  min-width: 1258px;
-  width: 75%;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  height: 750px;
-  flex-direction: column;
+    min-width: 1258px;
+    width: 75%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    height: 750px;
+    flex-direction: column;
 }
 .Stream .MuiTab-root {
-  text-transform: none;
+    text-transform: none;
 }
 .Stream video {
-  outline: none;
-  border: 1px #3a3a3a solid;
-  box-sizing: border-box;
+    outline: none;
+    border: 1px #3a3a3a solid;
+    box-sizing: border-box;
 }
 .Suggestions {
-  min-width: 1258px;
-  width: 75%;
-  height: 500px;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  justify-content: space-evenly;
-  margin-top: 25px;
-  flex-wrap: wrap;
+    min-width: 1258px;
+    width: 75%;
+    height: 500px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    justify-content: space-evenly;
+    margin-top: 25px;
+    flex-wrap: wrap;
 }
 .ShowComment {
-  max-width: 600px;
-  width: 255px;
-  height: 500px;
-  background-color: white;
+    max-width: 600px;
+    width: 255px;
+    height: 500px;
+    background-color: white;
 }
 .MuiListItemText-primary.MuiTypography-body2 {
-  font-family: "Roboto", sans-serif !important;
-  font-size: 17px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0 !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 17px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
 }
 .MuiTypography-colorTextSecondary.MuiTypography-body2 {
-  font-family: "Roboto", sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0 !important;
-  width: 95% !important;
-  word-break: break-word !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+    width: 95% !important;
+    word-break: break-word !important;
 }
 .CommentDialog .MuiDialog-paperWidthSm {
-  width: 90% !important;
-  max-width: 600px !important;
+    width: 90% !important;
+    max-width: 600px !important;
 }
 .ShowImage .MuiDialog-paperWidthSm {
-  width: auto !important;
-  max-width: 100% !important;
+    width: auto !important;
+    max-width: 100% !important;
 }
 .commentDate {
-  font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-  color: rgba(0, 0, 0, 0.54);
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.54);
 }
 .showComment {
-  max-height: 450px;
-  margin-bottom: 25px;
-  overflow: auto;
+    max-height: 450px;
+    margin-bottom: 25px;
+    overflow: auto;
 }
 .showComment::-webkit-scrollbar,
 .Description > p:nth-of-type(2)::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 @media only screen and (max-width: 1280px) {
-  .movieInfo {
-    min-width: 100%;
-  }
-  .Suggestions {
-    min-width: 100%;
-  }
-  .Stream {
-    min-width: 100%;
-  }
-  .CommentAndList {
-    width: auto;
-  }
-  .DetailAndDescription {
-    width: 600px;
-  }
-  .Detail {
-    width: 100%;
-  }
-  .movieInfo > div:nth-of-type(2) {
-    justify-content: space-around;
-  }
-  .Gallery {
-    display: none;
-  }
+    .movieInfo {
+        min-width: 100%;
+    }
+    .Suggestions {
+        min-width: 100%;
+    }
+    .Stream {
+        min-width: 100%;
+    }
+    .CommentAndList {
+        width: auto;
+    }
+    .DetailAndDescription {
+        width: 600px;
+    }
+    .Detail {
+        width: 100%;
+    }
+    .movieInfo > div:nth-of-type(2) {
+        justify-content: space-around;
+    }
+    .Gallery {
+        display: none;
+    }
 }
 @media only screen and (max-width: 960px) {
-  .movieInfo > div:nth-of-type(2) {
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-  }
-  .DetailAndDescription {
-    width: 90%;
-    height: 100%;
-  }
-  .movieInfo > div:nth-of-type(1) {
-    padding-left: 10px;
-    padding-right: 10px;
-    box-sizing: border-box;
-  }
+    .movieInfo > div:nth-of-type(2) {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+    }
+    .DetailAndDescription {
+        width: 90%;
+        height: 100%;
+    }
+    .movieInfo > div:nth-of-type(1) {
+        padding-left: 10px;
+        padding-right: 10px;
+        box-sizing: border-box;
+    }
 }
 @media only screen and (max-width: 600px) {
-  .InfoCast {
-    flex-direction: column;
-    height: 100%;
-  }
-  .InfoCast > div {
-    width: 100%;
-  }
-  .movieInfo > div:nth-of-type(1) > p:nth-of-type(3),
-  .movieInfo > div:nth-of-type(1) > p:nth-of-type(2) {
-    display: none;
-  }
+    .InfoCast {
+        flex-direction: column;
+        height: 100%;
+    }
+    .InfoCast > div {
+        width: 100%;
+    }
+    .movieInfo > div:nth-of-type(1) > p:nth-of-type(3),
+    .movieInfo > div:nth-of-type(1) > p:nth-of-type(2) {
+        display: none;
+    }
 }
