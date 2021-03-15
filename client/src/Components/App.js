@@ -46,7 +46,7 @@ function App() {
             if (ctx.cache.listMovies.next && ctx.cache.listMoviesLoader === false) {
               ctx.cache.listMoviesLoader = true;
               ctx.cache.listMovies = await ctx.GetMovies(ctx.cache.listMovies.page, ctx.cache.listMovies.list, ctx.cache.filter);
-              ctx.ref.setListMovies(ctx.cache.listMovies);
+              if (ctx.ref.setListMovies) ctx.ref.setListMovies(ctx.cache.listMovies);
               ctx.cache.listMoviesLoader = false;
             }
           }

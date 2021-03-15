@@ -84,6 +84,10 @@ export const Languages = {
     NoResult: "Ups!... no results found",
     showComment: "show comment",
     send: "send",
+    AccountActive: "your account has been activated.",
+    AddComment: "Add comment",
+    Comments: "Comments",
+    User: "Users",
   },
   Fr: {
     TitleLogin: "Vous venez de trouver le meilleur site Web pour regarder des films en haute qualité",
@@ -171,5 +175,9 @@ export const Languages = {
     NoResult: "UPS! ... Aucun résultat trouvé",
     showComment: "afficher le commentaire",
     send: "envoyer",
+    AccountActive: "your account has been activated.",
+    AddComment: "ajouter un commentaire",
+    Comments: "commentaires",
+    User: "Utilisateurs",
   },
 };

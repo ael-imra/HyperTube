@@ -48,6 +48,14 @@ const NavWeb = (props) => {
         }}>
         <p style={{ color: `${props.isActive === 3 ? "#ec4646" : "white"}` }}>{ctx.Languages[ctx.Lang].Profile}</p>
       </div>
+      <div
+        className={`${props.isActive === 4 ? "LinkActive" : "Link"}`}
+        onClick={() => {
+          props.setIsActive(4);
+          props.ctx.history.push("/Users");
+        }}>
+        <p style={{ color: `${props.isActive === 4 ? "#ec4646" : "white"}` }}>{ctx.Languages[ctx.Lang].User}</p>
+      </div>
       <Button
         variant='outlined'
         size={"small"}
@@ -61,7 +69,10 @@ const NavWeb = (props) => {
           marginRight: "10px",
           marginLeft: "10px",
         }}
-        onClick={() => props.ctx.setLang((oldValue) => (oldValue === "Eng" ? "Fr" : "Eng"))}>
+        onClick={() => {
+          localStorage.setItem("language", props.ctx.Lang === "Eng" ? "Fr" : "Eng");
+          props.ctx.setLang((oldValue) => (oldValue === "Eng" ? "Fr" : "Eng"));
+        }}>
         {props.ctx.Lang === "Eng" ? "Eng" : "Fre"}
       </Button>
       <Button
@@ -102,7 +113,10 @@ const NavMobil = (props) => {
           display: "flex",
           marginRight: "10px",
         }}
-        onClick={() => props.ctx.setLang((oldValue) => (oldValue === "Eng" ? "Fr" : "Eng"))}>
+        onClick={() => {
+          localStorage.setItem("language", props.ctx.Lang === "Eng" ? "Fr" : "Eng");
+          props.ctx.setLang((oldValue) => (oldValue === "Eng" ? "Fr" : "Eng"));
+        }}>
         {props.ctx.Lang === "Eng" ? "Eng" : "Fre"}
       </Button>
       <MenuIcon style={{ color: "white", display: "flex", fontSize: "40px", cursor: "pointer", marginRight: "15px" }} onClick={(event) => setShowMenuNav(event.currentTarget)} />
@@ -133,6 +147,14 @@ const NavMobil = (props) => {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            setShowMenuNav(null);
+            props.ctx.history.push("/Users");
+            props.setIsActive(4);
+          }}>
+          {ctx.Languages[ctx.Lang].User}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             document.cookie = "jwtToken=;expires=-5s";
             props.ctx.history.push("/");
             props.setIsLogin(false);
@@ -146,7 +168,9 @@ const NavMobil = (props) => {
 export default function Header(props) {
   const ctx = React.useContext(DataContext);
   let location = useLocation();
-  const [isActive, setIsActive] = React.useState(location.pathname === "/FavoriteMovie" ? 2 : location.pathname === "/Profile" ? 3 : location.pathname === "/" ? 1 : 0);
+  const [isActive, setIsActive] = React.useState(
+    location.pathname === "/FavoriteMovie" ? 2 : location.pathname === "/Profile" ? 3 : location.pathname === "/" ? 1 : location.pathname === "/Users" ? 4 : 0
+  );
   const width = UseWindowSize();
   if (props.type === "notLogin")
     return (

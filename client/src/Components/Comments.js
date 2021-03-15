@@ -13,7 +13,6 @@ import Axios from "axios";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import moment from "moment";
 import { UseWindowSize } from "../Assets/UseWindowSize";
 import { ImageProfile } from "./ImageProfile";
 
@@ -69,7 +68,7 @@ const Comments = (props) => {
   return (
     <Dialog open={showComment} onClose={() => setShowComment(false)} className='CommentDialog'>
       <DialogContent style={{ width: "92%" }}>
-        <p>Comments</p>
+        <p>{ctx.Languages[ctx.Lang].Comments}</p>
         <div className='showComment'>
           {comments.comment instanceof Array ? (
             <List dense={true}>
@@ -83,12 +82,15 @@ const Comments = (props) => {
                     />
 
                     <ListItemText primary={comment.userName} secondary={comment.commentContent} />
-                    <ListItemSecondaryAction>
-                      {width > 600 ? <span className='commentDate'>{moment(comment.date).fromNow()}</span> : ""}
-                      <IconButton edge='end' aria-label='delete' data-id={comment.commentID} onClick={deleteComment}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
+                    {comment.myComment ? (
+                      <ListItemSecondaryAction>
+                        <IconButton edge='end' aria-label='delete' data-id={comment.commentID} onClick={deleteComment}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    ) : (
+                      ""
+                    )}
                   </ListItem>
                   <Divider style={{ display: "flex", marginLeft: "auto", marginRight: "auto", width: "90%" }} />
                 </div>
@@ -99,7 +101,7 @@ const Comments = (props) => {
           )}
         </div>
         <TextField
-          label='Add comment'
+          label={ctx.Languages[ctx.Lang].AddComment}
           multiline
           rows={4}
           value={comments.myComment}
