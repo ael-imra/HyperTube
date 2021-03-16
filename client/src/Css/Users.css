@@ -18,7 +18,10 @@
   width: 155px;
   height: 150px;
   border-radius: 50%;
+<<<<<<< HEAD
+=======
   object-fit: cover;
+>>>>>>> master
 }
 
 .Fhover:hover {
