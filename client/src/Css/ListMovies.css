@@ -11,6 +11,7 @@
   margin-left: 15px;
   margin-right: 15px;
   margin-bottom: 15px;
+  border-radius: 6px;
   width: 290px;
   height: 500px;
 }
@@ -24,9 +25,10 @@
   border-radius: 6px;
   position: relative;
   transition: all 0.5;
+  height: 439px;
 }
 .movieImage:before {
-  content: '';
+  content: "";
   width: 100%;
   height: 100%;
   position: absolute;
@@ -41,7 +43,6 @@
   opacity: 1;
 }
 .moreInfoMovie {
-
   width: 100%;
   height: 100%;
   position: absolute;

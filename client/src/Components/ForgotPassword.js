@@ -2,7 +2,7 @@ import React from "react";
 import Input from "./Input";
 import Button from "@material-ui/core/Button";
 import { DataContext } from "../Context/AppContext";
-import { aythReset } from "../Assets/auth";
+import { authForgot } from "../Assets/auth";
 import { useHistory } from "react-router-dom";
 
 export default function ForgotPassword(props) {
@@ -11,7 +11,7 @@ export default function ForgotPassword(props) {
   let history = useHistory();
   const ForgotPassword = async () => {
     if (ctx.Validator("email", Email)) {
-      const result = await aythReset(Email);
+      const result = await authForgot(Email);
       props.handleShowMessage(result.type, result.body[ctx.Lang]);
       if (result.type === "success") history.push("/");
     } else props.handleShowMessage("error", ctx.Languages[ctx.Lang].emailNotFound);

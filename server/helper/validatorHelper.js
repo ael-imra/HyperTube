@@ -25,7 +25,7 @@ const validator = function (key, value) {
 				minLength: 8,
 				returnScore: true,
 			}) > 35 && validate.isLength(value, { max: 60 }),
-		token: () => validate.isBase64(value) && validate.isLength(value, { min: 0, max: 172 }),
+		token: () => validate.isUUID(value) && validate.isLength(value, { min: 0, max: 172 }),
 	}
 	return objectKeys[key]() ? true : false
 }

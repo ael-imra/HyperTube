@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const authRegister = async (body) => {
   const result = await Axios.post(`/auth/register`, body);
@@ -9,9 +9,9 @@ const authLogin = async (body) => {
   return result.data;
 };
 
-const aythReset = async (body) => {
+const authForgot = async (body) => {
   const result = await Axios.post(`/auth/reset`, { email: body });
   return result.data;
 };
 
-export { authRegister, authLogin, aythReset };
+export { authRegister, authLogin, authForgot };
