@@ -6,6 +6,7 @@ const { validateImage } = require("../helper/validatorHelper");
 const fs = require("fs");
 
 const allProfiles = async function (req, res, next) {
+<<<<<<< HEAD
   try {
     const { offSet } = req.query;
     const { search } = req.params;
@@ -20,6 +21,22 @@ const allProfiles = async function (req, res, next) {
     next(err);
   }
 };
+=======
+	try {
+		const { offSet } = req.query
+		const { search } = req.params
+		const profiles = await getAllUsers(search, offSet, req.user)
+		if (profiles.length <= 0) profiles.push('noMoreData')
+		return res.send({
+			type: 'success',
+			status: 200,
+			body: profiles,
+		})
+	} catch (err) {
+		next(err)
+	}
+}
+>>>>>>> master
 const getMyProfile = async function (req, res, next) {
   try {
     const user = await getUser({ userID: req.user }, ["userFrom", "userName", "email", "firstName", "lastName", "image"]);
@@ -123,6 +140,7 @@ const editPassword = async function (req, res, next) {
   }
 };
 const editImage = async function (req, res, next) {
+<<<<<<< HEAD
   try {
     const validImage = await validateImage(req.body.image);
     if (!validImage)
@@ -151,6 +169,36 @@ const editImage = async function (req, res, next) {
     next(err);
   }
 };
+=======
+	try {
+		const validImage = await validateImage(req.body.image)
+		if (!validImage)
+			return res.send({
+				type: 'error',
+				status: 403,
+				body: { Eng: 'Incorrect image', Fr: 'Image incorrecte' },
+			})
+		const imagePath = await createImage(req.body.image)
+		const user = await getUser({ userID: req.user }, 'image')
+		const resultUpdate = await updateUser(req.user, { image: imagePath })
+		if (resultUpdate) {
+			if (user.image && fs.existsSync(__dirname + '/..' + user.image)) fs.unlink(__dirname + '/..' + user.image, (err) => {})
+			return res.send({
+				type: 'success',
+				status: 200,
+				body: { Eng: 'Updated successful', Fr: 'Mise à jour réussie' },
+			})
+		}
+		return res.send({
+			type: 'error',
+			status: 403,
+			body: { Eng: 'Updated failed', Fr: 'Mise à jour a échoué' },
+		})
+	} catch (err) {
+		next(err)
+	}
+}
+>>>>>>> master
 
 module.exports = {
   allProfiles,

@@ -12,11 +12,8 @@ const getSubtitle = async function (req, res, next) {
 				return res.send(fs.readFileSync(filename).toString())
 			}
 		}
-		return res.send({
-			type: 'error',
-			status: 400,
-			body: { Eng: 'Incorrect parameters', Fr: 'Paramètres incorrects' },
-		})
+		res.setHeader('Content-Type', 'text/vtt')
+		return res.send('')
 	} catch (err) {
 		next(err)
 	}

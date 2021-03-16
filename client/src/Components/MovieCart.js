@@ -4,15 +4,13 @@ import StarIcon from "@material-ui/icons/Star";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { DataContext } from "../Context/AppContext";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import AddIcon from "@material-ui/icons/Add";
 import { toggleMyList } from "../Assets/toggleMyList";
-import { GetListMovieFavorite } from "../Assets/GetListMovieFavorite";
 export const MovieCart = (props) => {
   let history = useHistory();
-  const location = useLocation();
   const ctx = React.useContext(DataContext);
   const [movie, setMovie] = React.useState(props.movie);
   return (
@@ -50,7 +48,7 @@ export const MovieCart = (props) => {
                 textTransform: "none",
                 fontSize: "12px",
               }}>
-              Watch
+              {ctx.Languages[ctx.Lang].Watch}
             </Button>
             <Button
               variant='contained'

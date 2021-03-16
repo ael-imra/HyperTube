@@ -5,7 +5,14 @@ import { useHistory } from "react-router-dom";
 import { GetMovies } from "../Assets/GetMovies";
 export const DataContext = createContext();
 export default function AppContext(props) {
-  const [Lang, setLang] = useState("Eng");
+  let language;
+  try {
+    language = localStorage.getItem("language") ? localStorage.getItem("language") : "Eng";
+    if (!localStorage.getItem("language")) localStorage.setItem("language", "Eng");
+  } catch (error) {
+    language = "Eng";
+  }
+  const [Lang, setLang] = useState(language);
 
   let history = useHistory();
   const ref = {};

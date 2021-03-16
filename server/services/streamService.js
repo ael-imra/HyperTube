@@ -57,7 +57,7 @@ const downloadSubtitles = function (imdbID, lang) {
 const downloadStream = async function (torrentHash, completedDownload) {
 	return new Promise((resolve) => {
 		try {
-			const engine = torrentStream('magnet:?xt=urn:btih:' + torrentHash, {
+			const engine = torrentStream(torrentHash, {
 				path: __dirname + '/../downloads/videos',
 			})
 			engine.on('ready', () => {
