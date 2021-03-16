@@ -80,6 +80,8 @@ export const Languages = {
     UpdatePassword: "Update Password",
     Favorite: "Favorite",
     Watch: "Watch",
+<<<<<<< HEAD
+=======
     LastWatch: "Last watch",
     NoResult: "Ups!... no results found",
     showComment: "show comment",
@@ -87,6 +89,7 @@ export const Languages = {
     AccountActive: "your account has been activated.",
     AddComment: "Add comment",
     Comments: "Comments",
+>>>>>>> master
     User: "Users",
   },
   Fr: {
@@ -171,6 +174,8 @@ export const Languages = {
     UpdatePassword: "Mettre à jour le mot de passe",
     Favorite: "Favorite",
     Watch: "regarder",
+<<<<<<< HEAD
+=======
     LastWatch: "Dernière montre",
     NoResult: "UPS! ... Aucun résultat trouvé",
     showComment: "afficher le commentaire",
@@ -178,6 +183,7 @@ export const Languages = {
     AccountActive: "your account has been activated.",
     AddComment: "ajouter un commentaire",
     Comments: "commentaires",
+>>>>>>> master
     User: "Utilisateurs",
   },
 };
