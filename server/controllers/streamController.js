@@ -39,12 +39,7 @@ const stream = async function (movie, req, res, next) {
 						movieGenre: JSON.stringify(movieGenre),
 						movieRelease: new Date(release_date).getFullYear(),
 					})
-				} else
-					return res.send({
-						type: 'error',
-						status: 403,
-						body: { Eng: 'Error to find Movie', Fr: 'Erreur de recherche du film' },
-					})
+				}
 			} else
 				insertWatchedMovie({
 					userID: req.user,
@@ -60,12 +55,6 @@ const stream = async function (movie, req, res, next) {
 				})
 		} else updateWatchedMovie(imdbID, req.user)
 		const ext = path.extname(streamObject.file.name).replace('.', '')
-		if (streamObject.err)
-			return res.send({
-				type: 'error',
-				status: 403,
-				body: { Eng: 'Movie not found', Fr: 'Film introuvable' },
-			})
 		if (!Object.keys(movie).length) {
 			insertMovie({
 				torrentHash,
@@ -110,7 +99,6 @@ const stream = async function (movie, req, res, next) {
 			})
 		return streamFile.pipe(res)
 	} catch (err) {
-		console.log(err, 'ERROR')
 		return res.send({
 			type: 'error',
 			status: 403,

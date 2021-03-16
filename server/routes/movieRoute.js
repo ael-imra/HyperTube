@@ -1,11 +1,9 @@
 const express = require('express')
-const { getOneMovie, countWatchedMovies, lastWatchedMovies, countUserWatchedMovies, watchedMovies } = require('../controllers/movieController')
+const { getOneMovie, getMovieInfo, getMoviesInfo } = require('../controllers/movieController')
 const movieRoute = express.Router()
 
-movieRoute.get('/count/:userName', countUserWatchedMovies)
-movieRoute.get('/lastWatched', lastWatchedMovies)
-movieRoute.get('/watched', watchedMovies)
 movieRoute.get('/:imdbID/:torrentHash', getOneMovie)
-movieRoute.get('/:imdbID', countWatchedMovies)
+movieRoute.get('/:imdbID', getMovieInfo)
+movieRoute.get('/', getMoviesInfo)
 
 module.exports = movieRoute

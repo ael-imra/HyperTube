@@ -1,6 +1,7 @@
 const { query } = require(__dirname + "/../services/mysqlService");
 
 const getAllUsers = async function (search, offSet, userID) {
+<<<<<<< HEAD
   search = search ? `%${search}%` : "%%";
   const users = await query("SELECT userName,firstName,lastName,image FROM Users WHERE userName LIKE ? AND userID!=? LIMIT 25 OFFSET ?", [
     search,
@@ -9,6 +10,12 @@ const getAllUsers = async function (search, offSet, userID) {
   ]);
   return users;
 };
+=======
+	search = search ? `%${search}%` : '%%'
+	const users = await query('SELECT userName,firstName,lastName,image FROM Users WHERE userName LIKE ? AND userID!=? LIMIT 25 OFFSET ?', [search, userID, Number(offSet)])
+	return users
+}
+>>>>>>> master
 const getUser = async function (dependencies, keys) {
   const [user] = await query(`SELECT ${keys.toString()} FROM Users WHERE ?`, dependencies);
   return user;
