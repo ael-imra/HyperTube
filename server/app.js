@@ -33,19 +33,5 @@ app.use('/movie', authentication, movieRoute)
 app.use('/watchedMovie', authentication, watchedMovieRoute)
 app.use('/subtitle', authentication, subtitleRoute)
 app.use('/image', express.static('image'))
-app.get('/', (req, res) => {
-	if (req.isAuthenticated()) {
-		res.type('.html')
-		return res.sendFile(__dirname + '/public/index.html')
-	}
-	return res.redirect(`http://localhost:${clientPort}`)
-})
-app.get('/login', (req, res) => {
-	if (!req.isAuthenticated()) {
-		res.type('.html')
-		return res.sendFile(__dirname + '/public/login.html')
-	}
-	return res.redirect(`http://localhost:${clientPort}`)
-})
 app.use(errorHandler)
 module.exports = app
