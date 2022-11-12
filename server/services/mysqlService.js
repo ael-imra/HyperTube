@@ -1,5 +1,12 @@
 const mysql = require('mysql');
-const { db_config } = require(__dirname + '/../configs/indexConfig');
+
+const db_config = {
+  user: process.env.DB_CONFIG_USER,
+  password: process.env.DB_CONFIG_PASSWORD,
+  database: process.env.DB_CONFIG_DATABASE,
+  host: process.env.DB_CONFIG_HOST,
+  port: process.env.DB_CONFIG_PORT,
+};
 const pool = mysql.createPool(db_config);
 
 /**
