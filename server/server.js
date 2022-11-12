@@ -1,7 +1,6 @@
-const http = require('http')
-const app = require('./app')
-const { port } = require('./configs/indexConfig')
+const http = require('http');
+const app = require('./app');
 
-const server = http.createServer(app)
+const server = http.createServer(app);
 
-server.listen(port)
+server.listen(process.env.PORT);
