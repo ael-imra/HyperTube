@@ -14,7 +14,6 @@ const { getMovieInfo } = require('../services/movieService');
 const stream = async function (movie, req, res, next) {
   try {
     const { torrentHash, imdbID } = req.params;
-    console.log(__dirname);
     let streamObject = { file: fs.createReadStream(__dirname + '/../downloads/videos/video.mp4') };
     // if (!movie.isDownloaded)
     // 	streamObject = await downloadStream(torrentHash, () => {
