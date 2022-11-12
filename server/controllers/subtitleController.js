@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const { downloadSubtitles } = require("../services/streamService");
+const fs = require('fs');
+const path = require('path');
+const { downloadSubtitles } = require('../services/streamService');
 const getSubtitle = async function (req, res, next) {
   try {
     // const { imdbID, lang } = req.params
@@ -13,7 +13,7 @@ const getSubtitle = async function (req, res, next) {
     // 	}
     // }
     // res.setHeader('Content-Type', 'text/vtt')
-    return res.send("");
+    return res.send('');
   } catch (err) {
     next(err);
   }
