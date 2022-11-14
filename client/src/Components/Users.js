@@ -1,86 +1,84 @@
-import React, {useState, useEffect, useRef} from 'react'
-import '../Css/Users.css'
-import Button from '@material-ui/core/Button'
-import Search from './Search'
-import {DataContext} from '../Context/AppContext'
-import FindReplaceIcon from '@material-ui/icons/FilterList'
-import axios from 'axios'
-import noData from '../Images/no-data.svg'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import {useHistory} from 'react-router-dom'
-import Avatar from '@material-ui/core/Avatar'
+import React, { useState, useEffect, useRef } from 'react';
+import '../Css/Users.css';
+import Button from '@material-ui/core/Button';
+import Search from './Search';
+import { DataContext } from '../Context/AppContext';
+import FindReplaceIcon from '@material-ui/icons/FilterList';
+import axios from 'axios';
+import noData from '../Images/no-data.svg';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useHistory } from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+import { HOST } from '../constants';
 
 export function Users() {
-  const ctx = React.useContext(DataContext)
-  const [users, changeUsers] = useState([])
-  const [display, changeDisplay] = useState('none')
-  const [search, changeSearch] = useState('')
-  const [nextUsers, changeNext] = useState(25)
-  const history = useHistory()
-  const Ref = useRef()
+  const ctx = React.useContext(DataContext);
+  const [users, changeUsers] = useState([]);
+  const [display, changeDisplay] = useState('none');
+  const [search, changeSearch] = useState('');
+  const [nextUsers, changeNext] = useState(25);
+  const history = useHistory();
+  const Ref = useRef();
 
   async function getData() {
-    changeDisplay('block')
+    changeDisplay('block');
     await axios
-      .get(`http://localhost:1337/profile/allProfiles/${search}?offSet=0`, {
+      .get(`${HOST}/profile/allProfiles/${search}?offSet=0`, {
         withCredentials: true,
       })
-      .then(res => {
-        changeUsers(res.data.body)
-        changeDisplay('none')
-      })
+      .then((res) => {
+        changeUsers(res.data.body);
+        changeDisplay('none');
+      });
   }
   async function scroll() {
-    const {scrollHeight, scrollTop, offsetHeight} = Ref.current
+    const { scrollHeight, scrollTop, offsetHeight } = Ref.current;
     if (users[users.length - 1] !== 'noMoreData') {
       if (offsetHeight + scrollTop + 300 > scrollHeight) {
-        changeDisplay('block')
+        changeDisplay('block');
         await axios
-          .get(
-            `http://localhost:1337/profile/allProfiles/${search}?offSet=${nextUsers}`,
-            {withCredentials: true},
-          )
-          .then(res => {
-            let newArray = []
-            newArray.push(...users, res.data.body[0])
-            changeUsers(newArray)
-            changeDisplay('none')
-            changeNext(nextUsers + 25)
-          })
+          .get(`${HOST}/profile/allProfiles/${search}?offSet=${nextUsers}`, { withCredentials: true })
+          .then((res) => {
+            let newArray = [];
+            newArray.push(...users, res.data.body[0]);
+            changeUsers(newArray);
+            changeDisplay('none');
+            changeNext(nextUsers + 25);
+          });
       }
     }
   }
   useEffect(() => {
-    let unmount = false
+    let unmount = false;
     async function leakLix() {
-      changeDisplay('block')
+      changeDisplay('block');
       await axios
-        .get(`http://localhost:1337/profile/allProfiles?offSet=0`, {
+        .get(`${HOST}/profile/allProfiles?offSet=0`, {
           withCredentials: true,
         })
-        .then(res => {
+        .then((res) => {
           if (!unmount) {
-            changeUsers(res.data.body)
-            changeDisplay('none')
+            changeUsers(res.data.body);
+            changeDisplay('none');
           }
-        })
+        });
     }
-    if (!unmount) leakLix()
-    return () => (unmount = true) // eslint-disable-next-line
-  }, [])
+    if (!unmount) leakLix();
+    return () => (unmount = true); // eslint-disable-next-line
+  }, []);
   return (
-    <div style={{display: 'flex', flexFlow: 'column', marginTop: '50px'}}>
+    <div style={{ display: 'flex', flexFlow: 'column', marginTop: '50px' }}>
       <div className="searchUsers">
         <Search
-          Onchange={str => {
-            changeSearch(str)
+          Onchange={(str) => {
+            changeSearch(str);
           }}
         />
         <Button
           id="search"
           variant="contained"
           size="large"
-          startIcon={<FindReplaceIcon style={{fontSize: '25px'}} />}
+          startIcon={<FindReplaceIcon style={{ fontSize: '25px' }} />}
           style={{
             backgroundColor: '#ec4646',
             color: 'white',
@@ -100,11 +98,7 @@ export function Users() {
         {users[0] !== 'noMoreData' ? (
           users.map((value, key) =>
             value !== 'noMoreData' ? (
-              <div
-                className="user Fhover"
-                key={key}
-                onClick={() => history.push(`/profile/${value.userName}`)}
-              >
+              <div className="user Fhover" key={key} onClick={() => history.push(`/profile/${value.userName}`)}>
                 {value.image ? (
                   <img
                     className="userImg"
@@ -113,7 +107,7 @@ export function Users() {
                       value.image.includes('https://') ||
                       value.image.includes('data:image/')
                         ? value.image
-                        : `http://localhost:1337${value.image}`
+                        : `${HOST}${value.image}`
                     }
                   />
                 ) : (
@@ -141,14 +135,14 @@ export function Users() {
                     <span>{value.firstName + ' '}</span>
                     <span>{value.lastName}</span>
                   </p>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <p className="watchFavor">{`@${value.userName}`}</p>
                   </div>
                 </div>
               </div>
             ) : (
               ''
-            ),
+            )
           )
         ) : (
           <div className="NoData">
@@ -157,7 +151,7 @@ export function Users() {
           </div>
         )}
       </div>
-      <div className="loading" style={{display: display}}>
+      <div className="loading" style={{ display: display }}>
         <CircularProgress
           color="secondary"
           style={{
@@ -170,5 +164,5 @@ export function Users() {
         />
       </div>
     </div>
-  )
+  );
 }
