@@ -4,40 +4,43 @@ Ce projet vous propose de créer une application web permettant à un utilisateu
 
 ### Stack
 
-* Node JS (Express)
-* React JS
-* Material UI Front libraries
-* MySQL
-* JSON web tokens
-* Axios for API requests
+- Node JS (Express)
+- React JS
+- Material UI Front libraries
+- MySQL
+- JSON web tokens
+- Axios for API requests
 
 ## Installation
 
-Use the package manager [npm](https://pip.pypa.io/en/stable/) to install  client and server.
+Use the package manager [npm](https://pip.pypa.io/en/stable/) to install client and server.
 
 ```bash
 npm --prefix ./server install
 npm --prefix ./client install
 ```
-## How to launch
 
+## How to launch
 
 ```bash
 npm start
 npm start
 ```
+
 ## Screenshots
 
-![](screenShots/1.png)</br>
-![](screenShots/2.png)</br>
-![](screenShots/3.png)</br>
-![](screenShots/4.png)</br>
-![](screenShots/5.png)</br>
-![](screenShots/6.png)</br>
-![](screenShots/7.png)</br>
-![](screenShots/8.png)</br>
-![](screenShots/10.png)</br>
-
+<div align="center">
+    <img src="screenshots/1.png">
+    <img src="screenshots/2.png">
+    <img src="screenshots/3.png">
+    <img src="screenshots/4.png">
+    <img src="screenshots/6.png">
+    <img src="screenshots/7.png">
+    <img src="screenshots/8.png">
+    <img src="screenshots/9.png">
+    <img src="screenshots/10.png">
+</div>
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
