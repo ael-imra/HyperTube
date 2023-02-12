@@ -9,12 +9,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Comments from './Comments';
 import MovieIntro from './MovieIntro';
-import { HOST } from '../constants';
 export const MovieDetail = () => {
   let { code } = useParams();
   const ctx = React.useContext(DataContext);
   const [movieInfo, setMovieInfo] = React.useState(ctx.cache.movieInfo);
   const [quality, setQuality] = React.useState(0);
+
+  const HOST = process.env.REACT_APP_SERVER_HOST;
+
   React.useEffect(() => {
     let unmount = false;
     async function awaitData() {
@@ -47,19 +49,19 @@ export const MovieDetail = () => {
         {movieInfo.torrents.map((movie, key) =>
           quality === key ? (
             <video width="100%" height="700px" controls crossOrigin="use-credentials" key={key}>
-              <source src={`${HOST}/movie/${movieInfo.imdbCode}/${movie.hash}`} type="video/mp4" />
+              <source src={`${HOST}movie/${movieInfo.imdbCode}/${movie.hash}`} type="video/mp4" />
               <track
                 label="English"
                 kind="subtitles"
                 srcLang="en"
-                src={`${HOST}/subtitle/${movieInfo.imdbCode}/en`}
+                src={`${HOST}subtitle/${movieInfo.imdbCode}/en`}
                 default={ctx.Lang === 'Eng' ? true : false}
               />
               <track
                 label="French"
                 kind="subtitles"
                 srcLang="fr"
-                src={`${HOST}/subtitle/${movieInfo.imdbCode}/fr`}
+                src={`${HOST}subtitle/${movieInfo.imdbCode}/fr`}
                 default={ctx.Lang === 'Fr' ? true : false}
               />
             </video>

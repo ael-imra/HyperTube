@@ -5,7 +5,6 @@ import '../Css/Slider.css';
 import Axios from 'axios';
 import { UseWindowSize } from '../Assets/UseWindowSize';
 import { CartSlider } from './CartSlider';
-import { HOST } from '../constants';
 export default function Slider() {
   const width = UseWindowSize();
 
@@ -18,7 +17,7 @@ export default function Slider() {
       const popularMovies = await Axios.get(
         `https://api.themoviedb.org/3/movie/popular?api_key=7a518fe1d1c5359a4929ef4765c347fb`
       );
-      const listFavorite = await Axios(`${HOST}/favorite/imdbID`, { withCredentials: true });
+      const listFavorite = await Axios(`/favorite/imdbID`, { withCredentials: true });
       const detailPopularMovies = await new Promise((resolve) => {
         const result = [];
         popularMovies.data.results.map(async (movie) => {

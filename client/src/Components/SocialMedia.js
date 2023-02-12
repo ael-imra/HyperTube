@@ -4,8 +4,6 @@ import Intra42 from '../Images/Intra42.jpg';
 import Github from '../Images/github.svg';
 import { DataContext } from '../Context/AppContext';
 import '../Css/SocialMedia.css';
-import Axios from 'axios';
-import { HOST } from '../constants';
 
 function getImage(type) {
   if (type === 'Gmail') return <img src={Google} alt="Google" />;
@@ -14,6 +12,9 @@ function getImage(type) {
 }
 export default function SocialMedia(props) {
   const ctx = React.useContext(DataContext);
+
+  const HOST = process.env.REACT_APP_SERVER_HOST;
+
   return (
     <div
       className="socialMedia"

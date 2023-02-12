@@ -34,11 +34,12 @@ app.use('/api/movie', authentication, movieRoute);
 app.use('/api/watchedMovie', authentication, watchedMovieRoute);
 app.use('/api/subtitle', authentication, subtitleRoute);
 app.use('/api/image', express.static('image'));
-
-app.use(express.static('client/build'));
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 app.use(errorHandler);
 module.exports = app;

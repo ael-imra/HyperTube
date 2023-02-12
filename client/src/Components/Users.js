@@ -9,7 +9,6 @@ import noData from '../Images/no-data.svg';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
-import { HOST } from '../constants';
 
 export function Users() {
   const ctx = React.useContext(DataContext);
@@ -23,7 +22,7 @@ export function Users() {
   async function getData() {
     changeDisplay('block');
     await axios
-      .get(`${HOST}/profile/allProfiles/${search}?offSet=0`, {
+      .get(`/profile/allProfiles/${search}?offSet=0`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -36,15 +35,13 @@ export function Users() {
     if (users[users.length - 1] !== 'noMoreData') {
       if (offsetHeight + scrollTop + 300 > scrollHeight) {
         changeDisplay('block');
-        await axios
-          .get(`${HOST}/profile/allProfiles/${search}?offSet=${nextUsers}`, { withCredentials: true })
-          .then((res) => {
-            let newArray = [];
-            newArray.push(...users, res.data.body[0]);
-            changeUsers(newArray);
-            changeDisplay('none');
-            changeNext(nextUsers + 25);
-          });
+        await axios.get(`/profile/allProfiles/${search}?offSet=${nextUsers}`, { withCredentials: true }).then((res) => {
+          let newArray = [];
+          newArray.push(...users, res.data.body[0]);
+          changeUsers(newArray);
+          changeDisplay('none');
+          changeNext(nextUsers + 25);
+        });
       }
     }
   }
@@ -53,7 +50,7 @@ export function Users() {
     async function leakLix() {
       changeDisplay('block');
       await axios
-        .get(`${HOST}/profile/allProfiles?offSet=0`, {
+        .get(`/profile/allProfiles?offSet=0`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -107,7 +104,7 @@ export function Users() {
                       value.image.includes('https://') ||
                       value.image.includes('data:image/')
                         ? value.image
-                        : `${HOST}${value.image}`
+                        : `${process.env.REACT_APP_SERVER_HOST}${value.image}`
                     }
                   />
                 ) : (

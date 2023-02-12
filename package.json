@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "preinstall": "npm install --prefix ./client",
-    "start": "npm run --prefix ./client build && nodemon server.js"
+    "predev": "nodemon server.js&",
+    "dev": "npm start --prefix ./client",
+    "start": "npm run --prefix ./client build && NODE_ENV=production nodemon server.js"
   },
   "keywords": [],
   "author": "",
