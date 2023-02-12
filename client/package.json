@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "env-cmd -f ../.env.client react-scripts start",
-    "build": "env-cmd -f ../.env react-scripts build",
+    "build": "REACT_APP_SERVER_HOST=https://hyper-tube.netlify.app/api/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
