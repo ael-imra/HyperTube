@@ -1,6 +1,6 @@
 # HyperTube
 
-Ce projet vous propose de créer une application web permettant à un utilisateur de rechercher et visionner des vidéos. Le lecteur sera directement intégré au site, et les vidéos seront téléchargées au travers du protocole BitTorrent
+This project is a web application that allows a user to search and watch movies. The player will be directly integrated into the site, and the movies will be downloaded via the BitTorrent protocol.
 
 ### Stack
 
@@ -16,14 +16,15 @@ Ce projet vous propose de créer une application web permettant à un utilisateu
 Use the package manager [npm](https://pip.pypa.io/en/stable/) to install client and server.
 
 ```bash
-npm --prefix ./server install
-npm --prefix ./client install
+npm install
 ```
 
 ## How to launch
 
 ```bash
-npm start
+//run development mode
+npm run dev
+//run production mode
 npm start
 ```
 
