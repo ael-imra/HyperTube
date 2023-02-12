@@ -25,14 +25,21 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(jwt);
 app.use(passport.initialize());
-app.use('/oauth', oauthRoute);
-app.use('/auth', authRoute);
-app.use('/profile', authentication, profileRoute);
-app.use('/comment', authentication, commentRoute);
-app.use('/favorite', authentication, favoriteRoute);
-app.use('/movie', authentication, movieRoute);
-app.use('/watchedMovie', authentication, watchedMovieRoute);
-app.use('/subtitle', authentication, subtitleRoute);
-app.use('/image', express.static('image'));
+app.use('/api/oauth', oauthRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/profile', authentication, profileRoute);
+app.use('/api/comment', authentication, commentRoute);
+app.use('/api/favorite', authentication, favoriteRoute);
+app.use('/api/movie', authentication, movieRoute);
+app.use('/api/watchedMovie', authentication, watchedMovieRoute);
+app.use('/api/subtitle', authentication, subtitleRoute);
+app.use('/api/image', express.static('image'));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 app.use(errorHandler);
 module.exports = app;

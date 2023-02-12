@@ -5,7 +5,7 @@ const { getJWT } = require('../services/userService');
 const { sendMail } = require(__dirname + '/../helper/mailHelper');
 const { getUser, insertLocalUser, updateUser, checkUserExist } = require(__dirname + '/../models/userModel');
 
-const { PORT, HOST, CLIENT_PORT } = process.env;
+const { HOST, CLIENT_HOST } = process.env;
 
 const register = async function (req, res, next) {
   try {
@@ -20,7 +20,7 @@ const register = async function (req, res, next) {
     const checkResult = await checkUserExist(userName, email);
     if (!checkResult) {
       const token = crypto.randomUUID();
-      sendMail('active', email, userName, `${HOST}:${PORT}/auth/active`, token);
+      sendMail('active', email, userName, `${HOST}/auth/active`, token);
       req.body.password = await bcrypt.hash(password, 5);
       const insertSuccessful = await insertLocalUser({ ...req.body, userFrom: 'local', token });
       if (insertSuccessful)
@@ -128,7 +128,7 @@ const resetPassword = async function (req, res, next) {
             Fr: 'Activez votre compte plutôt que de réinitialiser le mot de passe',
           },
         });
-      sendMail('reset', email, user.userName, `${HOST}:${CLIENT_PORT}/ResetPassword`, user.token);
+      sendMail('reset', email, user.userName, `${CLIENT_HOTS}/ResetPassword`, user.token);
       return res.send({
         type: 'success',
         status: 200,
@@ -190,9 +190,9 @@ const activeAccount = async function (req, res, next) {
     if (user) {
       const token = crypto.randomUUID();
       updateUser(user.userID, { token, isActive: 1 });
-      return res.redirect(`${HOST}:${CLIENT_PORT}/success`);
+      return res.redirect(`${CLIENT_HOST}/success`);
     }
-    return res.redirect(`${HOST}:${CLIENT_PORT}/failed`);
+    return res.redirect(`${CLIENT_HOST}/failed`);
   } catch (err) {
     next(err);
   }

@@ -22,7 +22,7 @@ passport.use(
     {
       clientID: process.env.KEY_GITHUB_CLIENT_ID,
       clientSecret: process.env.KEY_GITHUB_CLIENT_SECRET,
-      callbackURL: `${process.env.HOST}:${process.env.PORT}/oauth/github/callback`,
+      callbackURL: `${process.env.HOST}/oauth/github/callback`,
       scope: ['user:email'],
     },
     async function (accessToken, refreshToken, profile, done) {
@@ -55,7 +55,7 @@ passport.use(
     {
       clientID: process.env.KEY_42_CLIENT_ID,
       clientSecret: process.env.KEY_42_CLIENT_SECRET,
-      callbackURL: `${process.env.HOST}:${process.env.PORT}/oauth/42/callback`,
+      callbackURL: `${process.env.HOST}/oauth/42/callback`,
     },
     async function (accessToken, refreshToken, profile, done) {
       const user = await getUser({ userID: `42_${profile.id}` }, 'userID');
@@ -82,7 +82,7 @@ passport.use(
     {
       clientID: process.env.KEY_GOOGLE_CLIENT_ID,
       clientSecret: process.env.KEY_GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.HOST}:${process.env.PORT}/oauth/google/callback`,
+      callbackURL: `${process.env.HOST}/oauth/google/callback`,
       scope: ['profile', 'email'],
     },
     async function (accessToken, refreshToken, profile, done) {

@@ -1,5 +1,13 @@
+
 .DS_Store
 */.DS_Store
+/node_modules
 */node_modules
-/downloads
+*/build
+/image
+/downloads/*
+!/downloads/videos
+/downloads/videos/*
+!/downloads/videos/video.mp4
 .env
+.env.client

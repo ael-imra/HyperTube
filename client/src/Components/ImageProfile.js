@@ -1,6 +1,5 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import { HOST } from '../constants';
 export const ImageProfile = (props) => {
   if (props.image)
     return (
@@ -8,7 +7,7 @@ export const ImageProfile = (props) => {
         src={
           props.image.includes('http://') || props.image.includes('https://') || props.image.includes('data:image/')
             ? props.image
-            : `${HOST}${props.image}`
+            : `${process.env.REACT_APP_SERVER_HOST}${props.image}`
         }
         style={{ ...props.style }}
       />

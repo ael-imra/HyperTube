@@ -15,11 +15,11 @@ authRoute.post('/login', (req, res, next) => {
       return await login(req, res, next);
     })(req, res, next);
   }
-  return res.redirect(`${process.env.HOST}:${process.env.CLIENT_PORT}`);
+  return res.redirect(process.env.CLIENT_HOST);
 });
 authRoute.post('/register', async (req, res, next) => {
   if (!req.isAuthenticated()) return await register(req, res, next);
-  return res.redirect(`${process.env.HOST}:${process.env.CLIENT_PORT}`);
+  return res.redirect(process.env.CLIENT_HOST);
 });
 authRoute.post('/reset', resetPassword);
 authRoute.post('/updatePassword', updatePassword);
