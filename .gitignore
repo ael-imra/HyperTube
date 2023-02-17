@@ -4,10 +4,6 @@
 /node_modules
 */node_modules
 */build
-/image
-/downloads/*
-!/downloads/videos
-/downloads/videos/*
-!/downloads/videos/video.mp4
-.env
-.env.client
+server/image
+!server/downloads/videos/video.mp4
+.env*

@@ -9,7 +9,6 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
     "axios": "^0.21.1",
-    "env-cmd": "^10.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -18,8 +17,8 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "env-cmd -f ../.env.client react-scripts start",
-    "build": "REACT_APP_SERVER_HOST=https://hyper-tube.netlify.app/api/ react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,48 +1,34 @@
 {
   "name": "hypertube",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is a web application that allows a user to search and watch movies. The player will be directly integrated into the site, and the movies will be downloaded via the BitTorrent protocol.",
   "main": "server.js",
   "scripts": {
-    "preinstall": "npm install --prefix ./client",
-    "predev": "nodemon server.js&",
-    "dev": "npm start --prefix ./client",
-    "start": "npm run --prefix ./client build && NODE_ENV=production node server.js"
+    "postinstall": "npm install --prefix ./server && npm install --prefix ./client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "npm start --prefix ./client",
+    "server": "npm run --prefix ./server dev"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ael-imra/HyperTube.git"
+  },
+  "keywords": [
+    "hypertube",
+    "movies",
+    "reactjs",
+    "nodejs"
+  ],
+  "author": "ael-imra",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "download": "^8.0.0",
-    "express": "^4.17.1",
-    "express-mysql-session": "^2.1.5",
-    "express-session": "^1.17.1",
-    "fluent-ffmpeg": "^2.1.2",
-    "jimp": "^0.16.1",
-    "jsonwebtoken": "^8.5.1",
-    "mkdirp": "^1.0.4",
-    "mysql": "^2.18.1",
-    "node-cron": "^2.0.3",
-    "nodemailer": "^6.4.18",
-    "nodemon": "^2.0.20",
-    "opensubtitles-api": "^5.1.2",
-    "passport": "^0.4.1",
-    "passport-42": "^1.2.6",
-    "passport-github2": "^0.1.12",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-local": "^1.0.0",
-    "rarbg-api": "^1.1.4",
-    "srt-to-vtt": "^1.1.3",
-    "torrent-stream": "^1.2.1",
-    "validator": "^13.5.2"
+  "bugs": {
+    "url": "https://github.com/ael-imra/HyperTube/issues"
   },
-  "devDependencies": {
-    "eslint": "^7.20.0"
+  "homepage": "https://github.com/ael-imra/HyperTube#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": "^16"
   }
 }
