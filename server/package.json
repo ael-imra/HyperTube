@@ -4,10 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "preinstall": "npm install --prefix ./client",
-    "predev": "nodemon server.js&",
-    "dev": "npm start --prefix ./client",
-    "start": "npm run --prefix ./client build && NODE_ENV=production node server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
