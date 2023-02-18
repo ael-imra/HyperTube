@@ -23,7 +23,7 @@ oauthRoute.get('/github/callback', (req, res, next) => {
     passport.authenticate('github', { session: false }, async (err, user) => {
       if (user) {
         const jwt = await getJWT(user);
-        res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false });
+        res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false, domain: 'vercel.app' });
         return res.redirect(process.env.CLIENT_HOST);
       }
       return res.redirect(`${process.env.CLIENT_HOST}/login`);
