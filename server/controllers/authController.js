@@ -75,11 +75,11 @@ const login = async function (req, res, next) {
         });
       if (user.isActive) {
         const jwt = await getJWT(user.userID);
-        res.cookie('jwtToken', jwt, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false });
         return res.send({
           type: 'success',
           status: 200,
           body: { Eng: 'user authenticated', Fr: 'utilisateur authentifié' },
+          jwt,
         });
       } else if (user.isActive === 0)
         return res.send({

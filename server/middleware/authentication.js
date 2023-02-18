@@ -10,7 +10,7 @@ const authentication = function (req, res, next) {
   });
 };
 const jwt = async function (req, res, next) {
-  const { jwtToken } = req.cookies;
+  const jwtToken = req.headers.authorization?.replace('Bearer ', '');
   try {
     if (jwtToken) {
       const payload = verify(jwtToken, process.env.KEY_JWT);
